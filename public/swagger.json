@@ -1015,7 +1015,7 @@
 		"/generating/generateToAddress": {
 			"post": {
 				"tags": [
-					"control"
+					"generating"
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
