@@ -11,7 +11,7 @@ let BITBOX = new BITBOXCli({
 });
 
 router.get('/', function(req, res, next) {
-  res.json({ status: 'rawtransaction' });
+  res.json({ status: 'rawtransactions' });
 });
 
 router.get('/decodeRawTransaction/:hex', function(req, res, next) {
