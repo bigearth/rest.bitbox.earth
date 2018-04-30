@@ -14,8 +14,12 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'mining' });
 });
 
-router.get('/getBlockTemplate', function(req, res, next) {
-  res.json({ status: 'getBlockTemplate' });
+router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
+  BITBOX.Mining.getBlockTemplate(req.params.templateRequest)
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getMiningInfo', function(req, res, next) {
@@ -27,15 +31,23 @@ router.get('/getMiningInfo', function(req, res, next) {
 });
 
 router.get('/getNetworkHashps', function(req, res, next) {
-  res.json({ status: 'getNetworkHashps' });
+  BITBOX.Mining.getNetworkHashps()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
-router.get('/prioritiseTransaction', function(req, res, next) {
-  res.json({ status: 'prioritiseTransaction' });
-});
-
-router.get('/submitBlock', function(req, res, next) {
-  res.json({ status: 'submitBlock' });
+router.get('/submitBlock/:hex', function(req, res, next) {
+  let parameters = '';
+  if(req.query.parameters && req.query.parameters !== '') {
+    parameters = true;
+  }
+  BITBOX.Mining.submitBlock(req.params.hex, parameters)
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 module.exports = router;
