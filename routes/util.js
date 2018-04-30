@@ -41,13 +41,13 @@ router.get('/createMultisig/:nrequired/:keys', function(req, res, next) {
 router.get('/estimateFee/:nblocks', function(req, res, next) {
   BITBOX.Util.estimateFee(parseInt(req.params.nblocks))
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
 
-router.get('/estimatepriority/:nblocks', function(req, res, next) {
-  BITBOX.Util.estimatepriority(parseInt(req.params.nblocks))
+router.get('/estimatePriority/:nblocks', function(req, res, next) {
+  BITBOX.Util.estimatePriority(parseInt(req.params.nblocks))
   .then((result) => {
     res.json({ result: result });
   }, (err) => { console.log(err);
