@@ -14,9 +14,6 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'generating' });
 });
 
-nblocks (numeric, required): How many blocks are generated immediately.
-address (string, required): The address to send the newly generated bitcoin to.
-maxtries (numeric, optional): How many iterations to try (default = 1000000).
 router.get('/generateToAddress/:nblocks/:address', function(req, res, next) {
   let maxtries = 1000000;
   if(req.query.maxtries) {
