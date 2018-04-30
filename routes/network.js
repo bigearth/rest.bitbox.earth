@@ -14,26 +14,42 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'network' });
 });
 
-router.get('/addNode', function(req, res, next) {
-  res.json({ status: 'addNode' });
+router.get('/addNode/:node/:command', function(req, res, next) {
+  BITBOX.Network.addNode(req.params.node, req.params.command)
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+    });
 });
 
 router.get('/clearBanned', function(req, res, next) {
-  res.json({ status: 'clearBanned' });
+  BITBOX.Network.clearBanned()
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
-router.get('/disconnectNode', function(req, res, next) {
-  res.json({ status: 'disconnectNode' });
+router.get('/disconnectNode/:address/:nodeid', function(req, res, next) {
+  BITBOX.Network.disconnectNode(req.params.address, req.params.nodeid)
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
-router.get('/getAddedNodeInfo', function(req, res, next) {
-  res.json({ status: 'getAddedNodeInfo' });
+router.get('/getAddedNodeInfo/:node', function(req, res, next) {
+  BITBOX.Network.getAddedNodeInfo(req.params.node)
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getConnectionCount', function(req, res, next) {
   BITBOX.Network.getConnectionCount()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -65,17 +81,30 @@ router.get('/getPeerInfo', function(req, res, next) {
 router.get('/ping', function(req, res, next) {
   BITBOX.Network.ping()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
 
-router.get('/setBan', function(req, res, next) {
-  res.json({ status: 'setBan' });
+router.get('/setBan/:subnet/:command', function(req, res, next) {
+  // TODO finish this
+  BITBOX.Network.getConnectionCount(req.params.subnet, req.params.command)
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
-router.get('/setNetworkActive', function(req, res, next) {
-  res.json({ status: 'setNetworkActive' });
+router.get('/setNetworkActive/:state', function(req, res, next) {
+  let state = true;
+  if(req.params.state  && req.params.state === 'false') {
+    state = false;
+  }
+  BITBOX.Network.getConnectionCount(state)
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
 module.exports = router;
