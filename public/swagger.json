@@ -289,28 +289,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
@@ -449,28 +430,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
@@ -609,28 +571,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
