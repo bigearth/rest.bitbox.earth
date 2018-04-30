@@ -14,8 +14,8 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'rawtransaction' });
 });
 
-router.get('/decodeRawTransaction/:txid', function(req, res, next) {
-  BITBOX.RawTransactions.decodeRawTransaction(req.params.txid)
+router.get('/decodeRawTransaction/:hex', function(req, res, next) {
+  BITBOX.RawTransactions.decodeRawTransaction(req.params.hex)
   .then((result) => {
     res.json({ result: result });
   }, (err) => { console.log('asdf', err);
@@ -37,7 +37,7 @@ router.get('/getRawTransaction/:txid', function(req, res, next) {
   }
   BITBOX.RawTransactions.getRawTransaction(req.params.txid, verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
