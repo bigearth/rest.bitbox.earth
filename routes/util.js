@@ -49,7 +49,7 @@ router.get('/estimateFee/:nblocks', function(req, res, next) {
 router.get('/estimatePriority/:nblocks', function(req, res, next) {
   BITBOX.Util.estimatePriority(parseInt(req.params.nblocks))
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -57,7 +57,7 @@ router.get('/estimatePriority/:nblocks', function(req, res, next) {
 router.get('/signMessageWithPrivKey/:privkey/:message', function(req, res, next) {
   BITBOX.Util.signMessageWithPrivKey(req.params.privkey, req.params.message)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
