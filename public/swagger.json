@@ -1052,30 +1052,34 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/mining/getMiningInfo": {
@@ -1083,30 +1087,34 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/mining/getNetworkHashps": {
@@ -1114,30 +1122,34 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/mining/prioritiseTransaction": {
@@ -1145,30 +1157,34 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/mining/submitBlock": {
@@ -1176,30 +1192,34 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/addNode": {
@@ -1207,30 +1227,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/clearBanned": {
@@ -1238,30 +1262,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/disconnectNode": {
@@ -1269,30 +1297,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/getAddedNodeInfo": {
@@ -1300,30 +1332,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/getConnectionCount": {
@@ -1331,30 +1367,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/getNetTotals": {
@@ -1362,30 +1402,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/getNetworkInfo": {
@@ -1393,30 +1437,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/getPeerInfo": {
@@ -1424,30 +1472,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/listBanned": {
@@ -1455,30 +1507,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/ping": {
@@ -1486,30 +1542,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/setBan": {
@@ -1517,30 +1577,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/network/setNetworkActive": {
@@ -1548,30 +1612,34 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransaction/createRawTransaction": {
@@ -1579,30 +1647,34 @@
 				"tags": [
 					"rawtransaction"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransaction/decodeRawTransaction": {
@@ -1610,30 +1682,34 @@
 				"tags": [
 					"rawtransaction"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransaction/decodeScript": {
@@ -1641,30 +1717,34 @@
 				"tags": [
 					"rawtransaction"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransactions/getRawTransaction": {
@@ -1672,30 +1752,34 @@
 				"tags": [
 					"rawtransactions"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransactions/sendRawTransaction": {
@@ -1703,30 +1787,34 @@
 				"tags": [
 					"rawtransactions"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/rawtransactions/signRawTransaction": {
@@ -1734,30 +1822,34 @@
 				"tags": [
 					"rawtransactions"
 				],
-				"summary": "Returns pet inventories by status",
-				"description": "Returns a map of status codes to quantities",
-				"operationId": "getInventory",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "object",
-							"additionalProperties": {
-								"type": "integer",
-								"format": "int32"
-							}
+							"$ref": "#/definitions/Order"
 						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
-				},
-				"security": [
-					{
-						"api_key": []
-					}
-				]
+				}
 			}
 		},
 		"/util/estimateSmartFee": {
@@ -1769,7 +1861,6 @@
 				"description": "",
 				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
@@ -1801,23 +1892,21 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Find purchase order by ID",
-				"description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
-				"operationId": "getOrderById",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
-						"name": "orderId",
-						"in": "path",
-						"description": "ID of pet that needs to be fetched",
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
 						"required": true,
-						"type": "integer",
-						"maximum": 10,
-						"minimum": 1,
-						"format": "int64"
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
 					}
 				],
 				"responses": {
@@ -1828,10 +1917,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid ID supplied"
-					},
-					"404": {
-						"description": "Order not found"
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -1841,24 +1927,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Create user",
-				"description": "This can only be done by the logged in user.",
-				"operationId": "createUser",
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
 						"in": "body",
 						"name": "body",
-						"description": "Created user object",
+						"description": "order placed for purchasing the pet",
 						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
 					}
 				],
 				"responses": {
-					"default": {
-						"description": "successful operation"
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -1868,30 +1962,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Creates list of users with given input array",
+				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "createUsersWithArrayInput",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
 						"in": "body",
 						"name": "body",
-						"description": "List of user object",
+						"description": "order placed for purchasing the pet",
 						"required": true,
 						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/User"
-							}
+							"$ref": "#/definitions/Order"
 						}
 					}
 				],
 				"responses": {
-					"default": {
-						"description": "successful operation"
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -1901,30 +1997,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Creates list of users with given input array",
+				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "createUsersWithListInput",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
 						"in": "body",
 						"name": "body",
-						"description": "List of user object",
+						"description": "order placed for purchasing the pet",
 						"required": true,
 						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/User"
-							}
+							"$ref": "#/definitions/Order"
 						}
 					}
 				],
 				"responses": {
-					"default": {
-						"description": "successful operation"
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -1934,50 +2032,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Logs user into the system",
+				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "loginUser",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
-						"name": "username",
-						"in": "query",
-						"description": "The user name for login",
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
 						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "password",
-						"in": "query",
-						"description": "The password for login in clear text",
-						"required": true,
-						"type": "string"
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
 					}
 				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"type": "string"
-						},
-						"headers": {
-							"X-Rate-Limit": {
-								"type": "integer",
-								"format": "int32",
-								"description": "calls per hour allowed by the user"
-							},
-							"X-Expires-After": {
-								"type": "string",
-								"format": "date-time",
-								"description": "date in UTC when token expires"
-							}
+							"$ref": "#/definitions/Order"
 						}
 					},
 					"400": {
-						"description": "Invalid username/password supplied"
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -1987,17 +2067,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Logs out current logged in user session",
+				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "logoutUser",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
-				"parameters": [],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
 				"responses": {
-					"default": {
-						"description": "successful operation"
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
 					}
 				}
 			}
@@ -2007,34 +2102,32 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Get user by user name",
+				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "getUserByName",
+				"operationId": "placeOrder",
 				"produces": [
-					"application/xml",
 					"application/json"
 				],
 				"parameters": [
 					{
-						"name": "username",
-						"in": "path",
-						"description": "The name that needs to be fetched. Use user1 for testing. ",
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
 						"required": true,
-						"type": "string"
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
 					}
 				],
 				"responses": {
 					"200": {
 						"description": "successful operation",
 						"schema": {
-							"$ref": "#/definitions/User"
+							"$ref": "#/definitions/Order"
 						}
 					},
 					"400": {
-						"description": "Invalid username supplied"
-					},
-					"404": {
-						"description": "User not found"
+						"description": "Invalid Order"
 					}
 				}
 			}
