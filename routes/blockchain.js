@@ -24,8 +24,8 @@ router.get('/getBestBlockHash', function(req, res, next) {
 
 router.get('/getBlock/:hash', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.Blockchain.getBlock(req.params.hash, verbose)
   .then((result) => {
@@ -60,8 +60,8 @@ router.get('/getBlockHash/:height', function(req, res, next) {
 
 router.get('/getBlockHeader/:hash', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.Blockchain.getBlockHeader(req.params.hash, verbose)
   .then((result) => {
@@ -88,8 +88,8 @@ router.get('/getDifficulty', function(req, res, next) {
 
 router.get('/getMempoolAncestors/:txid', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.Blockchain.getMempoolAncestors(req.params.txid, verbose)
   .then((result) => {
@@ -100,8 +100,8 @@ router.get('/getMempoolAncestors/:txid', function(req, res, next) {
 
 router.get('/getMempoolDescendants/:txid', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.Blockchain.getMempoolDescendants(req.params.txid, verbose)
   .then((result) => {
@@ -128,8 +128,8 @@ router.get('/getMempoolInfo', function(req, res, next) {
 
 router.get('/getRawMempool', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.Blockchain.getRawMempool(verbose)
   .then((result) => {
