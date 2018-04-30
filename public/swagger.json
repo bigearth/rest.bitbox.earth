@@ -1,13 +1,9 @@
 {
 	"swagger": "2.0",
 	"info": {
-		"description": "This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters.",
-		"version": "1.0.0",
+		"description": "rest.bitbox.earth is the REST layer for BITBOX Cloud. More info: https://www.bitbox.earth. #bitbox chatroom http://ambassador.cash",
+		"version": "0.7.15",
 		"title": "rest.bitbox.earth",
-		"termsOfService": "http://swagger.io/terms/",
-		"contact": {
-			"email": "apiteam@swagger.io"
-		},
 		"license": {
 			"name": "MIT",
 			"url": "https://opensource.org/licenses/MIT"
@@ -39,42 +35,11 @@
 				"description": "Find out more",
 				"url": "https://www.bitbox.earth/bitboxcli/generating"
 			}
-		},
-		{
-			"name": "mining",
-			"description": "Mining w/ the BCH Blockchain",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/mining"
-			}
-		},
-		{
-			"name": "network",
-			"description": "Interacting w/ the BCH Network",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/network"
-			}
-		},
-		{
-			"name": "rawtransactions",
-			"description": "Create transactions to be transmitted to the network.",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/rawtransactions"
-			}
-		},
-		{
-			"name": "util",
-			"description": "Inreact with utilities.",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/util"
-			}
 		}
 	],
 	"schemes": [
-		"http"
+		"http",
+		"https"
 	],
 	"paths": {
 		"/blockchain/getBestBlockHash": {
@@ -1287,22 +1252,6 @@
 			}
 		}
 	},
-	"securityDefinitions": {
-		"petstore_auth": {
-			"type": "oauth2",
-			"authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-			"flow": "implicit",
-			"scopes": {
-				"write:pets": "modify pets in your account",
-				"read:pets": "read your pets"
-			}
-		},
-		"api_key": {
-			"type": "apiKey",
-			"name": "api_key",
-			"in": "header"
-		}
-	},
 	"definitions": {
 		"Order": {
 			"type": "object",
@@ -1473,9 +1422,5 @@
 				}
 			}
 		}
-	},
-	"externalDocs": {
-		"description": "Find out more about Swagger",
-		"url": "http://swagger.io"
 	}
 }
