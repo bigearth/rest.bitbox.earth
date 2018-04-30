@@ -11,7 +11,7 @@ require('dotenv').config()
 let index = require('./routes/index');
 // let clones = require('./routes/clones');
 // let users = require('./routes/users');
-// let healthCheck = require('./routes/health-check');
+let healthCheck = require('./routes/health-check');
 
 let app = express();
 let cors = require('cors')
@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let prefix = 'v1';
 app.use('/', index);
-// app.use('/' + prefix + '/' + 'health-check', healthCheck);
+app.use('/' + prefix + '/' + 'health-check', healthCheck);
 // app.use('/' + prefix + '/' + 'users', users);
 // app.use('/clones', clones);
 
