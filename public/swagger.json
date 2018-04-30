@@ -871,10 +871,10 @@
 				]
 			}
 		},
-		"/store/order": {
+		"/util/estimateSmartFee": {
 			"post": {
 				"tags": [
-					"store"
+					"util"
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
@@ -907,10 +907,10 @@
 				}
 			}
 		},
-		"/store/order/{orderId}": {
+		"/util/estimateSmartPriority": {
 			"get": {
 				"tags": [
-					"store"
+					"util"
 				],
 				"summary": "Find purchase order by ID",
 				"description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
@@ -978,10 +978,10 @@
 				}
 			}
 		},
-		"/user": {
+		"/util/createMultisig": {
 			"post": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Create user",
 				"description": "This can only be done by the logged in user.",
@@ -1008,10 +1008,10 @@
 				}
 			}
 		},
-		"/user/createWithArray": {
+		"/util/estimateFee": {
 			"post": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Creates list of users with given input array",
 				"description": "",
@@ -1041,10 +1041,10 @@
 				}
 			}
 		},
-		"/user/createWithList": {
+		"/util/estimatePriority": {
 			"post": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Creates list of users with given input array",
 				"description": "",
@@ -1074,10 +1074,10 @@
 				}
 			}
 		},
-		"/user/login": {
+		"/util/signMessageWithPrivKey": {
 			"get": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Logs user into the system",
 				"description": "",
@@ -1127,10 +1127,10 @@
 				}
 			}
 		},
-		"/user/logout": {
+		"/util/validateAddress": {
 			"get": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Logs out current logged in user session",
 				"description": "",
@@ -1147,10 +1147,10 @@
 				}
 			}
 		},
-		"/user/{username}": {
+		"/util/verifyMessage": {
 			"get": {
 				"tags": [
-					"user"
+					"util"
 				],
 				"summary": "Get user by user name",
 				"description": "",
