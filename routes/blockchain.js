@@ -1,12 +1,25 @@
 let express = require('express');
 let router = express.Router();
 
+let BITBOXCli = require('bitbox-cli/lib/bitboxcli').default;
+let BITBOX = new BITBOXCli({
+  protocol: 'http',
+  host: "138.68.54.100",
+  port: "8332",
+  username: "bitcoin",
+  password: "xhFjluMJMyOXcYvF"
+});
+
 router.get('/', function(req, res, next) {
   res.json({ status: 'blockchain' });
 });
 
 router.get('/getBestBlockHash', function(req, res, next) {
-  res.json({ status: 'getBestBlockHash' });
+  BITBOX.Blockchain.getBestBlockHash()
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getBlock', function(req, res, next) {
@@ -14,11 +27,19 @@ router.get('/getBlock', function(req, res, next) {
 });
 
 router.get('/getBlockchainInfo', function(req, res, next) {
-  res.json({ status: 'getBlockchainInfo' });
+  BITBOX.Blockchain.getBlockchainInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getBlockCount', function(req, res, next) {
-  res.json({ status: 'getBlockCount' });
+  BITBOX.Blockchain.getBlockCount()
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getBlockHash', function(req, res, next) {
@@ -30,11 +51,19 @@ router.get('/getBlockHeader', function(req, res, next) {
 });
 
 router.get('/getChainTips', function(req, res, next) {
-  res.json({ status: 'getChainTips' });
+  BITBOX.Blockchain.getChainTips()
+  .then((result) => {
+    res.json({result: result});
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getDifficulty', function(req, res, next) {
-  res.json({ status: 'getDifficulty' });
+  BITBOX.Blockchain.getDifficulty()
+  .then((result) => {
+    res.json(result);
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getMempoolAncestors', function(req, res, next) {
@@ -50,7 +79,11 @@ router.get('/getMempoolEntry', function(req, res, next) {
 });
 
 router.get('/getMempoolInfo', function(req, res, next) {
-  res.json({ status: 'getMempoolInfo' });
+  BITBOX.Blockchain.getMempoolInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getRawMempool', function(req, res, next) {
@@ -66,7 +99,11 @@ router.get('/getTxOutProof', function(req, res, next) {
 });
 
 router.get('/getTxOutSetInfo', function(req, res, next) {
-  res.json({ status: 'getTxOutSetInfo' });
+  BITBOX.Blockchain.getTxOutSetInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/preciousBlock', function(req, res, next) {
@@ -78,7 +115,11 @@ router.get('/pruneBlockchain', function(req, res, next) {
 });
 
 router.get('/verifyChain', function(req, res, next) {
-  res.json({ status: 'verifyChain' });
+  BITBOX.Blockchain.verifyChain()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/verifyTxOutProof', function(req, res, next) {
