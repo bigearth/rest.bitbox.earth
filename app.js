@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let prefix = 'v1';
 app.use('/', index);
-app.use('/swagger', swagger);
+app.use('/' + prefix + '/' + 'swagger', swagger);
 app.use('/' + prefix + '/' + 'health-check', healthCheck);
 app.use('/' + prefix + '/' + 'blockchain', blockchain);
 app.use('/' + prefix + '/' + 'control', control);
