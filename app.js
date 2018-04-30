@@ -15,7 +15,7 @@ let control = require('./routes/control');
 let generating = require('./routes/generating');
 let mining = require('./routes/mining');
 let network = require('./routes/network');
-let rawtransaction = require('./routes/rawtransaction');
+let rawtransactions = require('./routes/rawtransactions');
 let util = require('./routes/util');
 
 let app = express();
@@ -46,8 +46,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 let prefix = 'v1';
 app.use('/', index);
 app.use('/' + prefix + '/' + 'health-check', healthCheck);
-// app.use('/' + prefix + '/' + 'users', users);
-// app.use('/clones', clones);
+app.use('/' + prefix + '/' + 'blockchain', blockchain);
+app.use('/' + prefix + '/' + 'control', control);
+app.use('/' + prefix + '/' + 'generating', generating);
+app.use('/' + prefix + '/' + 'mining', mining);
+app.use('/' + prefix + '/' + 'network', network);
+app.use('/' + prefix + '/' + 'rawtransactions', rawtransactions);
+app.use('/' + prefix + '/' + 'util', util);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
