@@ -10,13 +10,13 @@ require('dotenv').config()
 
 let index = require('./routes/index');
 let healthCheck = require('./routes/health-check');
-let healthCheck = require('./routes/blockchain');
-let healthCheck = require('./routes/control');
-let healthCheck = require('./routes/generating');
-let healthCheck = require('./routes/mining');
-let healthCheck = require('./routes/network');
-let healthCheck = require('./routes/rawtransaction');
-let healthCheck = require('./routes/util');
+let blockchain = require('./routes/blockchain');
+let control = require('./routes/control');
+let generating = require('./routes/generating');
+let mining = require('./routes/mining');
+let network = require('./routes/network');
+let rawtransaction = require('./routes/rawtransaction');
+let util = require('./routes/util');
 
 let app = express();
 let cors = require('cors')
