@@ -87,7 +87,7 @@
 				]
 			}
 		},
-		"/blockchain/findByStatus": {
+		"/blockchain/getBlock": {
 			"get": {
 				"tags": [
 					"blockchain"
@@ -142,7 +142,857 @@
 				]
 			}
 		},
-		"/blockchain/findByTags": {
+		"/blockchain/getBlockchainInfo": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getBlockCount": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getBlockHash": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getBlockHeader": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getChainTips": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getDifficulty": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getMempoolAncestors": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getMempoolDescendants": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getMempoolEntry": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getMempoolInfo": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getRawMempool": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getTxOut": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getTxOutProof": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/getTxOutSetInfo": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/preciousBlock": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/pruneBlockchain": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/verifyChain": {
+			"get": {
+				"tags": [
+					"blockchain"
+				],
+				"summary": "Finds Pets by tags",
+				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"operationId": "findPetsByTags",
+				"produces": [
+					"application/xml",
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "tags",
+						"in": "query",
+						"description": "Tags to filter by",
+						"required": true,
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"collectionFormat": "multi"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Pet"
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				},
+				"security": [
+					{
+						"petstore_auth": [
+							"write:pets",
+							"read:pets"
+						]
+					}
+				],
+				"deprecated": true
+			}
+		},
+		"/blockchain/verifyTxOutProof": {
 			"get": {
 				"tags": [
 					"blockchain"
