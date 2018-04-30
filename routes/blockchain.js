@@ -117,7 +117,7 @@ router.get('/pruneBlockchain', function(req, res, next) {
 router.get('/verifyChain', function(req, res, next) {
   BITBOX.Blockchain.verifyChain()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });

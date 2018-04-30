@@ -6,19 +6,35 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/getInfo', function(req, res, next) {
-  res.json({ status: 'getInfo' });
+  BITBOX.Control.getInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getMemoryInfo', function(req, res, next) {
-  res.json({ status: 'getMemoryInfo' });
+  BITBOX.Control.getMemoryInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/help', function(req, res, next) {
-  res.json({ status: 'help' });
+  BITBOX.Control.help()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/stop', function(req, res, next) {
-  res.json({ status: 'stop' });
+  BITBOX.Control.stop()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 module.exports = router;
