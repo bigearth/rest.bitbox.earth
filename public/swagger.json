@@ -39,6 +39,38 @@
 				"description": "Find out more",
 				"url": "https://www.bitbox.earth/bitboxcli/generating"
 			}
+		},
+		{
+			"name": "mining",
+			"description": "Mining w/ the BCH Blockchain",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/mining"
+			}
+		},
+		{
+			"name": "network",
+			"description": "Interacting w/ the BCH Network",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/network"
+			}
+		},
+		{
+			"name": "rawtransactions",
+			"description": "Create transactions to be transmitted to the network.",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/rawtransactions"
+			}
+		},
+		{
+			"name": "util",
+			"description": "Inreact with utilities.",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/util"
+			}
 		}
 	],
 	"schemes": [
