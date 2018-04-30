@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'generating' });
 });
 
-router.get('/generateToAddress/:nblocks/:address', function(req, res, next) {
+router.post('/generateToAddress/:nblocks/:address', function(req, res, next) {
   let maxtries = 1000000;
   if(req.query.maxtries) {
     maxtries = parseInt(req.query.maxtries);

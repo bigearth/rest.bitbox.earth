@@ -38,7 +38,7 @@ router.get('/getNetworkHashps', function(req, res, next) {
   });
 });
 
-router.get('/submitBlock/:hex', function(req, res, next) {
+router.post('/submitBlock/:hex', function(req, res, next) {
   let parameters = '';
   if(req.query.parameters && req.query.parameters !== '') {
     parameters = true;

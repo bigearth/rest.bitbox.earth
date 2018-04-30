@@ -38,7 +38,7 @@ router.get('/help', function(req, res, next) {
   });
 });
 
-router.get('/stop', function(req, res, next) {
+router.post('/stop', function(req, res, next) {
   BITBOX.Control.stop()
   .then((result) => {
     res.json({ result: result });

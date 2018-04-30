@@ -86,7 +86,7 @@ router.get('/ping', function(req, res, next) {
   });
 });
 
-router.get('/setBan/:subnet/:command', function(req, res, next) {
+router.post('/setBan/:subnet/:command', function(req, res, next) {
   // TODO finish this
   BITBOX.Network.getConnectionCount(req.params.subnet, req.params.command)
   .then((result) => {
