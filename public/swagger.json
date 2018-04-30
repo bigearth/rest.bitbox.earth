@@ -1047,6 +1047,719 @@
 				}
 			}
 		},
+		"/mining/getBlockTemplate": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/mining/getMiningInfo": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/mining/getNetworkHashps": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/mining/prioritiseTransaction": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/mining/submitBlock": {
+			"post": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/addNode": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/clearBanned": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/disconnectNode": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/getAddedNodeInfo": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/getConnectionCount": {
+			"post": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/getNetTotals": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/getNetworkInfo": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/getPeerInfo": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/listBanned": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/ping": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/setBan": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/network/setNetworkActive": {
+			"get": {
+				"tags": [
+					"network"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransaction/createRawTransaction": {
+			"get": {
+				"tags": [
+					"rawtransaction"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransaction/decodeRawTransaction": {
+			"get": {
+				"tags": [
+					"rawtransaction"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransaction/decodeScript": {
+			"get": {
+				"tags": [
+					"rawtransaction"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransactions/getRawTransaction": {
+			"get": {
+				"tags": [
+					"rawtransactions"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransactions/sendRawTransaction": {
+			"get": {
+				"tags": [
+					"rawtransactions"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
+		"/rawtransactions/signRawTransaction": {
+			"get": {
+				"tags": [
+					"rawtransactions"
+				],
+				"summary": "Returns pet inventories by status",
+				"description": "Returns a map of status codes to quantities",
+				"operationId": "getInventory",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "integer",
+								"format": "int32"
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"api_key": []
+					}
+				]
+			}
+		},
 		"/util/estimateSmartFee": {
 			"post": {
 				"tags": [
