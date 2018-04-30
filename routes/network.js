@@ -1,6 +1,15 @@
 let express = require('express');
 let router = express.Router();
 
+let BITBOXCli = require('bitbox-cli/lib/bitboxcli').default;
+let BITBOX = new BITBOXCli({
+  protocol: 'http',
+  host: "138.68.54.100",
+  port: "8332",
+  username: "bitcoin",
+  password: "xhFjluMJMyOXcYvF"
+});
+
 router.get('/', function(req, res, next) {
   res.json({ status: 'network' });
 });
@@ -22,23 +31,43 @@ router.get('/getAddedNodeInfo', function(req, res, next) {
 });
 
 router.get('/getConnectionCount', function(req, res, next) {
-  res.json({ status: 'getConnectionCount' });
+  BITBOX.Network.getConnectionCount()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getNetTotals', function(req, res, next) {
-  res.json({ status: 'getNetTotals' });
+  BITBOX.Network.getNetTotals()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getNetworkInfo', function(req, res, next) {
-  res.json({ status: 'getNetworkInfo' });
+  BITBOX.Network.getNetworkInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/getPeerInfo', function(req, res, next) {
-  res.json({ status: 'getPeerInfo' });
+  BITBOX.Network.getPeerInfo()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/ping', function(req, res, next) {
-  res.json({ status: 'ping' });
+  BITBOX.Network.ping()
+  .then((result) => {
+    res.json({ result: result });
+  }, (err) => { console.log(err);
+  });
 });
 
 router.get('/setBan', function(req, res, next) {
