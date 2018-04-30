@@ -33,11 +33,11 @@
 			}
 		},
 		{
-			"name": "user",
-			"description": "Operations about user",
+			"name": "generating",
+			"description": "Generating w/ the blockchain",
 			"externalDocs": {
-				"description": "Find out more about our store",
-				"url": "http://swagger.io"
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/generating"
 			}
 		}
 	],
