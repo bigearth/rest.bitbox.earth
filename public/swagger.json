@@ -167,34 +167,15 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Number of blocks in the longest blockchain.",
+				"description": "Returns the number of blocks in the longest blockchain.",
 				"operationId": "getBlockCount",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
@@ -207,8 +188,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Hash of block in best-block-chain at height provided.",
+				"description": "Returns hash of block in best-block-chain at height provided.",
 				"operationId": "getBlockHash",
 				"produces": [
 					"application/json"
@@ -247,8 +228,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Information about blockheader hash",
+				"description": "If verbose is false, returns a string that is serialized, hex-encoded data for blockheader 'hash'. If verbose is true, returns an Object with information about blockheader hash.",
 				"operationId": "getBlockHeader",
 				"produces": [
 					"application/json"
@@ -268,13 +249,7 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
@@ -287,34 +262,15 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Information about all known tips in the block tree",
+				"description": "Return information about all known tips in the block tree, including the main chain as well as orphaned branches.",
 				"operationId": "getChainTips",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
