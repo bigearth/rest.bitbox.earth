@@ -80,25 +80,14 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Add a new pet to the store",
+				"summary": "Returns the hash of the best (tip) block in the longest blockchain.",
 				"description": "",
-				"operationId": "addPet",
+				"operationId": "getBestBlockHash",
 				"consumes": [
 					"application/json"
 				],
 				"produces": [
 					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "Pet object that needs to be added to the store",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Pet"
-						}
-					}
 				],
 				"responses": {
 					"405": {
@@ -112,9 +101,9 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by status",
-				"description": "Multiple status values can be provided with comma separated strings",
-				"operationId": "findPetsByStatus",
+				"summary": "Information about block hash.",
+				"description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash.",
+				"operationId": "getBlock",
 				"produces": [
 					"application/json"
 				],
@@ -158,34 +147,15 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"summary": "Info regarding blockchain processing",
+				"description": "Returns an object containing various state info regarding blockchain processing.",
+				"operationId": "getBlockchainInfo",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"name": "tags",
-						"in": "query",
-						"description": "Tags to filter by",
-						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string"
-						},
-						"collectionFormat": "multi"
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid tag value"
@@ -200,7 +170,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getBlockCount",
 				"produces": [
 					"application/json"
 				],
@@ -240,7 +210,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getBlockHash",
 				"produces": [
 					"application/json"
 				],
@@ -280,7 +250,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getBlockHeader",
 				"produces": [
 					"application/json"
 				],
@@ -320,7 +290,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getChainTips",
 				"produces": [
 					"application/json"
 				],
@@ -360,7 +330,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getDifficulty",
 				"produces": [
 					"application/json"
 				],
@@ -400,7 +370,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getMempoolAncestors",
 				"produces": [
 					"application/json"
 				],
@@ -440,7 +410,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getMempoolDescendants",
 				"produces": [
 					"application/json"
 				],
@@ -480,7 +450,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getMempoolEntry",
 				"produces": [
 					"application/json"
 				],
@@ -520,7 +490,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getMempoolInfo",
 				"produces": [
 					"application/json"
 				],
@@ -560,7 +530,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getRawMempool",
 				"produces": [
 					"application/json"
 				],
@@ -600,7 +570,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getTxOut",
 				"produces": [
 					"application/json"
 				],
@@ -640,7 +610,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getTxOutProof",
 				"produces": [
 					"application/json"
 				],
@@ -680,7 +650,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "getTxOutSetInfo",
 				"produces": [
 					"application/json"
 				],
@@ -720,7 +690,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "preciousBlock",
 				"produces": [
 					"application/json"
 				],
@@ -760,7 +730,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "pruneBlockchain",
 				"produces": [
 					"application/json"
 				],
@@ -800,7 +770,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "verifyChain",
 				"produces": [
 					"application/json"
 				],
@@ -840,7 +810,7 @@
 				],
 				"summary": "Finds Pets by tags",
 				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-				"operationId": "findPetsByTags",
+				"operationId": "verifyTxOutProof",
 				"produces": [
 					"application/json"
 				],
