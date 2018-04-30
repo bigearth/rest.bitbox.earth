@@ -1047,6 +1047,181 @@
 				}
 			}
 		},
+		"/mining/getBlockTemplate": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
+					}
+				}
+			}
+		},
+		"/mining/getMiningInfo": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
+					}
+				}
+			}
+		},
+		"/mining/getNetworkHashps": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
+					}
+				}
+			}
+		},
+		"/mining/prioritiseTransaction": {
+			"get": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
+					}
+				}
+			}
+		},
+		"/mining/submitBlock": {
+			"post": {
+				"tags": [
+					"mining"
+				],
+				"summary": "Place an order for a pet",
+				"description": "",
+				"operationId": "placeOrder",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "order placed for purchasing the pet",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/Order"
+						}
+					},
+					"400": {
+						"description": "Invalid Order"
+					}
+				}
+			}
+		},
 		"/util/estimateSmartFee": {
 			"post": {
 				"tags": [
