@@ -9,9 +9,14 @@ let basicAuth = require('express-basic-auth')
 require('dotenv').config()
 
 let index = require('./routes/index');
-// let clones = require('./routes/clones');
-// let users = require('./routes/users');
 let healthCheck = require('./routes/health-check');
+let healthCheck = require('./routes/blockchain');
+let healthCheck = require('./routes/control');
+let healthCheck = require('./routes/generating');
+let healthCheck = require('./routes/mining');
+let healthCheck = require('./routes/network');
+let healthCheck = require('./routes/rawtransaction');
+let healthCheck = require('./routes/util');
 
 let app = express();
 let cors = require('cors')
