@@ -32,8 +32,8 @@ router.get('/decodeScript/:script', function(req, res, next) {
 
 router.get('/getRawTransaction/:txid', function(req, res, next) {
   let verbose = false;
-  if(req.query.verbose) {
-    verbose = req.query.verbose;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
   }
   BITBOX.RawTransactions.getRawTransaction(req.params.txid, verbose)
   .then((result) => {

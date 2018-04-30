@@ -53,7 +53,7 @@ router.get('/getBlockCount', function(req, res, next) {
 router.get('/getBlockHash/:height', function(req, res, next) {
   BITBOX.Blockchain.getBlockHash(req.params.height)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -140,10 +140,10 @@ router.get('/getRawMempool', function(req, res, next) {
 
 router.get('/getTxOut/:txid/:n', function(req, res, next) {
   let include_mempool = false;
-  if(req.query.include_mempool) {
-    include_mempool = req.query.include_mempool;
+  if(req.query.include_mempool && req.query.include_mempool === 'true') {
+    include_mempool = true;
   }
-  BITBOX.Blockchain.getTxOut(req.params.txid, req.params.n, include_mempool)
+  BITBOX.Blockchain.getTxOut(req.params.txid, parseInt(req.params.n), include_mempool)
   .then((result) => {
     res.json({ result: result });
   }, (err) => { console.log(err);
