@@ -739,24 +739,6 @@
 				}
 			}
 		},
-		"/control/stop": {
-			"post": {
-				"tags": [
-					"control"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "placeOrder",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation"
-					}
-				}
-			}
-		},
 		"/generating/generateToAddress": {
 			"post": {
 				"tags": [
