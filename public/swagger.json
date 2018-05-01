@@ -1366,139 +1366,36 @@
 				}
 			}
 		},
-		"/util/estimateSmartFee": {
+		"/util/createMultisig/{nrequired}/{keys}": {
 			"post": {
 				"tags": [
 					"util"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "estimateSmartFee",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
-					}
-				}
-			}
-		},
-		"/util/estimateSmartPriority": {
-			"get": {
-				"tags": [
-					"util"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "estimateSmartPriority",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
-					}
-				}
-			}
-		},
-		"/util/createMultisig": {
-			"post": {
-				"tags": [
-					"util"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Creates a multi-signature address",
+				"description": "Creates a multi-signature address with n signature of m keys required. It returns a json object with the address and redeemScript.",
 				"operationId": "createMultisig",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "nrequired",
+						"description": "The number of required signatures out of the n keys or addresses.",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "number"
 					},
-					"400": {
-						"description": "Invalid Command"
-					}
-				}
-			}
-		},
-		"/util/estimateFee": {
-			"post": {
-				"tags": [
-					"util"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "estimateFee",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "keys",
+						"description": "A json array of keys which are bitcoin addresses or hex-encoded public keys",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1506,42 +1403,7 @@
 				}
 			}
 		},
-		"/util/estimatePriority": {
-			"post": {
-				"tags": [
-					"util"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "estimatePriority",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
-					}
-				}
-			}
-		},
-		"/util/signMessageWithPrivKey": {
+		"/util/signMessageWithPrivKey/{privkey}/{message}": {
 			"get": {
 				"tags": [
 					"util"
@@ -1554,21 +1416,23 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "privkey",
+						"description": "The private key to sign the message with.",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "message",
+						"description": "The message to create a signature of.",
+						"required": true,
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1576,34 +1440,29 @@
 				}
 			}
 		},
-		"/util/validateAddress": {
+		"/util/validateAddress/{address}": {
 			"get": {
 				"tags": [
 					"util"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Information about the given bitcoin address.",
+				"description": "Return information about the given bitcoin address.",
 				"operationId": "validateAddress",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "address",
+						"description": "The bitcoin address to validate",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1611,34 +1470,43 @@
 				}
 			}
 		},
-		"/util/verifyMessage": {
+		"/util/verifyMessage/{address}/{signature}/{message}": {
 			"get": {
 				"tags": [
 					"util"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Verify a signed message",
+				"description": "Verify a signed message",
 				"operationId": "verifyMessage",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "address",
+						"description": "The bitcoin address to use for the signature.",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "signature",
+						"description": "The signature provided by the signer in base 64 encoding (see signmessage).",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "message",
+						"description": "The message that was signed.",
+						"required": true,
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
