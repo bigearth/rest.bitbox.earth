@@ -578,7 +578,7 @@
 			}
 		},
 		"/blockchain/pruneBlockchain/{height}": {
-			"get": {
+			"post": {
 				"tags": [
 					"blockchain"
 				],
