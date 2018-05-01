@@ -9,7 +9,6 @@ let basicAuth = require('express-basic-auth')
 require('dotenv').config()
 
 let index = require('./routes/index');
-let swagger = require('./routes/swagger');
 let healthCheck = require('./routes/health-check');
 let blockchain = require('./routes/blockchain');
 let control = require('./routes/control');
@@ -47,7 +46,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let prefix = 'v1';
 app.use('/', index);
-app.use('/' + prefix + '/' + 'swagger', swagger);
 app.use('/' + prefix + '/' + 'health-check', healthCheck);
 app.use('/' + prefix + '/' + 'blockchain', blockchain);
 app.use('/' + prefix + '/' + 'control', control);

@@ -284,8 +284,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Returns all in-mempool ancestors.",
+				"description": "If txid is in the mempool, returns all in-mempool ancestors.",
 				"operationId": "getMempoolAncestors",
 				"produces": [
 					"application/json"
@@ -322,8 +322,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Returns all in-mempool descendants.",
+				"description": "If txid is in the mempool, returns all in-mempool descendants.",
 				"operationId": "getMempoolDescendants",
 				"produces": [
 					"application/json"
@@ -531,8 +531,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Finds Pets by tags",
-				"description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+				"summary": "Returns statistics about the unspent transaction output set.",
+				"description": "Returns statistics about the unspent transaction output set. Note this call may take some time.",
 				"operationId": "getTxOutSetInfo",
 				"produces": [
 					"application/json"
@@ -1378,8 +1378,8 @@
 				"tags": [
 					"util"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Sign a message with the private key of an address",
+				"description": "Sign a message with the private key of an address",
 				"operationId": "signMessageWithPrivKey",
 				"produces": [
 					"application/json"
