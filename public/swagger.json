@@ -784,14 +784,14 @@
 				}
 			}
 		},
-		"/mining/getBlockTemplate": {
+		"/mining/getBlockTemplate/{templateRequest}": {
 			"get": {
 				"tags": [
 					"mining"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "placeOrder",
+				"summary": "Returns data needed to construct a block",
+				"description": "If the request parameters include a 'mode' key, that is used to explicitly select between the default 'template' request or a 'proposal'. It returns data needed to construct a block to work on",
+				"operationId": "getBlockTemplate",
 				"produces": [
 					"application/json"
 				],
@@ -808,10 +808,7 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Order"
@@ -826,7 +823,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getMiningInfo",
 				"produces": [
 					"application/json"
 				],
@@ -861,7 +858,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getNetworkHashps",
 				"produces": [
 					"application/json"
 				],
@@ -896,7 +893,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "prioritiseTransaction",
 				"produces": [
 					"application/json"
 				],
@@ -931,7 +928,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "submitBlock",
 				"produces": [
 					"application/json"
 				],
@@ -966,7 +963,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "addNode",
 				"produces": [
 					"application/json"
 				],
@@ -1001,7 +998,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "clearBanned",
 				"produces": [
 					"application/json"
 				],
@@ -1036,7 +1033,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "disconnectNode",
 				"produces": [
 					"application/json"
 				],
@@ -1071,7 +1068,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getAddedNodeInfo",
 				"produces": [
 					"application/json"
 				],
@@ -1106,7 +1103,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getConnectionCount",
 				"produces": [
 					"application/json"
 				],
@@ -1141,7 +1138,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getNetTotals",
 				"produces": [
 					"application/json"
 				],
@@ -1176,7 +1173,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getNetworkInfo",
 				"produces": [
 					"application/json"
 				],
@@ -1211,7 +1208,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getPeerInfo",
 				"produces": [
 					"application/json"
 				],
@@ -1246,7 +1243,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "listBanned",
 				"produces": [
 					"application/json"
 				],
@@ -1281,7 +1278,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "ping",
 				"produces": [
 					"application/json"
 				],
@@ -1316,7 +1313,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "setBan",
 				"produces": [
 					"application/json"
 				],
@@ -1351,7 +1348,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "setNetworkActive",
 				"produces": [
 					"application/json"
 				],
@@ -1386,7 +1383,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "getRawTransaction",
 				"produces": [
 					"application/json"
 				],
@@ -1421,7 +1418,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "sendRawTransaction",
 				"produces": [
 					"application/json"
 				],
@@ -1456,7 +1453,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "signRawTransaction",
 				"produces": [
 					"application/json"
 				],
@@ -1491,7 +1488,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "estimateSmartFee",
 				"produces": [
 					"application/json"
 				],
@@ -1526,7 +1523,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "estimateSmartPriority",
 				"produces": [
 					"application/json"
 				],
@@ -1561,7 +1558,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "createMultisig",
 				"produces": [
 					"application/json"
 				],
@@ -1596,7 +1593,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "estimateFee",
 				"produces": [
 					"application/json"
 				],
@@ -1631,7 +1628,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "estimatePriority",
 				"produces": [
 					"application/json"
 				],
@@ -1666,7 +1663,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "signMessageWithPrivKey",
 				"produces": [
 					"application/json"
 				],
@@ -1701,7 +1698,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "validateAddress",
 				"produces": [
 					"application/json"
 				],
@@ -1736,7 +1733,7 @@
 				],
 				"summary": "Place an order for a pet",
 				"description": "",
-				"operationId": "placeOrder",
+				"operationId": "verifyMessage",
 				"produces": [
 					"application/json"
 				],
