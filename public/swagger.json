@@ -1033,7 +1033,7 @@
 			}
 		},
 		"/network/getConnectionCount": {
-			"post": {
+			"get": {
 				"tags": [
 					"network"
 				],
