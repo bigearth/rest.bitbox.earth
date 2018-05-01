@@ -79,8 +79,8 @@
 				"tags": [
 					"blockchain"
 				],
-				"summary": "Returns the hash of the best (tip) block in the longest blockchain.",
-				"description": "",
+				"summary": "Hash of the best block in the longest blockchain.",
+				"description": "Returns the hash of the best (tip) block in the longest blockchain.",
 				"operationId": "getBestBlockHash",
 				"consumes": [
 					"application/json"
@@ -89,13 +89,13 @@
 					"application/json"
 				],
 				"responses": {
-					"405": {
-						"description": "Invalid input"
+					"200": {
+						"description": "successful response"
 					}
 				}
 			}
 		},
-		"/blockchain/getBlock": {
+		"/blockchain/getBlock/{hash}": {
 			"get": {
 				"tags": [
 					"blockchain"
@@ -108,35 +108,24 @@
 				],
 				"parameters": [
 					{
-						"name": "status",
-						"in": "query",
-						"description": "Status values that need to be considered for filter",
+						"name": "hash",
+						"in": "path",
+						"description": "the block hash",
 						"required": true,
-						"type": "array",
-						"items": {
-							"type": "string",
-							"enum": [
-								"available",
-								"pending",
-								"sold"
-							],
-							"default": "available"
-						},
-						"collectionFormat": "multi"
-					}
+						"type": "string"
+					},
+					{
+						"name": "verbose",
+						"in": "query",
+						"description": "true for a json object, false for the hex encoded data",
+						"required": false,
+						"type": "boolean",
+						"default": true
+					},
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/Pet"
-							}
-						}
-					},
-					"400": {
-						"description": "Invalid status value"
+						"description": "successful response"
 					}
 				}
 			}
@@ -746,9 +735,9 @@
 				"tags": [
 					"control"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "placeOrder",
+				"summary": "Various state info.",
+				"description": "Returns an object containing various state info.",
+				"operationId": "getInfo",
 				"produces": [
 					"application/json"
 				],
