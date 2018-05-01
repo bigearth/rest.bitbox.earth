@@ -779,12 +779,12 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid command"
 					}
 				}
 			}
 		},
-		"/mining/getBlockTemplate/{templateRequest}": {
+		"/mining/getBlockTemplate": {
 			"get": {
 				"tags": [
 					"mining"
@@ -797,13 +797,10 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"in": "query",
+						"name": "templateRequest",
+						"description": "a json object",
+						"required": false
 					}
 				],
 				"responses": {
@@ -811,7 +808,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid command"
 					}
 				}
 			}
@@ -821,32 +818,15 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Place an order for a pet",
+				"summary": "Returns a json object containing mining-related information.",
 				"description": "",
 				"operationId": "getMiningInfo",
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Order"
+						"description": "successful operation"
 					}
 				}
 			}
@@ -856,102 +836,73 @@
 				"tags": [
 					"mining"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Estimated network hashes per second",
+				"description": "Returns the estimated network hashes per second based on the last n blocks. Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change. Pass in [height] to estimate the network speed at the time when a certain block was found.",
 				"operationId": "getNetworkHashps",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"in": "query",
+						"name": "nblocks",
+						"description": "the number of blocks, or -1 for blocks since last difficulty change.",
+						"required": false,
+						"default": 120,
+						"type": "number"
 					},
-					"400": {
-						"description": "Invalid Order"
-					}
-				}
-			}
-		},
-		"/mining/prioritiseTransaction": {
-			"get": {
-				"tags": [
-					"mining"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "prioritiseTransaction",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"in": "query",
+						"name": "height",
+						"description": "to estimate at the time of the given height.",
+						"required": false,
+						"default": 1,
+						"type": "number"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
 		},
-		"/mining/submitBlock": {
+		"/mining/submitBlock/{hex}": {
 			"post": {
 				"tags": [
 					"mining"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Submit new block to network.",
+				"description": "attempts to submit new block to network.",
 				"operationId": "submitBlock",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "hex",
+						"description": "the hex-encoded block data to submit",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "parameters",
+						"description": "object of optional parameters",
+						"required": false,
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -986,7 +937,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1021,7 +972,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1056,7 +1007,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1091,7 +1042,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1126,7 +1077,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1161,7 +1112,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1196,7 +1147,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1231,7 +1182,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1266,7 +1217,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1301,7 +1252,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1336,7 +1287,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1371,7 +1322,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1406,7 +1357,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1441,7 +1392,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1476,7 +1427,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1511,7 +1462,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1546,7 +1497,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1581,7 +1532,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1616,7 +1567,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1651,7 +1602,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1686,7 +1637,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1721,7 +1672,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1756,7 +1707,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Order"
+						"description": "Invalid Command"
 					}
 				}
 			}
