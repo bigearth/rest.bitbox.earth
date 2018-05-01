@@ -746,7 +746,7 @@
 				],
 				"summary": "Mine blocks immediately to a specified address",
 				"description": "mine blocks immediately to a specified address (before the RPC call returns)",
-				"operationId": "placeOrder",
+				"operationId": "generateToAddress",
 				"produces": [
 					"application/json"
 				],
