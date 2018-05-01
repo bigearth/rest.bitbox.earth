@@ -1238,34 +1238,97 @@
 				}
 			}
 		},
-		"/rawtransactions/getRawTransaction": {
+		"/rawtransactions/decodeRawTransaction/{hex}": {
 			"get": {
 				"tags": [
 					"rawtransactions"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Return the hex encoded transaction.",
+				"description": "Return a JSON object representing the serialized, hex-encoded transaction.",
+				"operationId": "decodeRawTransaction",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "hex",
+						"description": "The transaction hex string",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation"
+					},
+					"400": {
+						"description": "Invalid Command"
+					}
+				}
+			}
+		},
+		"/rawtransactions/decodeScript/{hex}": {
+			"get": {
+				"tags": [
+					"rawtransactions"
+				],
+				"summary": "Decode a hex-encoded script.",
+				"description": "Decode a hex-encoded script.",
+				"operationId": "decodeScript",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "hex",
+						"description": "The hex encoded script",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation"
+					},
+					"400": {
+						"description": "Invalid Command"
+					}
+				}
+			}
+		},
+		"/rawtransactions/getRawTransaction/{txid}": {
+			"get": {
+				"tags": [
+					"rawtransactions"
+				],
+				"summary": "Return the raw transaction data.",
+				"description": "return the raw transaction data. If verbose is 'true', returns an Object with information about 'txid'. If verbose is 'false' or omitted, returns a string that is serialized, hex-encoded data for 'txid'.",
 				"operationId": "getRawTransaction",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "txid",
+						"description": "The transaction id",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "verbose",
+						"description": "If false, return a string, otherwise return a json object",
+						"required": true,
+						"type": "boolean",
+						"default": false
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1273,69 +1336,29 @@
 				}
 			}
 		},
-		"/rawtransactions/sendRawTransaction": {
-			"get": {
+		"/rawtransactions/sendRawTransaction/{hex}": {
+			"post": {
 				"tags": [
 					"rawtransactions"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Submits raw transaction to local node and network.",
+				"description": "Submits raw transaction (serialized, hex-encoded) to local node and network. Also see createrawtransaction and signrawtransaction calls.",
 				"operationId": "sendRawTransaction",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "hex",
+						"description": "The hex string of the raw transaction",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
-					}
-				}
-			}
-		},
-		"/rawtransactions/signRawTransaction": {
-			"get": {
-				"tags": [
-					"rawtransactions"
-				],
-				"summary": "Place an order for a pet",
-				"description": "",
-				"operationId": "signRawTransaction",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
