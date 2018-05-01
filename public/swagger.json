@@ -955,23 +955,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -992,21 +978,23 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"in": "query",
+						"name": "address",
+						"description": "the IP address/port of the node",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "nodeid",
+						"description": "The node ID (see getpeerinfo for node IDs)",
+						"required": false,
+						"type": "number"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1027,21 +1015,16 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"in": "query",
+						"name": "node",
+						"description": "If provided, return information about this specific node, otherwise all nodes are returned.",
+						"required": false,
+						"type": "number"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1060,26 +1043,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
+						"description": "successful operation"
 					}
 				}
 			}
@@ -1095,26 +1061,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
+						"description": "successful operation"
 					}
 				}
 			}
@@ -1130,26 +1079,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					},
-					"400": {
-						"description": "Invalid Command"
+						"description": "successful operation"
 					}
 				}
 			}
@@ -1165,23 +1097,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1200,23 +1118,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1235,23 +1139,9 @@
 				"produces": [
 					"application/json"
 				],
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
-				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1259,7 +1149,7 @@
 				}
 			}
 		},
-		"/network/setBan": {
+		"/network/setBan/{subnet}/{command}": {
 			"get": {
 				"tags": [
 					"network"
@@ -1272,14 +1162,34 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "subnet",
+						"description": "The IP/Subnet (see getpeerinfo for nodes ip) with a optional netmask (default is /32 = single ip)",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
-					}
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "subnet",
+						"description": "'add' to add a IP/Subnet to the list, 'remove' to remove a IP/Subnet from the list",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"in": "query",
+						"name": "bantime",
+						"description": "time in seconds how long (or until when if [absolute] is set) the ip is banned (0 or empty means using the default time of 24h which can also be overwritten by the -bantime startup argument)",
+						"required": false,
+						"type": "number"
+					},
+					{
+						"in": "query",
+						"name": "absolute",
+						"description": "If set, the bantime must be a absolute timestamp in seconds since epoch (Jan 1 1970 GMT)",
+						"required": false,
+						"type": "boolean",
+						"default": false
+					},
 				],
 				"responses": {
 					"200": {
@@ -1294,7 +1204,7 @@
 				}
 			}
 		},
-		"/network/setNetworkActive": {
+		"/network/setNetworkActive/{state}": {
 			"get": {
 				"tags": [
 					"network"
@@ -1307,13 +1217,12 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "state",
+						"description": "true to enable networking, false to disable",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "boolean",
+						"default": true
 					}
 				],
 				"responses": {
