@@ -709,36 +709,6 @@
 				}
 			}
 		},
-		"/control/help/{command}": {
-			"get": {
-				"tags": [
-					"control"
-				],
-				"summary": "Get help.",
-				"description": "get help for a specified command.",
-				"operationId": "placeOrder",
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"name": "command",
-						"in": "path",
-						"description": "the command to get help onf",
-						"required": true,
-						"type": "string"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation"
-					},
-					"400": {
-						"description": "Invalid command"
-					}
-				}
-			}
-		},
 		"/generating/generateToAddress/{nblocks}/{address}": {
 			"post": {
 				"tags": [
