@@ -908,7 +908,7 @@
 			}
 		},
 		"/network/addNode/{node}/{command}": {
-			"get": {
+			"post": {
 				"tags": [
 					"network"
 				],
@@ -1150,7 +1150,7 @@
 			}
 		},
 		"/network/setBan/{subnet}/{command}": {
-			"get": {
+			"post": {
 				"tags": [
 					"network"
 				],
@@ -1205,7 +1205,7 @@
 			}
 		},
 		"/network/setNetworkActive/{state}": {
-			"get": {
+			"post": {
 				"tags": [
 					"network"
 				],
