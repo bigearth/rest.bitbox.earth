@@ -907,34 +907,36 @@
 				}
 			}
 		},
-		"/network/addNode": {
+		"/network/addNode/{node}/{command}": {
 			"get": {
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Add or remove a node from the addnode list.",
+				"description": "Attempts add or remove a node from the addnode list. Or try a connection to a node once.",
 				"operationId": "addNode",
 				"produces": [
 					"application/json"
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"name": "body",
-						"description": "order placed for purchasing the pet",
+						"in": "path",
+						"name": "node",
+						"description": "the node (see getpeerinfo for nodes)",
 						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"type": "string"
+					},
+					{
+						"in": "path",
+						"name": "command",
+						"description": "'add' to add a node to the list, 'remove' to remove a node from the list, 'onetry' to try a connection to the node once",
+						"required": true,
+						"type": "string"
 					}
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation",
-						"schema": {
-							"$ref": "#/definitions/Order"
-						}
+						"description": "successful operation"
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -947,8 +949,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Clear all banned IPs.",
+				"description": "Clear all banned IPs.",
 				"operationId": "clearBanned",
 				"produces": [
 					"application/json"
