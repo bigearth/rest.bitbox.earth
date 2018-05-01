@@ -984,8 +984,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Immediately disconnects from the specified peer node.",
+				"description": "Strictly one out of 'address' and 'nodeid' can be provided to identify the node. To disconnect by nodeid, either set 'address' to the empty string, or call using the named 'nodeid' argument only.",
 				"operationId": "disconnectNode",
 				"produces": [
 					"application/json"
@@ -1019,8 +1019,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Returns information about the given added node",
+				"description": "returns information about the given added node, or all added nodes (note that onetry addnodes are not listed here)",
 				"operationId": "getAddedNodeInfo",
 				"produces": [
 					"application/json"
@@ -1054,8 +1054,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Number of connections.",
+				"description": "returns the number of connections to other nodes.",
 				"operationId": "getConnectionCount",
 				"produces": [
 					"application/json"
@@ -1089,8 +1089,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Information about network traffic",
+				"description": "returns information about network traffic, including bytes in, bytes out, and current time.",
 				"operationId": "getNetTotals",
 				"produces": [
 					"application/json"
@@ -1124,8 +1124,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Various state info regarding P2P networking.",
+				"description": "Returns an object containing various state info regarding P2P networking.",
 				"operationId": "getNetworkInfo",
 				"produces": [
 					"application/json"
@@ -1159,8 +1159,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Data about each connected network node.",
+				"description": "returns data about each connected network node as a json array of objects.",
 				"operationId": "getPeerInfo",
 				"produces": [
 					"application/json"
@@ -1194,8 +1194,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "List all banned IPs/Subnets.",
+				"description": "List all banned IPs/Subnets.",
 				"operationId": "listBanned",
 				"produces": [
 					"application/json"
@@ -1229,8 +1229,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Requests that a ping be sent to all other nodes to measure ping time",
+				"description": "Results provided in getpeerinfo, pingtime and pingwait fields are decimal seconds. Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.",
 				"operationId": "ping",
 				"produces": [
 					"application/json"
@@ -1264,8 +1264,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Attempts add or remove a IP/Subnet from the banned list.",
+				"description": "Attempts add or remove a IP/Subnet from the banned list.",
 				"operationId": "setBan",
 				"produces": [
 					"application/json"
@@ -1299,8 +1299,8 @@
 				"tags": [
 					"network"
 				],
-				"summary": "Place an order for a pet",
-				"description": "",
+				"summary": "Disable/enable all p2p network activity.",
+				"description": "Disable/enable all p2p network activity.",
 				"operationId": "setNetworkActive",
 				"produces": [
 					"application/json"
