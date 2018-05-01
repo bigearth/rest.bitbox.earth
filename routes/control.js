@@ -37,13 +37,13 @@ router.get('/help', function(req, res, next) {
   }, (err) => { console.log(err);
   });
 });
-
-router.post('/stop', function(req, res, next) {
-  BITBOX.Control.stop()
-  .then((result) => {
-    res.json({ result: result });
-  }, (err) => { console.log(err);
-  });
-});
+//
+// router.post('/stop', function(req, res, next) {
+//   BITBOX.Control.stop()
+//   .then((result) => {
+//     res.json({ result: result });
+//   }, (err) => { console.log(err);
+//   });
+// });
 
 module.exports = router;
