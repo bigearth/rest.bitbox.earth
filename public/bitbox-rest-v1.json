@@ -4,7 +4,7 @@
 	"info": {
 		"description": "rest.bitbox.earth is the REST layer for BITBOX Cloud. More info: https://www.bitbox.earth. #bitbox chatroom http://ambassador.cash",
 		"version": "0.7.15",
-		"title": "rest.bitbox.earth",
+		"title": "REST",
 		"license": {
 			"name": "MIT",
 			"url": "https://opensource.org/licenses/MIT"
