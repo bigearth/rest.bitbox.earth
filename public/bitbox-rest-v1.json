@@ -63,7 +63,7 @@
 		},
 		{
 			"name": "util",
-			"description": "Inreact with utilities.",
+			"description": "Bitcoin Cash utilities.",
 			"externalDocs": {
 				"description": "Find out more",
 				"url": "https://www.bitbox.earth/bitboxcli/util"
