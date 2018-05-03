@@ -175,7 +175,7 @@ router.get('/preciousBlock/:hash', function(req, res, next) {
   });
 });
 
-router.get('/pruneBlockchain/:height', function(req, res, next) {
+router.post('/pruneBlockchain/:height', function(req, res, next) {
   BITBOX.Blockchain.pruneBlockchain(req.params.height)
   .then((result) => {
     res.json({ result: result });
