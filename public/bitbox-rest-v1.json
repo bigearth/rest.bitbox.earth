@@ -1374,7 +1374,7 @@
 			}
 		},
 		"/util/signMessageWithPrivKey/{privkey}/{message}": {
-			"get": {
+			"post": {
 				"tags": [
 					"util"
 				],
