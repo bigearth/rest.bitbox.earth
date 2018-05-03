@@ -42,7 +42,7 @@ router.get('/getRawTransaction/:txid', function(req, res, next) {
   });
 });
 
-router.get('/sendRawTransaction/:hex', function(req, res, next) {
+router.post('/sendRawTransaction/:hex', function(req, res, next) {
   BITBOX.RawTransactions.sendRawTransaction(req.params.hex)
   .then((result) => {
     res.json({ result: result });
