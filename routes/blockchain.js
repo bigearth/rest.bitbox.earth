@@ -29,7 +29,7 @@ router.get('/getBlock/:hash', function(req, res, next) {
   }
   BITBOX.Blockchain.getBlock(req.params.hash, verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -37,7 +37,7 @@ router.get('/getBlock/:hash', function(req, res, next) {
 router.get('/getBlockchainInfo', function(req, res, next) {
   BITBOX.Blockchain.getBlockchainInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
