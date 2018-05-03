@@ -915,7 +915,7 @@
 			}
 		},
 		"/network/clearBanned": {
-			"get": {
+			"post": {
 				"tags": [
 					"network"
 				],
@@ -936,7 +936,7 @@
 			}
 		},
 		"/network/disconnectNode": {
-			"get": {
+			"post": {
 				"tags": [
 					"network"
 				],
