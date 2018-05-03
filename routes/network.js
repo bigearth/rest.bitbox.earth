@@ -14,29 +14,29 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'network' });
 });
 
-router.post('/addNode/:node/:command', function(req, res, next) {
-  BITBOX.Network.addNode(req.params.node, req.params.command)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-    });
-});
-
-router.post('/clearBanned', function(req, res, next) {
-  BITBOX.Network.clearBanned()
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.post('/disconnectNode/:address/:nodeid', function(req, res, next) {
-  BITBOX.Network.disconnectNode(req.params.address, req.params.nodeid)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
+// router.post('/addNode/:node/:command', function(req, res, next) {
+//   BITBOX.Network.addNode(req.params.node, req.params.command)
+//   .then((result) => {
+//     res.json(result);
+//   }, (err) => { console.log(err);
+//     });
+// });
+//
+// router.post('/clearBanned', function(req, res, next) {
+//   BITBOX.Network.clearBanned()
+//   .then((result) => {
+//     res.json(result);
+//   }, (err) => { console.log(err);
+//   });
+// });
+//
+// router.post('/disconnectNode/:address/:nodeid', function(req, res, next) {
+//   BITBOX.Network.disconnectNode(req.params.address, req.params.nodeid)
+//   .then((result) => {
+//     res.json(result);
+//   }, (err) => { console.log(err);
+//   });
+// });
 
 router.get('/getAddedNodeInfo/:node', function(req, res, next) {
   BITBOX.Network.getAddedNodeInfo(req.params.node)
