@@ -120,9 +120,9 @@
 				"tags": [
 					"address"
 				],
-				"summary": "Address details",
-				"description": "Returns the details of an address including balance",
-				"operationId": "details",
+				"summary": "Address utxos",
+				"description": "Returns the list of utxo for an address",
+				"operationId": "utxo",
 				"consumes": [
 					"application/json"
 				],
