@@ -14,6 +14,14 @@
 	"basePath": "/v1",
 	"tags": [
 		{
+			"name": "address",
+			"description": "Address details and utxo",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth/bitboxcli/address"
+			}
+		},
+		{
 			"name": "blockchain",
 			"description": "Interacting w/ the BCH Blockchain",
 			"externalDocs": {
@@ -74,6 +82,72 @@
 		"https"
 	],
 	"paths": {
+		"/address/details/{address}": {
+			"get": {
+				"tags": [
+					"address"
+				],
+				"summary": "Address details",
+				"description": "Returns the details of an address including balance",
+				"operationId": "details",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "address",
+						"in": "path",
+						"description": "the address",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful response"
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				}
+			}
+		},
+		"/address/utxo/{address}": {
+			"get": {
+				"tags": [
+					"address"
+				],
+				"summary": "Address details",
+				"description": "Returns the details of an address including balance",
+				"operationId": "details",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "address",
+						"in": "path",
+						"description": "the address",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful response"
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				}
+			}
+		},
 		"/blockchain/getBestBlockHash": {
 			"get": {
 				"tags": [

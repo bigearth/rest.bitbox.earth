@@ -10,6 +10,7 @@ require('dotenv').config()
 
 let index = require('./routes/index');
 let healthCheck = require('./routes/health-check');
+let address = require('./routes/address');
 let blockchain = require('./routes/blockchain');
 let control = require('./routes/control');
 let generating = require('./routes/generating');
@@ -47,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 let prefix = 'v1';
 app.use('/', index);
 app.use('/' + prefix + '/' + 'health-check', healthCheck);
+app.use('/' + prefix + '/' + 'address', address);
 app.use('/' + prefix + '/' + 'blockchain', blockchain);
 app.use('/' + prefix + '/' + 'control', control);
 app.use('/' + prefix + '/' + 'generating', generating);
