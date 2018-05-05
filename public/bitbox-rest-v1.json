@@ -25,7 +25,7 @@
 			"description": "Block Details",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth"
+				"url": "https://www.bitbox.earth/bitboxcli/block"
 			}
 		},
 		{
@@ -81,7 +81,7 @@
 			"description": "Transaction details.",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth"
+				"url": "https://www.bitbox.earth/bitboxcli/transaction"
 			}
 		},
 		{
