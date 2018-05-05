@@ -1,4 +1,3 @@
-
 {
 	"swagger": "2.0",
 	"info": {
@@ -19,6 +18,14 @@
 			"externalDocs": {
 				"description": "Find out more",
 				"url": "https://www.bitbox.earth/bitboxcli/address"
+			}
+		},
+		{
+			"name": "block",
+			"description": "Block Details",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth"
 			}
 		},
 		{
@@ -70,6 +77,14 @@
 			}
 		},
 		{
+			"name": "transaction",
+			"description": "Transaction details.",
+			"externalDocs": {
+				"description": "Find out more",
+				"url": "https://www.bitbox.earth"
+			}
+		},
+		{
 			"name": "util",
 			"description": "Bitcoin Cash utilities.",
 			"externalDocs": {
@@ -101,6 +116,39 @@
 						"name": "address",
 						"in": "path",
 						"description": "the address",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful response"
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				}
+			}
+		},
+		"/block/details/{id}": {
+			"get": {
+				"tags": [
+					"block"
+				],
+				"summary": "Block details",
+				"description": "Details about a block",
+				"operationId": "blockDetails",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Block height or hash",
 						"required": true,
 						"type": "string"
 					}
@@ -1212,6 +1260,36 @@
 						"in": "path",
 						"name": "hex",
 						"description": "The hex string of the raw transaction",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful operation"
+					},
+					"400": {
+						"description": "Invalid Command"
+					}
+				}
+			}
+		},
+		"/transaction/details/{txid}": {
+			"get": {
+				"tags": [
+					"transaction"
+				],
+				"summary": "Transaction details",
+				"description": "Details about a transaction",
+				"operationId": "transactionDetails",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "txid",
+						"description": "The transaction id",
 						"required": true,
 						"type": "string"
 					}
