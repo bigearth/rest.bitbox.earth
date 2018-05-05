@@ -130,39 +130,6 @@
 				}
 			}
 		},
-		"/block/details/{id}": {
-			"get": {
-				"tags": [
-					"block"
-				],
-				"summary": "Block details",
-				"description": "Details about a block",
-				"operationId": "blockDetails",
-				"consumes": [
-					"application/json"
-				],
-				"produces": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"name": "id",
-						"in": "path",
-						"description": "Block height or hash",
-						"required": true,
-						"type": "string"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "successful response"
-					},
-					"400": {
-						"description": "Invalid tag value"
-					}
-				}
-			}
-		},
 		"/address/utxo/{address}": {
 			"get": {
 				"tags": [
@@ -182,6 +149,39 @@
 						"name": "address",
 						"in": "path",
 						"description": "the address",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful response"
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				}
+			}
+		},
+		"/block/details/{id}": {
+			"get": {
+				"tags": [
+					"block"
+				],
+				"summary": "Block details",
+				"description": "Details about a block",
+				"operationId": "blockDetails",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"description": "Block hash",
 						"required": true,
 						"type": "string"
 					}
