@@ -22,4 +22,6 @@ router.get('/details/:txid', function(req, res, next) {
   });
 });
 
+
+
 module.exports = router;
