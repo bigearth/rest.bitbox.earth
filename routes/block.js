@@ -15,11 +15,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/details/:id', function(req, res, next) {
-  BITBOX.Block.details(req.params.id)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
+  if(req.params.id.length !== 64) {
+    BITBOX.Blockchain.getBlockHash(req.params.id)
+    .then((result) => {
+      BITBOX.Block.details(result)
+      .then((result) => {
+        res.json(result);
+      }, (err) => { console.log(err);
+      });
+    }, (err) => { console.log(err);
+    });
+  } else {
+    BITBOX.Block.details(req.params.id)
+    .then((result) => {
+      res.json(result);
+    }, (err) => { console.log(err);
+    });
+  }
 });
 
 module.exports = router;

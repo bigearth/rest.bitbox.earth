@@ -181,7 +181,7 @@
 					{
 						"name": "id",
 						"in": "path",
-						"description": "Block hash",
+						"description": "Block hash/height",
 						"required": true,
 						"type": "string"
 					}
