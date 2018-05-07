@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bitbox-cli": "^0.7.19",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",

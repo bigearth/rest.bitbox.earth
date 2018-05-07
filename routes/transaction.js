@@ -10,16 +10,33 @@ let BITBOX = new BITBOXCli({
   password: "xhFjluMJMyOXcYvF"
 });
 
+let axios = require('axios');
+
 router.get('/', function(req, res, next) {
   res.json({ status: 'transaction' });
 });
 
 router.get('/details/:txid', function(req, res, next) {
-  BITBOX.Transaction.details(req.params.txid)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
+  let txid;
+  try {
+    txs = JSON.parse(req.params.txid);
+    let result = [];
+    txs = txs.map(function(tx) {
+      return BITBOX.Transaction.details(tx)
+    })
+    axios.all(txs)
+    .then(axios.spread(function (...spread) {
+      result.push(...spread);
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BITBOX.Transaction.details(req.params.txid)
+    .then((result) => {
+      res.json(result);
+    }, (err) => { console.log(err);
+    });
+  }
 });
 
 
