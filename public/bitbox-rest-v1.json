@@ -1289,7 +1289,7 @@
 					{
 						"in": "path",
 						"name": "txid",
-						"description": "The transaction id",
+						"description": "single txid or url encoded array of txids",
 						"required": true,
 						"type": "string"
 					}
