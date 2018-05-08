@@ -31,9 +31,9 @@ router.get('/details/:txid', function(req, res, next) {
     }));
   }
   catch(error) {
-    axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(address)}`)
+    axios.get(`https://explorer.bitcoin.com/api/bch/tx/${req.params.txid}`)
     .then((result) => {
-      res.json(result);
+      res.json(result.data);
     });
   }
 });
