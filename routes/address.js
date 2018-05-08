@@ -10,22 +10,33 @@ let BITBOX = new BITBOXCli({
   password: "xhFjluMJMyOXcYvF"
 });
 
+let axios = require('axios');
+
 router.get('/', function(req, res, next) {
   res.json({ status: 'address' });
 });
 
 router.get('/details/:address', function(req, res, next) {
-  BITBOX.Address.details(req.params.address)
+  axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`)
   .then((result) => {
-    res.json(result);
+    delete result.data.addrStr;
+    result.data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+    result.data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+    res.json(result.data);
   }, (err) => { console.log(err);
   });
 });
 
 router.get('/utxo/:address', function(req, res, next) {
-  BITBOX.Address.utxo(req.params.address)
+  axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
   .then((result) => {
-    res.json(result);
+    result.data.forEach((data) => {
+      delete data.address;
+      data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+      data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+    })
+
+    res.json(result.data);
   }, (err) => { console.log(err);
   });
 });
