@@ -34,13 +34,15 @@ router.get('/details/:txid', function(req, res, next) {
     .then((result) => {
       if(result.data && result.data.vin) {
         result.data.vin.forEach((vin) => {
-          let address = vin.addr;
-          vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
-          vin.cashAddress = BITBOX.Address.toCashAddress(address);
-          vin.value = vin.valueSat;
-          delete vin.addr;
-          delete vin.valueSat;
-          delete vin.doubleSpentTxID;
+          if(!vin.coinbase) {
+            let address = vin.addr;
+            vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
+            vin.cashAddress = BITBOX.Address.toCashAddress(address);
+            vin.value = vin.valueSat;
+            delete vin.addr;
+            delete vin.valueSat;
+            delete vin.doubleSpentTxID;
+          }
         });
       }
       res.json(result.data);
