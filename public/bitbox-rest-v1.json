@@ -115,7 +115,7 @@
 					{
 						"name": "address",
 						"in": "path",
-						"description": "the address",
+						"description": "the address or array of addresses in cashAddr or legacy",
 						"required": true,
 						"type": "string"
 					}
@@ -148,7 +148,7 @@
 					{
 						"name": "address",
 						"in": "path",
-						"description": "the address",
+						"description": "the address or an array of addresses in cashAddr or legacy",
 						"required": true,
 						"type": "string"
 					}
