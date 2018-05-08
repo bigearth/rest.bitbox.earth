@@ -17,9 +17,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/details/:txid', function(req, res, next) {
-  let txid;
   try {
-    txs = JSON.parse(req.params.txid);
+    let txs = JSON.parse(req.params.txid);
     let result = [];
     txs = txs.map(function(tx) {
       return BITBOX.Transaction.details(tx)
