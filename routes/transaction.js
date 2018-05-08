@@ -32,6 +32,14 @@ router.get('/details/:txid', function(req, res, next) {
   catch(error) {
     axios.get(`https://explorer.bitcoin.com/api/bch/tx/${req.params.txid}`)
     .then((result) => {
+      if(result.data && result.data.vin) {
+        result.data.vin.forEach((vin) => {
+          let address = vin.addr;
+          vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
+          vin.cashAddress = BITBOX.Address.toCashAddress(address);
+          delete vin.addr;
+        });
+      }
       res.json(result.data);
     });
   }
