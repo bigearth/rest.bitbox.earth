@@ -85,18 +85,18 @@ router.get('/unconfirmed/:address', function(req, res, next) {
   catch(error) {
     axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
     .then((result) => {
-      console.log(result)
+      let unconfirmed = [];
       result.data.forEach((data) => {
-        console.log(data);
         delete data.address;
         data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
         data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+        if(data.confirmations === 0) {
+          unconfirmed.push(data);
+        }
       })
 
-      res.json(result.data);
-    }, (err) => { console.log(err);
-      console.log(err)
-    });
+      res.json(unconfirmed);
+    }, (err) => { console.log(err); });
   }
 });
 
