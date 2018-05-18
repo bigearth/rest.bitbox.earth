@@ -163,6 +163,39 @@
 				}
 			}
 		},
+		"/address/unconfirmed/{address}": {
+			"get": {
+				"tags": [
+					"address"
+				],
+				"summary": "Unconfirmed transactions for an address",
+				"description": "Returns the list of unconfirmed transactions for an address",
+				"operationId": "unconfirmed",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "address",
+						"in": "path",
+						"description": "the address or an array of addresses in cashAddr or legacy",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "successful response"
+					},
+					"400": {
+						"description": "Invalid tag value"
+					}
+				}
+			}
+		},
 		"/block/details/{id}": {
 			"get": {
 				"tags": [
