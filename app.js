@@ -4,7 +4,9 @@ let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
-let basicAuth = require('express-basic-auth')
+let basicAuth = require('express-basic-auth');
+let helmet = require('helmet');
+let RateLimit = require('express-rate-limit');
 
 require('dotenv').config()
 
@@ -22,8 +24,26 @@ let transaction = require('./routes/transaction');
 let util = require('./routes/util');
 
 let app = express();
+app.use(helmet());
 let cors = require('cors')
 app.use(cors())
+app.enable('trust proxy');
+let limiter = new RateLimit({
+  windowMs: 60000, // 1 minute
+  max: 20, // limit each IP to 20 requests per windowMs
+  delayMs: 0, // disable delaying - full speed until the max limit is reached
+  // handler: function (req, res, /*next*/) {
+  //   if (options.headers) {
+  //     res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
+  //   }
+  //   res.format({
+  //     json: function(){
+  //       res.status(500).json({ message: 'Rate Limit'});
+  //     }
+  //   });
+  // }
+});
+app.use('/v1/', limiter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
