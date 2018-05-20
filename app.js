@@ -32,16 +32,13 @@ let limiter = new RateLimit({
   windowMs: 60000, // 1 minute
   max: 20, // limit each IP to 20 requests per windowMs
   delayMs: 0, // disable delaying - full speed until the max limit is reached
-  // handler: function (req, res, /*next*/) {
-  //   if (options.headers) {
-  //     res.setHeader('Retry-After', Math.ceil(options.windowMs / 1000));
-  //   }
-  //   res.format({
-  //     json: function(){
-  //       res.status(500).json({ message: 'Rate Limit'});
-  //     }
-  //   });
-  // }
+  handler: function (req, res, /*next*/) {
+    res.format({
+      json: function(){
+        res.status(500).json({ error: 'Too many requests. Limits are 20 requests per minute.'});
+      }
+    });
+  }
 });
 app.use('/v1/', limiter);
 
