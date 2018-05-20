@@ -36,7 +36,8 @@ router.get('/details/:address', function(req, res, next) {
       result.data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
       result.data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
       res.json(result.data);
-    }, (err) => { console.log(err);
+    }, (err) => {
+      console.log(err);
     });
   }
 });

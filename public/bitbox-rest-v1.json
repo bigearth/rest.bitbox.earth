@@ -122,10 +122,16 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/AddressDetails"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"schema": {
+						  "status": 500,
+							"message": "Received an invalid Bitcoin Cash address as input."
+						}
 					}
 				}
 			}
@@ -155,10 +161,16 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/AddressUtxo"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"schema": {
+						  "status": 500,
+							"message": "Received an invalid Bitcoin Cash address as input."
+						}
 					}
 				}
 			}
@@ -1401,6 +1413,103 @@
 					"400": {
 						"description": "Invalid Command"
 					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"AddressDetails": {
+			"type": "object",
+			"properties": {
+			  "balance": {
+					"type": "number",
+					"format": "float"
+				},
+			  "balanceSat": {
+					"type": "number",
+					"format": "float"
+				},
+			  "totalReceived": {
+					"type": "number",
+					"format": "float"
+				},
+			  "totalReceivedSat": {
+					"type": "number",
+					"format": "float"
+				},
+			  "totalSent": {
+					"type": "number",
+					"format": "float"
+				},
+			  "totalSentSat": {
+					"type": "number",
+					"format": "float"
+				},
+			  "unconfirmedBalance": {
+					"type": "number",
+					"format": "float"
+				},
+			  "unconfirmedBalanceSat": {
+					"type": "number",
+					"format": "float"
+				},
+			  "unconfirmedTxApperances": {
+					"type": "number",
+					"format": "float"
+				},
+			  "txApperances": {
+					"type": "number"
+				},
+			  "transactions": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+			  "legacyAddress": {
+					"type": "string"
+				},
+			  "cashAddress": {
+					"type": "string"
+				}
+			}
+		},
+		"AddressUtxo": {
+			"type": "array",
+			"items": {
+			  "$ref": "#/definitions/Utxo"
+			}
+		},
+	  "Utxo": {
+			"type": "object",
+			"properties": {
+			  "txid": {
+					"type": "string"
+				},
+			  "vout": {
+					"type": "number"
+				},
+			  "scriptPubKey": {
+					"type": "string"
+				},
+			  "amount": {
+					"type": "number",
+					"format": "float"
+				},
+			  "satoshis": {
+					"type": "number"
+				},
+			  "height": {
+					"type": "number"
+				},
+			  "confirmations": {
+					"type": "number"
+				},
+			  "legacyAddress": {
+					"type": "string"
+				},
+			  "cashAddress": {
+					"type": "string"
 				}
 			}
 		}
