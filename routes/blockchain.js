@@ -73,7 +73,7 @@ router.get('/getBlockHeader/:hash', function(req, res, next) {
 router.get('/getChainTips', function(req, res, next) {
   BITBOX.Blockchain.getChainTips()
   .then((result) => {
-    res.json({result: result});
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -93,7 +93,7 @@ router.get('/getMempoolAncestors/:txid', function(req, res, next) {
   }
   BITBOX.Blockchain.getMempoolAncestors(req.params.txid, verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -105,7 +105,7 @@ router.get('/getMempoolDescendants/:txid', function(req, res, next) {
   }
   BITBOX.Blockchain.getMempoolDescendants(req.params.txid, verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -113,7 +113,7 @@ router.get('/getMempoolDescendants/:txid', function(req, res, next) {
 router.get('/getMempoolEntry/:txid', function(req, res, next) {
   BITBOX.Blockchain.getMempoolEntry(req.params.txid)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -121,7 +121,7 @@ router.get('/getMempoolEntry/:txid', function(req, res, next) {
 router.get('/getMempoolInfo', function(req, res, next) {
   BITBOX.Blockchain.getMempoolInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -133,7 +133,7 @@ router.get('/getRawMempool', function(req, res, next) {
   }
   BITBOX.Blockchain.getRawMempool(verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -145,7 +145,7 @@ router.get('/getTxOut/:txid/:n', function(req, res, next) {
   }
   BITBOX.Blockchain.getTxOut(req.params.txid, parseInt(req.params.n), include_mempool)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -154,7 +154,7 @@ router.get('/getTxOutProof/:txids', function(req, res, next) {
   // TODO finish this
   BITBOX.Blockchain.getTxOutProof(req.params.txids)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -162,7 +162,7 @@ router.get('/getTxOutProof/:txids', function(req, res, next) {
 router.get('/getTxOutSetInfo', function(req, res, next) {
   BITBOX.Blockchain.getTxOutSetInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -170,7 +170,7 @@ router.get('/getTxOutSetInfo', function(req, res, next) {
 router.get('/preciousBlock/:hash', function(req, res, next) {
   BITBOX.Blockchain.preciousBlock(req.params.hash)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -178,7 +178,7 @@ router.get('/preciousBlock/:hash', function(req, res, next) {
 router.post('/pruneBlockchain/:height', function(req, res, next) {
   BITBOX.Blockchain.pruneBlockchain(req.params.height)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -195,7 +195,7 @@ router.get('/verifyChain', function(req, res, next) {
 router.get('/verifyTxOutProof/:proof', function(req, res, next) {
   BITBOX.Blockchain.verifyTxOutProof(req.params.proof)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
