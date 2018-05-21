@@ -519,10 +519,13 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/MempoolAncestors"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "transaction not found"
 					}
 				}
 			}
@@ -557,10 +560,13 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/MempoolDescendants"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "transaction not found"
 					}
 				}
 			}
@@ -2617,6 +2623,18 @@
 		},
 	  "ConnectionCount": {
 			"type": "number",
+		},
+	  "MempoolAncestors": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+	  "MempoolDescendants": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
 		}
 	}
 }
