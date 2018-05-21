@@ -878,7 +878,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/Info"
+						}
 					}
 				}
 			}
@@ -2031,6 +2034,43 @@
 				},
 			  "isscript": {
 					"type": "boolean"
+				}
+			}
+		},
+	  "Info": {
+			"type": "object",
+			"properties": {
+			  "version": {
+					"type": "number"
+				},
+			  "protocolversion": {
+					"type": "number"
+				},
+			  "blocks": {
+					"type": "number"
+				},
+			  "timeoffset": {
+					"type": "number"
+				},
+			  "connections": {
+					"type": "number"
+				},
+			  "proxy": {
+					"type": "string"
+				},
+			  "difficulty": {
+					"type": "number",
+					"format": "float"
+				},
+			  "paytxfee": {
+					"type": "number"
+				},
+			  "relayfee": {
+					"type": "number",
+					"format": "float"
+				},
+			  "errors": {
+					"type": "string"
 				}
 			}
 		}
