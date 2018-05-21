@@ -128,6 +128,7 @@
 						}
 					},
 					"400": {
+						"description": "Received an invalid Bitcoin Cash address as input.",
 						"schema": {
 						  "status": 500,
 							"message": "Received an invalid Bitcoin Cash address as input."
@@ -167,6 +168,7 @@
 						}
 					},
 					"400": {
+						"description": "Received an invalid Bitcoin Cash address as input.",
 						"schema": {
 						  "status": 500,
 							"message": "Received an invalid Bitcoin Cash address as input."
@@ -200,10 +202,17 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/AddressUnconfirmed"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Received an invalid Bitcoin Cash address as input.",
+						"schema": {
+						  "status": 500,
+							"message": "Received an invalid Bitcoin Cash address as input."
+						}
 					}
 				}
 			}
@@ -233,10 +242,17 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/BlockDetails"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Invalid tag value",
+						"schema": {
+						  "status": 500,
+							"message": "Received an invalid Bitcoin Cash address as input."
+						}
 					}
 				}
 			}
@@ -1510,6 +1526,110 @@
 				},
 			  "cashAddress": {
 					"type": "string"
+				}
+			}
+		},
+		"AddressUnconfirmed": {
+			"type": "array",
+			"items": {
+			  "$ref": "#/definitions/Unconfirmed"
+			}
+		},
+	  "Unconfirmed": {
+			"type": "object",
+			"properties": {
+			  "txid": {
+					"type": "string"
+				},
+			  "vout": {
+					"type": "number"
+				},
+			  "scriptPubKey": {
+					"type": "string"
+				},
+			  "amount": {
+					"type": "number",
+					"format": "float"
+				},
+			  "satoshis": {
+					"type": "number"
+				},
+			  "height": {
+					"type": "number"
+				},
+			  "confirmations": {
+					"type": "number"
+				},
+			  "legacyAddress": {
+					"type": "string"
+				},
+			  "cashAddress": {
+					"type": "string"
+				}
+			}
+		},
+	  "BlockDetails": {
+			"type": "object",
+			"properties": {
+			  "hash": {
+					"type": "string"
+				},
+			  "size": {
+					"type": "number"
+				},
+			  "height": {
+					"type": "number"
+				},
+			  "version": {
+					"type": "number"
+				},
+			  "merkleroot": {
+					"type": "string"
+				},
+			  "tx": {
+					"type": "array",
+					"items": {
+					  "type": "string"
+					}
+				},
+			  "time": {
+					"type": "number"
+				},
+			  "nonce": {
+					"type": "number"
+				},
+			  "bits": {
+					"type": "string"
+				},
+			  "difficulty": {
+					"type": "number",
+					"format": "float"
+				},
+			  "chainwork": {
+					"type": "string"
+				},
+			  "confirmations": {
+					"type": "number"
+				},
+			  "previousblockhash": {
+					"type": "string"
+				},
+			  "nextblockhash": {
+					"type": "string"
+				},
+			  "reward": {
+					"type": "number",
+					"format": "float"
+				},
+			  "isMainChain": {
+					"type": "boolean"
+				},
+			  "poolInfo": {
+					"type": "object",
+			    "properties": {
+						"poolName": "string",
+						"url": "strinng"
+					}
 				}
 			}
 		}
