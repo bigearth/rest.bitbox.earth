@@ -394,6 +394,13 @@
 						"schema": {
 						  "$ref": "#/definitions/BlockHash"
 						}
+					},
+					"400": {
+						"description": "Block not found",
+						"schema": {
+						  "status": 500,
+							"message": "Block not found"
+						}
 					}
 				}
 			}
@@ -434,7 +441,11 @@
 						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Block not found",
+						"schema": {
+						  "status": 500,
+							"message": "Block not found"
+						}
 					}
 				}
 			}
