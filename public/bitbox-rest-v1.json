@@ -1241,7 +1241,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/DecodeRawTransaction"
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1271,7 +1274,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/DecodeScript"
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1312,7 +1318,7 @@
 						"description": "successful operation",
 						"schema": {
 							"$ref": "#/definitions/GetRawTransaction"
-						  }
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1375,7 +1381,7 @@
 						"description": "successful operation",
 						"schema": {
 							"$ref": "#/definitions/TransactionDetails"
-						  }
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1415,7 +1421,7 @@
 						"description": "successful operation",
 						"schema": {
 							"$ref": "#/definitions/CreateMultisig"
-						  }
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1448,7 +1454,7 @@
 						"description": "successful operation",
 						"schema": {
 							"$ref": "#/definitions/ValidateAddress"
-						  }
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1862,6 +1868,104 @@
 		},
 	  "VerifyChain": {
 			"type": "boolean"
+		},
+		"DecodeRawTransaction": {
+			"type": "object",
+			"properties": {
+				"txid": {
+					"type": "string"
+				},
+				"hash": {
+					"type": "string"
+				},
+				"size": {
+					"type": "number"
+				},
+				"version": {
+					"type": "number"
+				},
+				"vin": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"txid": {
+								"type": "string"
+							},
+							"vout": {
+								"type": "number"
+							},
+							"scriptSig": {
+								"type": "object",
+								"properties":{
+									"asm": {
+										"type": "string"
+									},
+									"hex": {
+										"type": "string"
+									}
+								}
+							},
+							"sequence": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"vout": {
+					"type": "array",
+					"items":{
+						"type": "object",
+						"properties": {
+							"value":{
+								"type": "number"
+							},
+							"n": {
+								"type": "number"
+							},
+							"scriptPubkey": {
+								"type": "object",
+								"properties": {
+									"asm": {
+										"type": "string"
+									},
+									"hex": {
+										"type": "string"
+									},
+									"reqSigs": {
+										"type": "number"
+									},
+									"type": {
+										"type": "string"
+									},
+									"addresses": {
+										"type": "array",
+										"items": {
+											"address": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"DecodeScript": {
+			"type": "object",
+			"properties": {
+				"asm": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"p2sh": {
+					"type": "string"
+				}
+			}
 		},
 		"GetRawTransaction": {
 			"type": "object",
