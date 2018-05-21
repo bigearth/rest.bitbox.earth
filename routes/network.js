@@ -57,7 +57,7 @@ router.get('/getConnectionCount', function(req, res, next) {
 router.get('/getNetTotals', function(req, res, next) {
   BITBOX.Network.getNetTotals()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -65,7 +65,7 @@ router.get('/getNetTotals', function(req, res, next) {
 router.get('/getNetworkInfo', function(req, res, next) {
   BITBOX.Network.getNetworkInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -73,7 +73,7 @@ router.get('/getNetworkInfo', function(req, res, next) {
 router.get('/getPeerInfo', function(req, res, next) {
   BITBOX.Network.getPeerInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });

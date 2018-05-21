@@ -21,7 +21,7 @@ router.post('/generateToAddress/:nblocks/:address', function(req, res, next) {
   }
   BITBOX.Generating.generateToAddress(req.params.nblocks, req.params.address, maxtries)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });

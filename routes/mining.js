@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
   BITBOX.Mining.getBlockTemplate(req.params.templateRequest)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -25,7 +25,7 @@ router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
 router.get('/getMiningInfo', function(req, res, next) {
   BITBOX.Mining.getMiningInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -45,7 +45,7 @@ router.post('/submitBlock/:hex', function(req, res, next) {
   }
   BITBOX.Mining.submitBlock(req.params.hex, parameters)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });

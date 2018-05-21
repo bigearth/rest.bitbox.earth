@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 router.get('/getInfo', function(req, res, next) {
   BITBOX.Control.getInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -25,7 +25,7 @@ router.get('/getInfo', function(req, res, next) {
 router.get('/getMemoryInfo', function(req, res, next) {
   BITBOX.Control.getMemoryInfo()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -33,7 +33,7 @@ router.get('/getMemoryInfo', function(req, res, next) {
 router.get('/help', function(req, res, next) {
   BITBOX.Control.help()
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -41,7 +41,7 @@ router.get('/help', function(req, res, next) {
 // router.post('/stop', function(req, res, next) {
 //   BITBOX.Control.stop()
 //   .then((result) => {
-//     res.json({ result: result });
+//     res.json(result);
 //   }, (err) => { console.log(err);
 //   });
 // });
