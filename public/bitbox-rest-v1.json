@@ -1169,7 +1169,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/GetPeerInfo"
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1868,6 +1871,138 @@
 		},
 	  "VerifyChain": {
 			"type": "boolean"
+		},
+		"GetPeerInfo": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "number"
+				},
+				"addr": {
+					"type": "string"
+				},
+				"addrlocal": {
+					"type": "string"
+				},
+				"services": {
+					"type": "number"
+				},
+				"relaytxes": {
+					"type": "boolean"
+				},
+				"lastsend": {
+					"type": "number"
+				},
+				"lastrecv": {
+					"type": "number"
+				},
+				"bytessent": {
+					"type": "number"
+				},
+				"bytesrecv": {
+					"type": "number"
+				},
+				"conntime": {
+					"type": "number"
+				},
+				"timeoffset": {
+					"type": "number"
+				},
+				"pingtime": {
+					"type": "number"
+				},
+				"minping": {
+					"type": "number"
+				},
+				"version": {
+					"type": "number"
+				},
+				"subver": {
+					"type": "string"
+				},
+				"inbound": {
+					"type": "boolean"
+				},
+				"addnode": {
+					"type": "boolean"
+				},
+				"startingheight": {
+					"type": "number"
+				},
+				"banscore": {
+					"type": "number"
+				},
+				"synced_headers": {
+					"type": "number"
+				},
+				"synced_blocks": {
+					"type": "number"
+				},
+				"inflight": {
+					"type": "array"
+				},
+				"whitelist": {
+					"type": "boolean"
+				},
+				"bytessent_per_msg": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"addr": {
+								"type": "number"
+							},
+							"feefilter": {
+								"type": "number"
+							},
+							"inv": {
+								"type": "number"
+							},
+							"ping": {
+								"type": "number"
+							},
+							"pong": {
+								"type": "number"
+							},
+							"sendcmpct": {
+								"type": "number"
+							},
+							"sendheaders": {
+								"type": "number"
+							},
+							"verack": {
+								"type": "number"
+							},
+							"version": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"bytesrecv_per_msg": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"addr": {
+								"type": "number"
+							},
+							"ping": {
+								"type": "number"
+							},
+							"pong": {
+								"type": "number"
+							},
+							"verack": {
+								"type": "number"
+							},
+							"version": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
 		},
 		"DecodeRawTransaction": {
 			"type": "object",
