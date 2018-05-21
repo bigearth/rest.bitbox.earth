@@ -1738,7 +1738,17 @@
 			  "softforks": {
 					"type": "array",
 					"items": {
-					  "type": "string"
+						"type": "object",
+				    "properties": {
+							"id": "string",
+							"version": "number",
+							"reject": {
+					      "type": "object",
+						    "properties": {
+									"status": "boolean"
+								}
+							}
+						}
 					}
 				},
 			  "bip9_softforks": {
@@ -1754,13 +1764,3 @@
 		}
 	}
 }
-
-"softforks": [
-	{
-		"id": "bip34",
-		"version": 2,
-		"reject": {
-			"status": true
-		}
-	},
-],
