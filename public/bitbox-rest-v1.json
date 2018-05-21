@@ -2282,6 +2282,34 @@
 					"type": "string"
 				}
 			}
+		},
+	  "MemoryInfo": {
+			"type": "object",
+			"properties": {
+			  "locked": {
+					"type": "object",
+					"properties": {
+					  "used": {
+							"type": "number",
+						},
+					  "free": {
+							"type": "number",
+						},
+					  "total": {
+							"type": "number",
+						},
+					  "locked": {
+							"type": "number",
+						},
+					  "chunks_used": {
+							"type": "number",
+						},
+					  "chunks_free": {
+							"type": "number",
+						}
+					}
+				}
+			}
 		}
 	}
 }
