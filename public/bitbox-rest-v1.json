@@ -248,10 +248,10 @@
 						}
 					},
 					"400": {
-						"description": "Invalid tag value",
+						"description": "Received an invalid block height.",
 						"schema": {
 						  "status": 500,
-							"message": "Received an invalid Bitcoin Cash address as input."
+							"message": "Received an invalid block height."
 						}
 					}
 				}
