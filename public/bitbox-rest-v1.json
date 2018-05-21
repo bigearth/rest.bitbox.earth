@@ -1145,7 +1145,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/GetNetTotals"
+						}
 					}
 				}
 			}
@@ -1163,7 +1166,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+							"$ref": "#/definitions/GetNetworkInfo"
+						}
 					}
 				}
 			}
@@ -1883,6 +1889,124 @@
 		},
 	  "VerifyChain": {
 			"type": "boolean"
+		},
+		"GetNetTotals": {
+			"type": "object",
+			"properties": {
+				"totalbytesrecv": {
+					"type": "number"
+				},
+				"totalbytessent": {
+					"type": "number"
+				},
+				"timemillis": {
+					"type": "number"
+				},
+				"uploadtarget": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"timeframe": {
+								"type": "number"
+							},
+							"target": {
+								"type": "number"
+							},
+							"target_reached": {
+								"type": "boolean"
+							},
+							"serve_historical_blocks": {
+								"type": "boolean"
+							},
+							"proxy_randomize_credentials": {
+								"type": "number"
+							},
+							"time_left_in_cycle": {
+								"type": "number"
+							}
+						}
+					}
+				}
+			}
+		},
+		"GetNetworkInfo": {
+			"type": "object",
+			"properties": {
+				"version": {
+					"type": "number"
+				},
+				"subversion": {
+					"type": "string"
+				},
+				"protocolversion": {
+					"type": "number"
+				},
+				"localservices": {
+					"type": "number"
+				},
+				"localrelay": {
+					"type": "boolean"
+				},
+				"timeoffset": {
+					"type": "number"
+				},
+				"networkactive": {
+					"type": "boolean"
+				},
+				"connections": {
+					"type": "number"
+				},
+				"networks": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"limited": {
+								"type": "boolean"
+							},
+							"reachable": {
+								"type": "boolean"
+							},
+							"proxy": {
+								"type": "string"
+							},
+							"proxy_randomize_credentials": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"relayfee": {
+					"type": "number"
+				},
+				"incrementalfee": {
+					"type": "number"
+				},
+				"localaddresses": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"address": {
+								"type": "string"
+							},
+							"port": {
+								"type": "number"
+							},
+							"score": {
+								"type": "number"
+							}
+						}
+					}
+				},
+				"warnings": {
+					"type": "string"
+				}
+			}
 		},
 		"GetPeerInfo": {
 			"type": "object",
