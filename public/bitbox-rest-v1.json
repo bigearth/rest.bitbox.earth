@@ -1955,7 +1955,7 @@
 					"type": "number"
 				},
 				"time": {
-					"type": "blocktime"
+					"type": "number"
 				},
 				"blocktime": {
 					"type": "number"
@@ -2100,7 +2100,7 @@
 					"type": "number"
 				},
 				"time": {
-					"type": "blocktime"
+					"type": "number"
 				},
 				"valueOut": {
 					"type": "number"
