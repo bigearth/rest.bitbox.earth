@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 router.get('/estimateSmartFee/:nblocks', function(req, res, next) {
   BITBOX.Util.estimateSmartFee(parseInt(req.params.nblocks))
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -25,7 +25,7 @@ router.get('/estimateSmartFee/:nblocks', function(req, res, next) {
 router.get('/estimateSmartPriority/:nblocks', function(req, res, next) {
   BITBOX.Util.estimateSmartPriority(parseInt(req.params.nblocks))
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -33,7 +33,7 @@ router.get('/estimateSmartPriority/:nblocks', function(req, res, next) {
 router.get('/createMultisig/:nrequired/:keys', function(req, res, next) {
   BITBOX.Util.createMultisig(parseInt(req.params.nrequired), req.params.keys)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
@@ -54,26 +54,10 @@ router.get('/estimatePriority/:nblocks', function(req, res, next) {
   });
 });
 
-router.get('/signMessageWithPrivKey/:privkey/:message', function(req, res, next) {
-  BITBOX.Util.signMessageWithPrivKey(req.params.privkey, req.params.message)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
 router.get('/validateAddress/:address', function(req, res, next) {
   BITBOX.Util.validateAddress(req.params.address)
   .then((result) => {
-    res.json({ result: result });
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/verifyMessage/:address/:signature/:message', function(req, res, next) {
-  BITBOX.Util.verifyMessage(req.params.address, req.params.signature, req.params.message)
-  .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
