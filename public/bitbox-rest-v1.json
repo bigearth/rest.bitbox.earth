@@ -273,7 +273,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/BestBlockHash"
+						}
 					}
 				}
 			}
@@ -308,10 +311,17 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful response"
+						"description": "successful response",
+						"schema": {
+						  "$ref": "#/definitions/Block"
+						}
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Block not found",
+						"schema": {
+						  "status": 500,
+							"message": "Block not found"
+						}
 					}
 				}
 			}
@@ -329,10 +339,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
-					},
-					"400": {
-						"description": "Invalid tag value"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/BlockchainInfo"
+						}
 					}
 				}
 			}
@@ -1628,10 +1638,129 @@
 					"type": "object",
 			    "properties": {
 						"poolName": "string",
-						"url": "strinng"
+						"url": "string"
+					}
+				}
+			}
+		},
+	  "BestBlockHash": {
+			"type": "string"
+		},
+	  "Block": {
+			"type": "object",
+			"properties": {
+			  "hash": {
+					"type": "string"
+				},
+			  "confirmations": {
+					"type": "number"
+				},
+			  "size": {
+					"type": "number"
+				},
+			  "height": {
+					"type": "number"
+				},
+			  "version": {
+					"type": "number"
+				},
+			  "versionHex": {
+					"type": "string"
+				},
+			  "merkleroot": {
+					"type": "string"
+				},
+			  "tx": {
+					"type": "array",
+					"items": {
+					  "type": "string"
+					}
+				},
+			  "time": {
+					"type": "number"
+				},
+			  "mediantime": {
+					"type": "number"
+				},
+			  "nonce": {
+					"type": "number"
+				},
+			  "bits": {
+					"type": "string"
+				},
+			  "difficulty": {
+					"type": "number",
+					"format": "float"
+				},
+			  "chainwork": {
+					"type": "string"
+				},
+			  "previousblockhash": {
+					"type": "string"
+				},
+			  "nextblockhash": {
+					"type": "string"
+				}
+			}
+		},
+	  "BlockchainInfo": {
+			"type": "object",
+			"properties": {
+			  "chain": {
+					"type": "string"
+				},
+			  "blocks": {
+					"type": "number"
+				},
+			  "headers": {
+					"type": "number"
+				},
+			  "bestblockhash": {
+					"type": "string"
+				},
+			  "difficulty": {
+					"type": "number",
+					"format": "float"
+				},
+			  "mediantime": {
+					"type": "number"
+				},
+			  "verificationprogress": {
+					"type": "number",
+					"format": "float"
+				},
+			  "chainwork": {
+					"type": "string"
+				},
+			  "pruned": {
+					"type": "boolean"
+				},
+			  "softforks": {
+					"type": "array",
+					"items": {
+					  "type": "string"
+					}
+				},
+			  "bip9_softforks": {
+					"type": "object",
+			    "properties": {
+						"status": "string",
+						"startTime": "number",
+						"timeout": "number",
+						"since": "number"
 					}
 				}
 			}
 		}
 	}
 }
+
+"softforks": [
+	{
+		"id": "bip34",
+		"version": 2,
+		"reject": {
+			"status": true
+		}
+	},
+],
