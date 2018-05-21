@@ -1033,7 +1033,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/NetworkHashps"
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -2346,6 +2349,9 @@
 					"type": "string"
 				}
 			}
+		},
+	  "NetworkHashps": {
+			"type": "number",
 		}
 	}
 }
