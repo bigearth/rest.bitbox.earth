@@ -65,7 +65,7 @@ router.get('/getBlockHeader/:hash', function(req, res, next) {
   }
   BITBOX.Blockchain.getBlockHeader(req.params.hash, verbose)
   .then((result) => {
-    res.json({ result: result });
+    res.json(result);
   }, (err) => { console.log(err);
   });
 });
