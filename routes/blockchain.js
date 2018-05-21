@@ -159,14 +159,6 @@ router.get('/getTxOutProof/:txids', function(req, res, next) {
   });
 });
 
-router.get('/getTxOutSetInfo', function(req, res, next) {
-  BITBOX.Blockchain.getTxOutSetInfo()
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
 router.get('/preciousBlock/:hash', function(req, res, next) {
   BITBOX.Blockchain.preciousBlock(req.params.hash)
   .then((result) => {

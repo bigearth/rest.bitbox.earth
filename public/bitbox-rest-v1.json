@@ -736,27 +736,6 @@
 				}
 			}
 		},
-		"/blockchain/getTxOutSetInfo": {
-			"get": {
-				"tags": [
-					"blockchain"
-				],
-				"summary": "Returns statistics about the unspent transaction output set.",
-				"description": "Returns statistics about the unspent transaction output set. Note this call may take some time.",
-				"operationId": "getTxOutSetInfo",
-				"produces": [
-					"application/json"
-				],
-				"responses": {
-					"200": {
-						"description": "successful operation"
-					},
-					"400": {
-						"description": "Invalid tag value"
-					}
-				}
-			}
-		},
 		"/blockchain/preciousBlock/{blockhash}": {
 			"get": {
 				"tags": [
@@ -1857,5 +1836,25 @@
 				},
 			}
 		},
+	  "RawMempool": {
+			"type": "object",
+	    "properties": {
+			  "size": {
+					"type": "number"
+				},
+			  "bytes": {
+					"type": "number"
+				},
+			  "usage": {
+					"type": "number"
+				},
+			  "maxmempool": {
+					"type": "number"
+				},
+			  "mempoolminfee": {
+					"type": "number"
+				},
+			}
+		}
 	}
 }
