@@ -2,7 +2,7 @@
 	"swagger": "2.0",
 	"info": {
 		"description": "rest.bitbox.earth is the REST layer for BITBOX Cloud. More info: https://www.bitbox.earth. #bitbox chatroom http://ambassador.cash",
-		"version": "0.7.15",
+		"version": "0.1.13",
 		"title": "REST",
 		"license": {
 			"name": "MIT",
@@ -899,7 +899,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/MemoryInfo"
+						}
 					}
 				}
 			}
@@ -991,7 +994,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/MiningInfo"
+						}
 					}
 				}
 			}
@@ -1027,7 +1033,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/NetworkHashps"
+						}
 					},
 					"400": {
 						"description": "Invalid Command"
@@ -1115,7 +1124,10 @@
 				],
 				"responses": {
 					"200": {
-						"description": "successful operation"
+						"description": "successful operation",
+						"schema": {
+						  "$ref": "#/definitions/ConnectionCount"
+						}
 					}
 				}
 			}
@@ -2414,6 +2426,73 @@
 					"type": "string"
 				}
 			}
+		},
+	  "MemoryInfo": {
+			"type": "object",
+			"properties": {
+			  "locked": {
+					"type": "object",
+					"properties": {
+					  "used": {
+							"type": "number",
+						},
+					  "free": {
+							"type": "number",
+						},
+					  "total": {
+							"type": "number",
+						},
+					  "locked": {
+							"type": "number",
+						},
+					  "chunks_used": {
+							"type": "number",
+						},
+					  "chunks_free": {
+							"type": "number",
+						}
+					}
+				}
+			}
+		},
+	  "MiningInfo": {
+			"type": "object",
+			"properties": {
+				"blocks": {
+					"type": "number"
+				},
+				"currentblocksize": {
+					"type": "number"
+				},
+				"currentblocktx": {
+					"type": "number"
+				},
+			  "difficulty": {
+					"type": "number",
+					"format": "float"
+				},
+				"blockprioritypercentage": {
+					"type": "number"
+				},
+				"errors": {
+					"type": "string"
+				},
+				"networkhashps": {
+					"type": "number"
+				},
+				"pooledtx": {
+					"type": "number"
+				},
+				"chain": {
+					"type": "string"
+				}
+			}
+		},
+	  "NetworkHashps": {
+			"type": "number",
+		},
+	  "ConnectionCount": {
+			"type": "number",
 		}
 	}
 }
