@@ -522,7 +522,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Transaction not in mempool"
 					}
 				}
 			}
@@ -560,7 +560,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Transaction not in mempool"
 					}
 				}
 			}
@@ -590,7 +590,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Transaction not in mempool"
 					}
 				}
 			}
@@ -687,7 +687,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Invalid value/s - Null"
 					}
 				}
 			}
@@ -761,7 +761,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Invalid precious block input"
 					}
 				}
 			}
@@ -791,7 +791,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid tag value"
+						"description": "Cannot prune blocks because node is not in prune mode."
 					}
 				}
 			}
@@ -976,7 +976,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid command"
+						"description": "Block template not found"
 					}
 				}
 			}
@@ -1037,9 +1037,6 @@
 						"schema": {
 						  "$ref": "#/definitions/NetworkHashps"
 						}
-					},
-					"400": {
-						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1076,7 +1073,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Block decode failed"
 					}
 				}
 			}
@@ -1106,7 +1103,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Node info not found"
 					}
 				}
 			}
@@ -1191,9 +1188,6 @@
 						"schema": {
 							"$ref": "#/definitions/GetPeerInfo"
 						}
-					},
-					"400": {
-						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1212,9 +1206,6 @@
 				"responses": {
 					"200": {
 						"description": "successful operation"
-					},
-					"400": {
-						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1233,9 +1224,6 @@
 				"responses": {
 					"200": {
 						"description": "successful operation"
-					},
-					"400": {
-						"description": "Invalid Command"
 					}
 				}
 			}
@@ -1268,7 +1256,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "TX decode failed"
 					}
 				}
 			}
@@ -1301,7 +1289,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Argument must be hexadecimal string"
 					}
 				}
 			}
@@ -1342,7 +1330,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Transaction not found"
 					}
 				}
 			}
@@ -1372,7 +1360,7 @@
 						"description": "successful operation"
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Transaction not found"
 					}
 				}
 			}
@@ -1405,7 +1393,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Transaction not found"
 					}
 				}
 			}
@@ -1478,7 +1466,7 @@
 						}
 					},
 					"400": {
-						"description": "Invalid Command"
+						"description": "Invalid Address"
 					}
 				}
 			}
