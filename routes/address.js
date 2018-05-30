@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/details/:address', function(req, res, next) {
+  console.log('query string params', req.query)
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
@@ -30,7 +31,12 @@ router.get('/details/:address', function(req, res, next) {
     }));
   }
   catch(error) {
-    axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`)
+    let path = `https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`;
+    if(req.query.from && req.query.to) {
+      path = `${path}?from=${req.query.from}&to=${req.query.to}`;
+    }
+
+    axios.get(path)
     .then((result) => {
       delete result.data.addrStr;
       result.data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
