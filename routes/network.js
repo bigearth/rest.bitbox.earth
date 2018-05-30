@@ -37,14 +37,14 @@ router.get('/', function(req, res, next) {
 //   }, (err) => { console.log(err);
 //   });
 // });
-
-router.get('/getAddedNodeInfo/:node', function(req, res, next) {
-  BITBOX.Network.getAddedNodeInfo(req.params.node)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
+//
+// router.get('/getAddedNodeInfo/:node', function(req, res, next) {
+//   BITBOX.Network.getAddedNodeInfo(req.params.node)
+//   .then((result) => {
+//     res.json(result);
+//   }, (err) => { console.log(err);
+//   });
+// });
 
 router.get('/getConnectionCount', function(req, res, next) {
   BITBOX.Network.getConnectionCount()
