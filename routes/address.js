@@ -17,7 +17,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/details/:address', function(req, res, next) {
-  console.log('query string params', req.query)
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
