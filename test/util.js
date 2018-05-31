@@ -1,39 +1,39 @@
 let chai = require('chai');
 let assert = require('assert');
 let httpMocks = require("node-mocks-http");
-let blockRoute = require('../routes/block');
+let utilRoute = require('../routes/util');
 
-describe("#BlockRouter", () => {
+describe("#UtilRouter", () => {
   describe("#root", () => {
-    it("should return 'block' for GET /", () => {
+    it("should return 'util' for GET /", () => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
       });
       let mockResponse = httpMocks.createResponse();
-      blockRoute(mockRequest, mockResponse);
+      utilRoute(mockRequest, mockResponse);
       let actualResponseBody = mockResponse._getData();
       let expectedResponseBody = {
-        status: 'block'
+        status: 'util'
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
 
-  describe("#BlockDetails", () => {
-    it("should GET /details/:id ", (done) => {
+  describe("#ValidateAddress", () => {
+    it("should GET /validateAddress/:address ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/details/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"
+        url: "/validateAddress/bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
       });
-      blockRoute(mockRequest, mockResponse);
+      utilRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [ 'hash', 'size', 'height', 'version', 'merkleroot', 'tx', 'time', 'nonce', 'bits', 'difficulty', 'chainwork', 'confirmations', 'previousblockhash', 'nextblockhash', 'reward', 'isMainChain', 'poolInfo' ]);
+        assert.deepEqual(actualResponseBody, ['isvalid', 'address', 'scriptPubKey', 'ismine', 'iswatchonly', 'isscript']);
         done();
       });
     });
