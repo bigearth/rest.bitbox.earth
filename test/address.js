@@ -39,4 +39,26 @@ describe("#AddressRouter", () => {
       });
     });
   });
+
+  describe("#AddressUtxo", () => {
+    it("should GET /utxo/:address ", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url: "/utxo/qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      addressRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0])
+        // console.log(JSON.parse(mockResponse._getData())[0]);
+        assert.deepEqual(actualResponseBody, [ 'txid', 'vout', 'scriptPubKey', 'amount', 'satoshis', 'height', 'confirmations', 'legacyAddress', 'cashAddress']);
+        done();
+      });
+    });
+  });
+
+
 });
