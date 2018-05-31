@@ -33,8 +33,6 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        // TODO: check actual value not just length
-        actualResponseBody = "0000000000000000010601d5f62fc53698ef0aca2e2ef11321af0c83cdc7eb67"
         assert.equal(actualResponseBody.length, 64);
         done();
       });
