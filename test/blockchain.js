@@ -84,7 +84,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlockCount ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getBlockcount"
+        url: "/getBlockCount"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -92,9 +92,8 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        console.log(mockResponse._getData());
-        // assert.equal(actualResponseBody, "532656");
+        let actualResponseBody = parseInt(mockResponse._getData());
+        assert.equal(typeof actualResponseBody, "number");
         done();
       });
     });

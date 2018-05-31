@@ -45,7 +45,7 @@ router.get('/getBlockchainInfo', function(req, res, next) {
 router.get('/getBlockCount', function(req, res, next) {
   BITBOX.Blockchain.getBlockCount()
   .then((result) => {
-    res.json(result);
+    res.json(JSON.stringify(result));
   }, (err) => { console.log(err);
   });
 });
