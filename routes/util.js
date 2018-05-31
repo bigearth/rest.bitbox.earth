@@ -14,46 +14,6 @@ router.get('/', function(req, res, next) {
   res.json({ status: 'util' });
 });
 
-router.get('/estimateSmartFee/:nblocks', function(req, res, next) {
-  BITBOX.Util.estimateSmartFee(parseInt(req.params.nblocks))
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/estimateSmartPriority/:nblocks', function(req, res, next) {
-  BITBOX.Util.estimateSmartPriority(parseInt(req.params.nblocks))
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/createMultisig/:nrequired/:keys', function(req, res, next) {
-  BITBOX.Util.createMultisig(parseInt(req.params.nrequired), req.params.keys)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/estimateFee/:nblocks', function(req, res, next) {
-  BITBOX.Util.estimateFee(parseInt(req.params.nblocks))
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/estimatePriority/:nblocks', function(req, res, next) {
-  BITBOX.Util.estimatePriority(parseInt(req.params.nblocks))
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
-
 router.get('/validateAddress/:address', function(req, res, next) {
   BITBOX.Util.validateAddress(req.params.address)
   .then((result) => {

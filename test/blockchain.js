@@ -1,6 +1,5 @@
 let chai = require('chai');
 let assert = require('assert');
-let expect = chai.expect;
 let httpMocks = require("node-mocks-http");
 let blockchainRoute = require('../routes/blockchain');
 
