@@ -81,7 +81,7 @@ router.get('/getChainTips', function(req, res, next) {
 router.get('/getDifficulty', function(req, res, next) {
   BITBOX.Blockchain.getDifficulty()
   .then((result) => {
-    res.json(result);
+    res.json(JSON.stringify(result));
   }, (err) => { console.log(err);
   });
 });
