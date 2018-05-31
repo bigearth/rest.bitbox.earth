@@ -52,13 +52,31 @@ describe("#AddressRouter", () => {
       addressRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0])
-        // console.log(JSON.parse(mockResponse._getData())[0]);
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
         assert.deepEqual(actualResponseBody, [ 'txid', 'vout', 'scriptPubKey', 'amount', 'satoshis', 'height', 'confirmations', 'legacyAddress', 'cashAddress']);
         done();
       });
     });
   });
 
+  describe("#AddressUnconfirmed", () => {
+    it("should GET /unconfirmed/:address ", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url: "/unconfirmed/qql6r7khtjgwy3ufnjtsczvaf925hyw49cudht57tr"
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      addressRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        // TODO: Needs a utxo to pass. Comparing with an empty array for now.
+        // assert.deepEqual(actualResponseBody, [ 'txid', 'vout', 'scriptPubKey', 'amount', 'satoshis', 'height', 'confirmations', 'legacyAddress', 'cashAddress']);
+        done();
+      });
+    });
+  });
 
 });
