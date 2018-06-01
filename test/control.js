@@ -21,7 +21,26 @@ describe("#ControlRouter", () => {
     });
   });
 
-  describe("#ControlGetMemoryInfo", () => {
+  describe("#GetInfo", () => {
+    it("should GET /getInfo ", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url: "/getInfo"
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      controlRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        assert.deepEqual(actualResponseBody, [ 'version', 'protocolversion', 'blocks', 'timeoffset', 'connections', 'proxy', 'difficulty', 'testnet', 'paytxfee', 'relayfee', 'errors' ]);
+        done();
+      });
+    });
+  });
+
+  describe("#GetMemoryInfo", () => {
     it("should GET /getMemoryInfo ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
@@ -33,12 +52,10 @@ describe("#ControlRouter", () => {
       controlRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        // Just check to make this is an appropriate test. Only deepEquals one result? More keys inside of locked..
-        assert.deepEqual(actualResponseBody, [ 'locked' ]);
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()).locked);
+        assert.deepEqual(actualResponseBody, [ 'used', 'free', 'total', 'locked', 'chunks_used', 'chunks_free' ]);
         done();
       });
     });
   });
-
 });

@@ -20,7 +20,7 @@ describe("#GeneratingRouter", () => {
         assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
       });
     });
-  
+
     describe("#GeneratingGenerateToAddress", () => {
       it("should POST /generateToAddress/:n/:address ", (done) => {
         let mockRequest = httpMocks.createRequest({
@@ -31,7 +31,7 @@ describe("#GeneratingRouter", () => {
           eventEmitter: require('events').EventEmitter
         });
         generatingRoute(mockRequest, mockResponse);
-  
+
         mockResponse.on('end', () => {
           let actualResponseBody = JSON.parse(mockResponse._getData());
           // TODO: not just make this equal to a string..
@@ -40,5 +40,4 @@ describe("#GeneratingRouter", () => {
         });
       });
     });
-  
   });

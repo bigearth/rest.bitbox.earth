@@ -29,14 +29,14 @@ router.get('/getMemoryInfo', function(req, res, next) {
   }, (err) => { console.log(err);
   });
 });
-
-router.get('/help', function(req, res, next) {
-  BITBOX.Control.help()
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
-  });
-});
+//
+// router.get('/help', function(req, res, next) {
+//   BITBOX.Control.help()
+//   .then((result) => {
+//     res.json(result);
+//   }, (err) => { console.log(err);
+//   });
+// });
 //
 // router.post('/stop', function(req, res, next) {
 //   BITBOX.Control.stop()
