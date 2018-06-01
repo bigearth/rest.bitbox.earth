@@ -173,7 +173,7 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-  
+
   describe("#BlockchainGetMempoolAncestors", () => {
     it("should GET /getMempoolAncestors/:txid ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -193,7 +193,7 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-    
+
   describe("#BlockchainGetMempoolDescendants", () => {
     it("should GET /getMempoolDescendants/:txid ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -213,7 +213,7 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-      
+
   describe("#BlockchainGetMempoolEntry", () => {
     it("should GET /getMempoolEntry/:txid ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -233,7 +233,7 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-        
+
   describe("#BlockchainGetMempoolInfo", () => {
     it("should GET /getMempoolInfo ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -252,7 +252,7 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-         
+
   describe("#BlockchainGetRawMempool", () => {
     it("should GET /getRawMempool ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -374,5 +374,4 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-
 });
