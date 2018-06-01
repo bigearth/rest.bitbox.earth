@@ -20,28 +20,26 @@ describe("#MiningRouter", () => {
         assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
       });
     });
-  
-    // TODO: Get this working.
-    // describe("#MiningGetBlockTemplate", () => {
-    //   it("should GET /getBlockTemplate ", (done) => {
-    //     let mockRequest = httpMocks.createRequest({
-    //       method: "GET",
-    //       url: "/getBlockTemplate"
-    //     });
-    //     let mockResponse = httpMocks.createResponse({
-    //       eventEmitter: require('events').EventEmitter
-    //     });
-    //     miningRoute(mockRequest, mockResponse);
-  
-    //     mockResponse.on('end', () => {
-    //     //   let actualResponseBody = JSON.parse(mockResponse._getData());
-    //     //   console.log(actualResponseBody);
-    //       // assert.equal(actualResponseBody, "\"JSON value is not an integer as expected\"");
-    //       done();
-    //     });
-    //   });
-    // });
-  
+
+    describe("#MiningGetBlockTemplate", () => {
+      it("should GET /getBlockTemplate ", (done) => {
+        let mockRequest = httpMocks.createRequest({
+          method: "GET",
+          url: "/getBlockTemplate/{}"
+        });
+        let mockResponse = httpMocks.createResponse({
+          eventEmitter: require('events').EventEmitter
+        });
+        miningRoute(mockRequest, mockResponse);
+
+        mockResponse.on('end', () => {
+          let actualResponseBody = JSON.parse(mockResponse._getData());
+          assert.equal(actualResponseBody, '"JSON value is not an object as expected"');
+          done();
+        });
+      });
+    });
+
     describe("#MiningGetMiningInfo", () => {
         it("should GET /getMiningInfo ", (done) => {
           let mockRequest = httpMocks.createRequest({
@@ -52,7 +50,7 @@ describe("#MiningRouter", () => {
             eventEmitter: require('events').EventEmitter
           });
           miningRoute(mockRequest, mockResponse);
-    
+
           mockResponse.on('end', () => {
             let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
             assert.deepEqual(actualResponseBody, [ 'blocks', 'currentblocksize', 'currentblocktx', 'difficulty', 'blockprioritypercentage', 'errors', 'networkhashps', 'pooledtx', 'chain' ]);
@@ -60,7 +58,7 @@ describe("#MiningRouter", () => {
           });
         });
       });
-      
+
       describe("#MiningGetNetworkHashps", () => {
         it("should GET /getNetworkHashps ", (done) => {
           let mockRequest = httpMocks.createRequest({
@@ -71,7 +69,7 @@ describe("#MiningRouter", () => {
             eventEmitter: require('events').EventEmitter
           });
           miningRoute(mockRequest, mockResponse);
-    
+
           mockResponse.on('end', () => {
             let actualResponseBody = parseInt(mockResponse._getData());
             assert.equal(typeof actualResponseBody, "number");
@@ -79,7 +77,7 @@ describe("#MiningRouter", () => {
           });
         });
       });
-    
+
     describe("#MiningSubmitBlock", () => {
         it("should POST /SubmitBlock ", (done) => {
           let mockRequest = httpMocks.createRequest({
@@ -90,7 +88,7 @@ describe("#MiningRouter", () => {
             eventEmitter: require('events').EventEmitter
           });
           miningRoute(mockRequest, mockResponse);
-    
+
           mockResponse.on('end', () => {
             let actualResponseBody = JSON.parse(mockResponse._getData());
             // TODO: The block decode failed. Just testing the error string
