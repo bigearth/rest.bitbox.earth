@@ -49,7 +49,7 @@ router.get('/', function(req, res, next) {
 router.get('/getConnectionCount', function(req, res, next) {
   BITBOX.Network.getConnectionCount()
   .then((result) => {
-    res.json(result);
+    res.json(JSON.stringify(result));
   }, (err) => { console.log(err);
   });
 });
@@ -81,7 +81,7 @@ router.get('/getPeerInfo', function(req, res, next) {
 router.get('/ping', function(req, res, next) {
   BITBOX.Network.ping()
   .then((result) => {
-    res.json(result);
+    res.json(JSON.stringify(result));
   }, (err) => { console.log(err);
   });
 });

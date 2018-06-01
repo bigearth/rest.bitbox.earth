@@ -33,7 +33,7 @@ router.get('/getMiningInfo', function(req, res, next) {
 router.get('/getNetworkHashps', function(req, res, next) {
   BITBOX.Mining.getNetworkHashps()
   .then((result) => {
-    res.json(result);
+    res.json(JSON.stringify(result));
   }, (err) => { console.log(err);
   });
 });
