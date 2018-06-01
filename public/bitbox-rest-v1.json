@@ -2,7 +2,7 @@
 	"swagger": "2.0",
 	"info": {
 		"description": "rest.bitbox.earth is the REST layer for BITBOX Cloud. More info: https://www.bitbox.earth. #bitbox chatroom http://ambassador.cash",
-		"version": "0.1.13",
+		"version": "0.2.0",
 		"title": "REST",
 		"license": {
 			"name": "MIT",
