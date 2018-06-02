@@ -11,11 +11,11 @@ let BitboxHTTP = axios.create({
 let username = 'bitcoin';
 let password = 'xhFjluMJMyOXcYvF';
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.json({ status: 'blockchain' });
 });
 
-router.get('/getBestBlockHash', function(req, res, next) {
+router.get('/getBestBlockHash', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -66,7 +66,7 @@ router.get('/getBlock/:hash', (req, res, next) => {
   });
 });
 
-router.get('/getBlockchainInfo', function(req, res, next) {
+router.get('/getBlockchainInfo', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -87,7 +87,7 @@ router.get('/getBlockchainInfo', function(req, res, next) {
   });
 });
 
-router.get('/getBlockCount', function(req, res, next) {
+router.get('/getBlockCount', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -108,7 +108,7 @@ router.get('/getBlockCount', function(req, res, next) {
   });
 });
 
-router.get('/getBlockHash/:height', function(req, res, next) {
+router.get('/getBlockHash/:height', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -132,7 +132,7 @@ router.get('/getBlockHash/:height', function(req, res, next) {
   });
 });
 
-router.get('/getBlockHeader/:hash', function(req, res, next) {
+router.get('/getBlockHeader/:hash', (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -162,7 +162,7 @@ router.get('/getBlockHeader/:hash', function(req, res, next) {
   });
 });
 
-router.get('/getChainTips', function(req, res, next) {
+router.get('/getChainTips', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -183,7 +183,7 @@ router.get('/getChainTips', function(req, res, next) {
   });
 });
 
-router.get('/getDifficulty', function(req, res, next) {
+router.get('/getDifficulty', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -204,11 +204,12 @@ router.get('/getDifficulty', function(req, res, next) {
   });
 });
 
-router.get('/getMempoolAncestors/:txid', function(req, res, next) {
+router.get('/getMempoolAncestors/:txid', (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
+
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -226,6 +227,41 @@ router.get('/getMempoolAncestors/:txid', function(req, res, next) {
     }
   })
   .then((response) => {
+    if(typeof respons.data.result === 'string') {
+      res.send(response.data.result);
+    } else {
+      res.json(response.data.result);
+    }
+  })
+  .catch((error) => {
+    // console.log(error)
+    res.send(error.response.data.error.message);
+  });
+});
+
+router.get('/getMempoolDescendants/:txid', (req, res, next) => {
+  let verbose = false;
+  if(req.query.verbose && req.query.verbose === 'true') {
+    verbose = true;
+  }
+
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getmempooldescendants",
+      method: "getmempooldescendants",
+      params: [
+        req.params.txid,
+        verbose
+      ]
+    }
+  })
+  .then((response) => {
     res.json(response.data.result);
   })
   .catch((error) => {
@@ -234,27 +270,31 @@ router.get('/getMempoolAncestors/:txid', function(req, res, next) {
   });
 });
 
-router.get('/getMempoolDescendants/:txid', function(req, res, next) {
-  let verbose = false;
-  if(req.query.verbose && req.query.verbose === 'true') {
-    verbose = true;
-  }
-  BITBOX.Blockchain.getMempoolDescendants(req.params.txid, verbose)
-  .then((result) => {
-    res.send(result);
-  }, (err) => { console.log(err);
+router.get('/getMempoolEntry/:txid', (req, res, next) => {
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getmempoolentry",
+      method: "getmempoolentry",
+      params: [
+        req.params.txid
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.get('/getMempoolEntry/:txid', function(req, res, next) {
-  BITBOX.Blockchain.getMempoolEntry(req.params.txid)
-  .then((result) => {
-    res.send(result);
-  }, (err) => { console.log(err);
-  });
-});
-
-router.get('/getMempoolInfo', function(req, res, next) {
+router.get('/getMempoolInfo', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -275,56 +315,139 @@ router.get('/getMempoolInfo', function(req, res, next) {
   });
 });
 
-router.get('/getRawMempool', function(req, res, next) {
+router.get('/getRawMempool', (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
-  BITBOX.Blockchain.getRawMempool(verbose)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getrawmempool",
+      method: "getrawmempool",
+      params: [
+        verbose
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.get('/getTxOut/:txid/:n', function(req, res, next) {
+router.get('/getTxOut/:txid/:n', (req, res, next) => {
   let include_mempool = false;
   if(req.query.include_mempool && req.query.include_mempool === 'true') {
     include_mempool = true;
   }
-  BITBOX.Blockchain.getTxOut(req.params.txid, parseInt(req.params.n), include_mempool)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"gettxout",
+      method: "gettxout",
+      params: [
+        req.params.txid,
+        parseInt(req.params.n),
+        include_mempool
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.get('/getTxOutProof/:txids', function(req, res, next) {
-  // TODO finish this
-  BITBOX.Blockchain.getTxOutProof(req.params.txids)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+router.get('/getTxOutProof/:txids', (req, res, next) => {
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"gettxoutproof",
+      method: "gettxoutproof",
+      params: [
+        req.params.txids
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.get('/preciousBlock/:hash', function(req, res, next) {
-  BITBOX.Blockchain.preciousBlock(req.params.hash)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+router.get('/preciousBlock/:hash', (req, res, next) => {
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"preciousblock",
+      method: "preciousblock",
+      params: [
+        req.params.hash
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(JSON.stringify(response.data.result));
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.post('/pruneBlockchain/:height', function(req, res, next) {
-  BITBOX.Blockchain.pruneBlockchain(req.params.height)
-  .then((result) => {
-    res.send(result);
-  }, (err) => { console.log(err);
+router.post('/pruneBlockchain/:height', (req, res, next) => {
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"pruneblockchain",
+      method: "pruneblockchain",
+      params: [
+        req.params.height
+      ]
+    }
+  })
+  .then((response) => {
+    res.send(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
-router.get('/verifyChain', function(req, res, next) {
+router.get('/verifyChain', (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -345,11 +468,27 @@ router.get('/verifyChain', function(req, res, next) {
   });
 });
 
-router.get('/verifyTxOutProof/:proof', function(req, res, next) {
-  BITBOX.Blockchain.verifyTxOutProof(req.params.proof)
-  .then((result) => {
-    res.send(result);
-  }, (err) => { console.log(err);
+router.get('/verifyTxOutProof/:proof', (req, res, next) => {
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"verifytxoutproof",
+      method: "verifytxoutproof",
+      params: [
+        req.params.proof
+      ]
+    }
+  })
+  .then((response) => {
+    res.send(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
