@@ -40,10 +40,10 @@ describe("#BlockchainRouter", () => {
   });
 
   describe("#BlockchainGetBlock", () => {
-    it("should GET /getblock/:id", (done) => {
+    it("should GET /getBlock/:id w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"
+        url: "/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=true"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -53,6 +53,23 @@ describe("#BlockchainRouter", () => {
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
         assert.deepEqual(actualResponseBody, [ 'hash', 'confirmations', 'size', 'height', 'version', 'versionHex', 'merkleroot', 'tx', 'time', 'mediantime', 'nonce', 'bits', 'difficulty', 'chainwork', 'previousblockhash', 'nextblockhash' ]);
+        done();
+      });
+    });
+
+    it("should GET /getBlock/:id w/ verbose=false", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url: "/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=false"
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      blockchainRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = mockResponse._getData();
+        assert.equal(actualResponseBody.length, 34638);
         done();
       });
     });
@@ -116,10 +133,10 @@ describe("#BlockchainRouter", () => {
   });
 
   describe("#BlockchainGetBlockHeader", () => {
-    it("should GET /getBlockHeader/:hash ", (done) => {
+    it("should GET /getBlockHeader/:hash w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"
+        url: "/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=true"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -129,6 +146,23 @@ describe("#BlockchainRouter", () => {
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
         assert.deepEqual(actualResponseBody, [ 'hash', 'confirmations', 'height', 'version', 'versionHex', 'merkleroot', 'time', 'mediantime', 'nonce', 'bits', 'difficulty', 'chainwork', 'previousblockhash', 'nextblockhash' ]);
+        done();
+      });
+    });
+
+    it("should GET /getBlockHeader/:hash w/ verbose=false", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url: "/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=false"
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      blockchainRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = JSON.parse(mockResponse._getData());
+        assert.deepEqual(actualResponseBody.length, 160);
         done();
       });
     });
