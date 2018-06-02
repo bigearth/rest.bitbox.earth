@@ -110,7 +110,7 @@ describe("#NetworkRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, '"null"');
+        assert.equal(actualResponseBody, 'null');
         done();
       });
     });
