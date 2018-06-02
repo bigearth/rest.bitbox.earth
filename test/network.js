@@ -34,7 +34,6 @@ describe("#NetworkRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = parseInt(mockResponse._getData());
-        // console.log(actualResponseBody);
         assert.equal(typeof actualResponseBody, "number");
         done();
       });
@@ -110,8 +109,8 @@ describe("#NetworkRouter", () => {
       networkRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
-        assert.equal(actualResponseBody, "\"null\"");
+        let actualResponseBody = JSON.parse(mockResponse._getData());
+        assert.equal(actualResponseBody, '"null"');
         done();
       });
     });

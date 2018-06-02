@@ -33,7 +33,7 @@ describe("#MiningRouter", () => {
       miningRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
+        let actualResponseBody = mockResponse._getData();
         assert.equal(actualResponseBody, '"JSON value is not an object as expected"');
         done();
       });

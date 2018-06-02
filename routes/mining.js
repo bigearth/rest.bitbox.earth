@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
   BITBOX.Mining.getBlockTemplate(req.params.templateRequest)
   .then((result) => {
-    res.json(result);
+    res.send(result);
   }, (err) => { console.log(err);
   });
 });

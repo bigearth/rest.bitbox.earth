@@ -1,7 +1,7 @@
 let chai = require('chai');
 let assert = require('assert');
 let httpMocks = require("node-mocks-http");
-let rawTransactionsRoute = require('../routes/rawTransactions');
+let rawTransactionsRoute = require('../routes/rawtransactions');
 
 describe("#RawTransactionsRouter", () => {
   describe("#root", () => {

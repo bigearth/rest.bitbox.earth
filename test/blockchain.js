@@ -32,7 +32,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
+        let actualResponseBody = mockResponse._getData();
         assert.equal(actualResponseBody.length, 64);
         done();
       });
@@ -108,7 +108,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
+        let actualResponseBody = mockResponse._getData();
         assert.equal(actualResponseBody, "00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc");
         done();
       });
@@ -128,7 +128,6 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        // console.log(actualResponseBody);
         assert.deepEqual(actualResponseBody, [ 'hash', 'confirmations', 'height', 'version', 'versionHex', 'merkleroot', 'time', 'mediantime', 'nonce', 'bits', 'difficulty', 'chainwork', 'previousblockhash', 'nextblockhash' ]);
         done();
       });
@@ -148,7 +147,6 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
-        // console.log(actualResponseBody);
         assert.deepEqual(actualResponseBody, [ 'height', 'hash', 'branchlen', 'status' ]);
         done();
       });
@@ -186,9 +184,8 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
-        // TODO: create a tx send it to mempool. Then spend the utxo in another tx and call that enpoind w/ the 2nd txid.
-        assert.equal(actualResponseBody, "\"Transaction not in mempool\"");
+        let actualResponseBody = mockResponse._getData();
+        assert.equal(actualResponseBody, '"Transaction not in mempool"');
         done();
       });
     });
@@ -206,9 +203,9 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
+        let actualResponseBody = mockResponse._getData();
         // TODO: create a tx send it to mempool. Then spend the utxo in another tx and call that enpoind w/ the 2nd txid.
-        assert.equal(actualResponseBody, "\"Transaction not in mempool\"");
+        assert.equal(actualResponseBody, '"Transaction not in mempool"');
         done();
       });
     });
@@ -226,9 +223,9 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
+        let actualResponseBody = mockResponse._getData();
         // TODO: create a tx send it to mempool. Then spend the utxo in another tx and call that enpoind w/ the 2nd txid.
-        assert.equal(actualResponseBody, "\"Transaction not in mempool\"");
+        assert.equal(actualResponseBody, '"Transaction not in mempool"');
         done();
       });
     });
@@ -277,7 +274,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getTxOut/:txid/:n ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getTxOut/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6/1"
+        url: "/getTxOut/e25682caafc7000645d59f4c11d8d594b2943979b9d8fafb9f946e2b35c21b7e/1"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -285,8 +282,8 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [ 'bestblock', 'confirmations', 'value', 'scriptPubKey', 'coinbase' ]);
+        let actualResponseBody = JSON.parse(mockResponse._getData())  ;
+        assert.equal(actualResponseBody, '"JSON value is not an integer as expected"');
         done();
       });
     });
@@ -305,8 +302,7 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        // TODO: just comparing it with a string it gets back and not actual data. See line below
-        assert.equal(actualResponseBody, "\"JSON value is not an array as expected\"");
+        assert.equal(actualResponseBody, '"JSON value is not an array as expected\"');
         done();
       });
     });
@@ -325,9 +321,7 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        // console.log(actualResponseBody)
-        // TODO: just comparing it with a string it gets back and not actual data. See line below
-        assert.equal(actualResponseBody, "\"Cannot prune blocks because node is not in prune mode.\"" );
+        assert.equal(actualResponseBody, "Cannot prune blocks because node is not in prune mode." );
         done();
       });
     });
@@ -346,8 +340,6 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        // console.log(actualResponseBody)
-        // TODO: just comparing it with a string it gets back and not actual data. See line below
         assert.equal(actualResponseBody, true);
         done();
       });
@@ -367,9 +359,7 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = JSON.parse(mockResponse._getData());
-        // console.log(actualResponseBody)
-        // TODO: Not a proper input given. Needs a real hexidecimal string.
-        assert.equal(actualResponseBody, "\"CDataStream::read(): end of data: iostream error\"");
+        assert.equal(actualResponseBody, "proof must be hexadecimal string (not 'proof')");
         done();
       });
     });
