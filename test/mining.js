@@ -91,7 +91,6 @@ describe("#MiningRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = mockResponse._getData();
-        // TODO: The block decode failed. Just testing the error string
         assert.equal(actualResponseBody, "Block decode failed");
         done();
       });

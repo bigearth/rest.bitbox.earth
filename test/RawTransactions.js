@@ -89,8 +89,8 @@ describe("#RawTransactionsRouter", () => {
       rawTransactionsRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, '"transaction already in block chain"');
+        let actualResponseBody = mockResponse._getData();
+        assert.equal(actualResponseBody, 'transaction already in block chain');
         done();
       });
     });

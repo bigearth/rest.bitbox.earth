@@ -1,26 +1,65 @@
 let express = require('express');
 let router = express.Router();
+let axios = require('axios');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
+
+let BitboxHTTP = axios.create({
+  baseURL: `http://138.68.54.100:8332/`
+});
+let username = 'bitcoin';
+let password = 'xhFjluMJMyOXcYvF';
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'rawtransactions' });
 });
 
 router.get('/decodeRawTransaction/:hex', (req, res, next) => {
-  BITBOX.RawTransactions.decodeRawTransaction(req.params.hex)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log('asdf', err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"decoderawtransaction",
+      method: "decoderawtransaction",
+      params: [
+        req.params.hex
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
 router.get('/decodeScript/:script', (req, res, next) => {
-  BITBOX.RawTransactions.decodeScript(req.params.script)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"decodescript",
+      method: "decodescript",
+      params: [
+        req.params.script
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
@@ -29,18 +68,52 @@ router.get('/getRawTransaction/:txid', (req, res, next) => {
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
-  BITBOX.RawTransactions.getRawTransaction(req.params.txid, verbose)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getrawtransaction",
+      method: "getrawtransaction",
+      params: [
+        req.params.txid,
+        verbose
+      ]
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
 router.post('/sendRawTransaction/:hex', (req, res, next) => {
-  BITBOX.RawTransactions.sendRawTransaction(req.params.hex)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"sendrawtransaction",
+      method: "sendrawtransaction",
+      params: [
+        req.params.hex
+      ]
+    }
+  })
+  .then((response) => {
+    res.send(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
