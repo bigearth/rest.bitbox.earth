@@ -1,34 +1,83 @@
 let express = require('express');
 let router = express.Router();
+let axios = require('axios');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
+
+let BitboxHTTP = axios.create({
+  baseURL: `http://138.68.54.100:8332/`
+});
+let username = 'bitcoin';
+let password = 'xhFjluMJMyOXcYvF';
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'mining' });
 });
 
 router.get('/getBlockTemplate/:templateRequest', (req, res, next) => {
-  BITBOX.Mining.getBlockTemplate(req.params.templateRequest)
-  .then((result) => {
-    res.send(result);
-  }, (err) => { console.log(err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getblocktemplate",
+      method: "getblocktemplate",
+      params: [
+        req.params.templateRequest
+      ]
+    }
+  })
+  .then((response) => {
+    res.send(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
 router.get('/getMiningInfo', (req, res, next) => {
-  BITBOX.Mining.getMiningInfo()
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getmininginfo",
+      method: "getmininginfo"
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
 router.get('/getNetworkHashps', (req, res, next) => {
-  BITBOX.Mining.getNetworkHashps()
-  .then((result) => {
-    res.json(JSON.stringify(result));
-  }, (err) => { console.log(err);
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"getnetworkhashps",
+      method: "getnetworkhashps"
+    }
+  })
+  .then((response) => {
+    res.json(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
@@ -37,10 +86,28 @@ router.post('/submitBlock/:hex', (req, res, next) => {
   if(req.query.parameters && req.query.parameters !== '') {
     parameters = true;
   }
-  BITBOX.Mining.submitBlock(req.params.hex, parameters)
-  .then((result) => {
-    res.json(result);
-  }, (err) => { console.log(err);
+
+  BitboxHTTP({
+    method: 'post',
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0",
+      id:"submitblock",
+      method: "submitblock",
+      params: [
+        req.params.hex,
+        parameters
+      ]
+    }
+  })
+  .then((response) => {
+    res.send(response.data.result);
+  })
+  .catch((error) => {
+    res.send(error.response.data.error.message);
   });
 });
 
