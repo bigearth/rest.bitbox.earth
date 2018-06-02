@@ -6,11 +6,11 @@ let BITBOX = new BITBOXCli();
 
 let axios = require('axios');
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.json({ status: 'address' });
 });
 
-router.get('/details/:address', function(req, res, next) {
+router.get('/details/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
@@ -41,7 +41,7 @@ router.get('/details/:address', function(req, res, next) {
   }
 });
 
-router.get('/utxo/:address', function(req, res, next) {
+router.get('/utxo/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
@@ -69,7 +69,7 @@ router.get('/utxo/:address', function(req, res, next) {
   }
 });
 
-router.get('/unconfirmed/:address', function(req, res, next) {
+router.get('/unconfirmed/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];

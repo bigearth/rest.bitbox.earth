@@ -22,7 +22,7 @@ describe("#ControlRouter", () => {
   });
 
   describe("#GetInfo", () => {
-    it("should GET /getInfo ", (done) => {
+    it("should GET /getInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getInfo"

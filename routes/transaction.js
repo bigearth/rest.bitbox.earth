@@ -6,11 +6,11 @@ let BITBOX = new BITBOXCli();
 
 let axios = require('axios');
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.json({ status: 'transaction' });
 });
 
-router.get('/details/:txid', function(req, res, next) {
+router.get('/details/:txid', (req, res, next) => {
   try {
     let txs = JSON.parse(req.params.txid);
     let result = [];

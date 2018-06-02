@@ -4,11 +4,11 @@ let router = express.Router();
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.json({ status: 'mining' });
 });
 
-router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
+router.get('/getBlockTemplate/:templateRequest', (req, res, next) => {
   BITBOX.Mining.getBlockTemplate(req.params.templateRequest)
   .then((result) => {
     res.send(result);
@@ -16,7 +16,7 @@ router.get('/getBlockTemplate/:templateRequest', function(req, res, next) {
   });
 });
 
-router.get('/getMiningInfo', function(req, res, next) {
+router.get('/getMiningInfo', (req, res, next) => {
   BITBOX.Mining.getMiningInfo()
   .then((result) => {
     res.json(result);
@@ -24,7 +24,7 @@ router.get('/getMiningInfo', function(req, res, next) {
   });
 });
 
-router.get('/getNetworkHashps', function(req, res, next) {
+router.get('/getNetworkHashps', (req, res, next) => {
   BITBOX.Mining.getNetworkHashps()
   .then((result) => {
     res.json(JSON.stringify(result));
@@ -32,7 +32,7 @@ router.get('/getNetworkHashps', function(req, res, next) {
   });
 });
 
-router.post('/submitBlock/:hex', function(req, res, next) {
+router.post('/submitBlock/:hex', (req, res, next) => {
   let parameters = '';
   if(req.query.parameters && req.query.parameters !== '') {
     parameters = true;

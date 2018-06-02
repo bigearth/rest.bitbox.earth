@@ -4,11 +4,11 @@ let router = express.Router();
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.json({ status: 'generating' });
 });
 
-router.post('/generateToAddress/:nblocks/:address', function(req, res, next) {
+router.post('/generateToAddress/:nblocks/:address', (req, res, next) => {
   let maxtries = 1000000;
   if(req.query.maxtries) {
     maxtries = parseInt(req.query.maxtries);
