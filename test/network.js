@@ -60,7 +60,7 @@ describe("#NetworkRouter", () => {
   });
 
   describe("#NetworkGetNetworkInfo", () => {
-    it("should GET /getNetworkInfo ", (done) => {
+    it("should GET /getNetworkInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getNetworkInfo"
@@ -79,7 +79,7 @@ describe("#NetworkRouter", () => {
   });
 
   describe("#NetworkGetPeerInfo", () => {
-    it("should GET /getPeerInfo ", (done) => {
+    it("should GET /getPeerInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getPeerInfo"
@@ -98,7 +98,7 @@ describe("#NetworkRouter", () => {
   });
 
   describe("#NetworkPing", () => {
-    it("should GET /ping ", (done) => {
+    it("should GET /ping", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/ping"

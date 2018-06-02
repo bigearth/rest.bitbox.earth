@@ -22,7 +22,7 @@ describe("#MiningRouter", () => {
   });
 
   describe("#MiningGetBlockTemplate", () => {
-    it("should GET /getBlockTemplate ", (done) => {
+    it("should GET /getBlockTemplate", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getBlockTemplate/{}"
@@ -41,7 +41,7 @@ describe("#MiningRouter", () => {
   });
 
   describe("#MiningGetMiningInfo", () => {
-    it("should GET /getMiningInfo ", (done) => {
+    it("should GET /getMiningInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getMiningInfo"
@@ -60,7 +60,7 @@ describe("#MiningRouter", () => {
   });
 
   describe("#MiningGetNetworkHashps", () => {
-    it("should GET /getNetworkHashps ", (done) => {
+    it("should GET /getNetworkHashps", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getNetworkHashps"
@@ -79,7 +79,7 @@ describe("#MiningRouter", () => {
   });
 
   describe("#MiningSubmitBlock", () => {
-    it("should POST /SubmitBlock ", (done) => {
+    it("should POST /SubmitBlock", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "POST",
         url: "/submitBlock/000000000000000000df19ff517463e288aca3de261ece7d53f97da65f9b7b8d"

@@ -14,11 +14,11 @@ router.get('/details/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
-    addresses = addresses.map(function(address) {
+    addresses = addresses.map((address) => {
       return BITBOX.Address.details(address)
     })
     axios.all(addresses)
-    .then(axios.spread(function (...spread) {
+    .then(axios.spread((...spread) => {
       result.push(...spread);
       res.json(result);
     }));
@@ -45,11 +45,11 @@ router.get('/utxo/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
-    addresses = addresses.map(function(address) {
+    addresses = addresses.map((address) => {
       return BITBOX.Address.utxo(address)
     })
     axios.all(addresses)
-    .then(axios.spread(function (...spread) {
+    .then(axios.spread((...spread) => {
       result.push(...spread);
       res.json(result);
     }));
@@ -73,11 +73,11 @@ router.get('/unconfirmed/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
-    addresses = addresses.map(function(address) {
+    addresses = addresses.map((address) => {
       return BITBOX.Address.unconfirmed(address)
     })
     axios.all(addresses)
-    .then(axios.spread(function (...spread) {
+    .then(axios.spread((...spread) => {
       result.push(...spread);
       res.json(result);
     }));

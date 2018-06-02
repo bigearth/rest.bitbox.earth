@@ -21,7 +21,7 @@ describe("#UtilRouter", () => {
   });
 
   describe("#ValidateAddress", () => {
-    it("should GET /validateAddress/:address ", (done) => {
+    it("should GET /validateAddress/:address", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/validateAddress/bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"
