@@ -1,8 +1,15 @@
 let express = require('express');
 let router = express.Router();
+let axios = require('axios');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
+
+let BitboxHTTP = axios.create({
+  baseURL: `http://138.68.54.100:8332/`
+});
+let username = 'bitcoin';
+let password = 'xhFjluMJMyOXcYvF';
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'block' });
@@ -10,20 +17,42 @@ router.get('/', (req, res, next) => {
 
 router.get('/details/:id', (req, res, next) => {
   if(req.params.id.length !== 64) {
-    BITBOX.Blockchain.getBlockHash(req.params.id)
-    .then((result) => {
-      BITBOX.Block.details(result)
-      .then((result) => {
-        res.json(result);
-      }, (err) => { console.log(err);
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getblockhash",
+        method: "getblockhash",
+        params: [
+          parseInt(req.params.id)
+        ]
+      }
+    })
+    .then((response) => {
+
+      axios.get(`https://explorer.bitcoin.com/api/bch/block/${response.data.result}`)
+      .then((response) => {
+        res.json(response.data);
+      })
+      .catch((error) => {
+        res.send(error.response.data.error.message);
       });
-    }, (err) => { console.log(err);
+
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   } else {
-    BITBOX.Block.details(req.params.id)
-    .then((result) => {
-      res.json(result);
-    }, (err) => { console.log(err);
+    axios.get(`https://explorer.bitcoin.com/api/bch/block/${req.params.id}`)
+    .then((response) => {
+      res.json(response.data);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });
