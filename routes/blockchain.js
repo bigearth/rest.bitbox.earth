@@ -197,7 +197,7 @@ router.get('/getDifficulty', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.send(JSON.stringify(response.data.result));
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
