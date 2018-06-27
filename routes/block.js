@@ -1,6 +1,8 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+const request = require('request')
+const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -41,26 +43,18 @@ router.get('/details/:id', (req, res, next) => {
       }
     })
     .then((response) => {
-
-      axios.get(`https://explorer.bitcoin.com/api/bch/block/${response.data.result}`)
-      .then((response) => {
-        res.json(response.data);
-      })
-      .catch((error) => {
-        res.send(error.response.data.error.message);
+      fixieRequest(`https://explorer.bitcoin.com/api/bch/block/${response.data.result}`, (err, result, body) => {
+        let parsed = JSON.parse(body);
+        res.json(parsed);
       });
-
     })
     .catch((error) => {
       res.send(error.response.data.error.message);
     });
   } else {
-    axios.get(`https://explorer.bitcoin.com/api/bch/block/${req.params.id}`)
-    .then((response) => {
-      res.json(response.data);
-    })
-    .catch((error) => {
-      res.send(error.response.data.error.message);
+    fixieRequest(`https://explorer.bitcoin.com/api/bch/block/${req.params.id}`, (err, result, body) => {
+      let parsed = JSON.parse(body);
+      res.json(parsed);
     });
   }
 });
