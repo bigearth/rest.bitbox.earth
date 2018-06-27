@@ -25,7 +25,7 @@ router.get('/details/:txid', (req, res, next) => {
     }));
   }
   catch(error) {
-    fixieRequest(`https://explorer.bitcoin.com/api/bch/tx/${req.params.txid}`, (err, result, body) => {
+    fixieRequest(`http://194.14.246.69/api/tx/${req.params.txid}`, (err, result, body) => {
       let parsed = JSON.parse(body);
       if(parsed && parsed.vin) {
         parsed.vin.forEach((vin) => {

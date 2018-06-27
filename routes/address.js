@@ -25,7 +25,7 @@ router.get('/details/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    let path = `https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`;
+    let path = `http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`;
     if(req.query.from && req.query.to) {
       path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     }
@@ -54,7 +54,7 @@ router.get('/utxo/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    fixieRequest(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
+    fixieRequest(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
       let parsed = JSON.parse(body);
       parsed.forEach((data) => {
         delete data.address;
@@ -80,7 +80,7 @@ router.get('/unconfirmed/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    fixieRequest(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
+    fixieRequest(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
       let parsed = JSON.parse(body);
       let unconfirmed = [];
       parsed.forEach((data) => {
