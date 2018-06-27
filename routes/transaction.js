@@ -1,10 +1,11 @@
 let express = require('express');
 let router = express.Router();
+let axios = require('axios');
+const request = require('request')
+const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
-
-let axios = require('axios');
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'transaction' });
@@ -24,10 +25,10 @@ router.get('/details/:txid', (req, res, next) => {
     }));
   }
   catch(error) {
-    axios.get(`https://explorer.bitcoin.com/api/bch/tx/${req.params.txid}`)
-    .then((result) => {
-      if(result.data && result.data.vin) {
-        result.data.vin.forEach((vin) => {
+    fixieRequest(`https://explorer.bitcoin.com/api/bch/tx/${req.params.txid}`, (err, result, body) => {
+      let parsed = JSON.parse(body);
+      if(parsed && parsed.vin) {
+        parsed.vin.forEach((vin) => {
           if(!vin.coinbase) {
             let address = vin.addr;
             vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
@@ -39,7 +40,7 @@ router.get('/details/:txid', (req, res, next) => {
           }
         });
       }
-      res.json(result.data);
+      res.json(parsed);
     });
   }
 });

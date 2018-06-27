@@ -1,10 +1,11 @@
 let express = require('express');
 let router = express.Router();
+let axios = require('axios');
+const request = require('request')
+const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
-
-let axios = require('axios');
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'address' });
@@ -29,14 +30,12 @@ router.get('/details/:address', (req, res, next) => {
       path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     }
 
-    axios.get(path)
-    .then((result) => {
-      delete result.data.addrStr;
-      result.data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
-      result.data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
-      res.json(result.data);
-    }, (err) => {
-      console.log(err);
+    fixieRequest(path, (err, result, body) => {
+      let parsed = JSON.parse(body);
+      delete parsed.addrStr;
+      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+      parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+      res.json(parsed);
     });
   }
 });
@@ -55,16 +54,14 @@ router.get('/utxo/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
-    .then((result) => {
-      result.data.forEach((data) => {
+    fixieRequest(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
+      let parsed = JSON.parse(body);
+      parsed.forEach((data) => {
         delete data.address;
         data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
         data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
-      })
-
-      res.json(result.data);
-    }, (err) => { console.log(err);
+      });
+      res.json(parsed);
     });
   }
 });
@@ -83,20 +80,19 @@ router.get('/unconfirmed/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    axios.get(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
-    .then((result) => {
+    fixieRequest(`https://explorer.bitcoin.com/api/bch/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
+      let parsed = JSON.parse(body);
       let unconfirmed = [];
-      result.data.forEach((data) => {
-        delete data.address;
-        data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
-        data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
-        if(data.confirmations === 0) {
+      parsed.forEach((data) => {
+        delete parsed.address;
+        parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+        parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+        if(parsed.confirmations === 0) {
           unconfirmed.push(data);
         }
       })
-
       res.json(unconfirmed);
-    }, (err) => { console.log(err); });
+    });
   }
 });
 
