@@ -1,8 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
-const request = require('request')
-const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -30,12 +28,16 @@ router.get('/details/:address', (req, res, next) => {
       path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     }
 
-    fixieRequest(path, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(path)
+    .then((response) => {
+      let parsed = response.data;
       delete parsed.addrStr;
       parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
       parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
       res.json(parsed);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });
@@ -51,8 +53,9 @@ router.get('/utxo/:address', (req, res, next) => {
       final.push([])
     });
 
-    fixieRequest(`http://194.14.246.69/api/addrs/${addresses}/utxo`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/addrs/${addresses}/utxo`)
+    .then((response) => {
+      let parsed = response.data;
       parsed.forEach((data) => {
         data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address);
         data.cashAddress = BITBOX.Address.toCashAddress(data.address);
@@ -64,17 +67,24 @@ router.get('/utxo/:address', (req, res, next) => {
         });
       });
       res.json(final);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
   catch(error) {
-    fixieRequest(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
+    .then((response) => {
+      let parsed = response.data;
       parsed.forEach((data) => {
         delete data.address;
         data.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
         data.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
       });
       res.json(parsed);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });
@@ -89,8 +99,9 @@ router.get('/unconfirmed/:address', (req, res, next) => {
     addresses.forEach((address) => {
       final.push([])
     });
-    fixieRequest(`http://194.14.246.69/api/addrs/${addresses}/utxo`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/addrs/${addresses}/utxo`)
+    .then((response) => {
+      let parsed = response.data;
       parsed.forEach((data) => {
         data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address);
         data.cashAddress = BITBOX.Address.toCashAddress(data.address);
@@ -104,11 +115,15 @@ router.get('/unconfirmed/:address', (req, res, next) => {
         }
       });
       res.json(final);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
   catch(error) {
-    fixieRequest(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
+    .then((response) => {
+      let parsed = response.data;
       let unconfirmed = [];
       parsed.forEach((data) => {
         delete parsed.address;
@@ -119,6 +134,9 @@ router.get('/unconfirmed/:address', (req, res, next) => {
         }
       })
       res.json(unconfirmed);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });

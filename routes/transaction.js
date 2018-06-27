@@ -1,8 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
-const request = require('request')
-const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -25,8 +23,9 @@ router.get('/details/:txid', (req, res, next) => {
     }));
   }
   catch(error) {
-    fixieRequest(`http://194.14.246.69/api/tx/${req.params.txid}`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/tx/${req.params.txid}`)
+    .then((response) => {
+      let parsed = response.data;
       if(parsed && parsed.vin) {
         parsed.vin.forEach((vin) => {
           if(!vin.coinbase) {
@@ -41,6 +40,9 @@ router.get('/details/:txid', (req, res, next) => {
         });
       }
       res.json(parsed);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });

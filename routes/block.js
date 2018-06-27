@@ -1,8 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
-const request = require('request')
-const fixieRequest = request.defaults({'proxy': process.env.FIXIE_URL});
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -43,18 +41,26 @@ router.get('/details/:id', (req, res, next) => {
       }
     })
     .then((response) => {
-      fixieRequest(`http://194.14.246.69/api/block/${response.data.result}`, (err, result, body) => {
-        let parsed = JSON.parse(body);
+      axios.get(`http://194.14.246.69/api/block/${response.data.result}`)
+      .then((response) => {
+        let parsed = response.data;
         res.json(parsed);
+      })
+      .catch((error) => {
+        res.send(error.response.data.error.message);
       });
     })
     .catch((error) => {
       res.send(error.response.data.error.message);
     });
   } else {
-    fixieRequest(`http://194.14.246.69/api/block/${req.params.id}`, (err, result, body) => {
-      let parsed = JSON.parse(body);
+    axios.get(`http://194.14.246.69/api/block/${req.params.id}`)
+    .then((response) => {
+      let parsed = response.data;
       res.json(parsed);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
     });
   }
 });
