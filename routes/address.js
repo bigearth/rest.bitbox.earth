@@ -23,7 +23,7 @@ router.get('/details/:address', (req, res, next) => {
     }));
   }
   catch(error) {
-    let path = `http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`;
+    let path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(req.params.address)}`;
     if(req.query.from && req.query.to) {
       path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     }
@@ -53,7 +53,7 @@ router.get('/utxo/:address', (req, res, next) => {
       final.push([])
     });
 
-    axios.get(`http://194.14.246.69/api/addrs/${addresses}/utxo`)
+    axios.get(`${process.env.BITCOINCOM_BASEURL}addrs/${addresses}/utxo`)
     .then((response) => {
       let parsed = response.data;
       parsed.forEach((data) => {
@@ -73,7 +73,7 @@ router.get('/utxo/:address', (req, res, next) => {
     });
   }
   catch(error) {
-    axios.get(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
+    axios.get(`${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
     .then((response) => {
       let parsed = response.data;
       parsed.forEach((data) => {
@@ -99,7 +99,7 @@ router.get('/unconfirmed/:address', (req, res, next) => {
     addresses.forEach((address) => {
       final.push([])
     });
-    axios.get(`http://194.14.246.69/api/addrs/${addresses}/utxo`)
+    axios.get(`${process.env.BITCOINCOM_BASEURL}addrs/${addresses}/utxo`)
     .then((response) => {
       let parsed = response.data;
       parsed.forEach((data) => {
@@ -121,7 +121,7 @@ router.get('/unconfirmed/:address', (req, res, next) => {
     });
   }
   catch(error) {
-    axios.get(`http://194.14.246.69/api/addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
+    axios.get(`${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`)
     .then((response) => {
       let parsed = response.data;
       let unconfirmed = [];

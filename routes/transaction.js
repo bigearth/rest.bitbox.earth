@@ -23,7 +23,7 @@ router.get('/details/:txid', (req, res, next) => {
     }));
   }
   catch(error) {
-    axios.get(`http://194.14.246.69/api/tx/${req.params.txid}`)
+    axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${req.params.txid}`)
     .then((response) => {
       let parsed = response.data;
       if(parsed && parsed.vin) {
