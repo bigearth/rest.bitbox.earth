@@ -29,7 +29,7 @@ router.get('/getBestBlockHash', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
@@ -125,7 +125,7 @@ router.get('/getBlockHash/:height', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
@@ -197,7 +197,7 @@ router.get('/getDifficulty', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(JSON.stringify(response.data.result));
+    res.json(JSON.stringify(response.data.result));
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
@@ -440,7 +440,7 @@ router.post('/pruneBlockchain/:height', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
@@ -485,7 +485,7 @@ router.get('/verifyTxOutProof/:proof', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);

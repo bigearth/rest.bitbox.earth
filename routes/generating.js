@@ -39,7 +39,7 @@ router.post('/generateToAddress/:nblocks/:address', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);

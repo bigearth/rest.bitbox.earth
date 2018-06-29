@@ -32,7 +32,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData());
         assert.equal(actualResponseBody.length, 64);
         done();
       });
@@ -125,7 +125,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData());
         assert.equal(actualResponseBody, "00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc");
         done();
       });

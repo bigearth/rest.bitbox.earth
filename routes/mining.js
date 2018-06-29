@@ -32,7 +32,7 @@ router.get('/getBlockTemplate/:templateRequest', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
@@ -104,7 +104,7 @@ router.post('/submitBlock/:hex', (req, res, next) => {
     }
   })
   .then((response) => {
-    res.send(response.data.result);
+    res.json(response.data.result);
   })
   .catch((error) => {
     res.send(error.response.data.error.message);
