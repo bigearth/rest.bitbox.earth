@@ -126,10 +126,10 @@ router.get('/unconfirmed/:address', (req, res, next) => {
       let parsed = response.data;
       let unconfirmed = [];
       parsed.forEach((data) => {
-        delete parsed.address;
-        parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
-        parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
-        if(parsed.confirmations === 0) {
+        data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address);
+        data.cashAddress = BITBOX.Address.toCashAddress(data.address);
+        delete data.address;
+        if(data.confirmations === 0) {
           unconfirmed.push(data);
         }
       })
