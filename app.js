@@ -30,12 +30,12 @@ app.use(cors())
 app.enable('trust proxy');
 let limiter = new RateLimit({
   windowMs: 60000, // 1 minute
-  max: 40, // limit each IP to 20 requests per windowMs
+  max: 60, // limit each IP to 20 requests per windowMs
   delayMs: 0, // disable delaying - full speed until the max limit is reached
   handler: function (req, res, /*next*/) {
     res.format({
       json: function(){
-        res.status(500).json({ error: 'Too many requests. Limits are 40 requests per minute.'});
+        res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.'});
       }
     });
   }
