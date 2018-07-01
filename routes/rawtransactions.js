@@ -94,27 +94,41 @@ router.get('/getRawTransaction/:txid', (req, res, next) => {
 });
 
 router.post('/sendRawTransaction/:hex', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"sendrawtransaction",
-      method: "sendrawtransaction",
-      params: [
-        req.params.hex
-      ]
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  try {
+    let transactions = JSON.parse(req.params.hex);
+    let result = [];
+    transactions = transactions.map((transaction) => {
+      return BITBOX.RawTransactions.sendRawTransaction(transaction)
+    })
+    axios.all(transactions)
+    .then(axios.spread((...spread) => {
+      result.push(...spread);
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"sendrawtransaction",
+        method: "sendrawtransaction",
+        params: [
+          req.params.hex
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 module.exports = router;
