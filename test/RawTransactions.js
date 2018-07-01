@@ -78,7 +78,7 @@ describe("#RawTransactionsRouter", () => {
   });
 
   describe("#SendRawTransaction", () => {
-    it("should POST /sendRawTransaction/:hex", (done) => {
+    it("should POST /sendRawTransaction/:hex single tx hex", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "POST",
           url: "/sendRawTransaction/01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000"
@@ -90,6 +90,23 @@ describe("#RawTransactionsRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = mockResponse._getData();
+        assert.equal(actualResponseBody, 'transaction already in block chain');
+        done();
+      });
+    });
+
+    it("should POST /sendRawTransaction/:hex array", (done) => {
+      let mockRequest = httpMocks.createRequest({
+        method: "POST",
+        url: '/sendRawTransaction/["0200000001cbfff7cb0a69c2740548d784c4a611456a4699ebd685a924b02d1c75b4f8d8f0000000006a47304402201a3577d3dbb385feb73ba0a34688b9878e65e10c03f8f37f4d02ed578d087b7b02207b269e53b0d7a93e881778a8769373dd26477651a7a978cfe45d84e96ca2185c4121031eb1c9c8ac2a65fb9939895dfb03b6b053dc8135011c2ddde85f6ce6e2764678ffffffff026b1a0000000000001976a9144bdc84d51cda8a66212fbb7f2efa38265c1b077588ac6b1a0000000000001976a914ca766fbabd09e5236bceffed47c2b761284aade688ac00000000", "020000000176854447f9bed3101f1630e79a1d1016799e2ee2cc46aae6d8fd899188a1604e000000006a47304402207d0427204b7b850c000e345da323567a3a6d1dd95f63059376213994e9e5feba02200d9fe81b24175f339fd018c0e0e8c77f457f1e17afa03049399d217870a6194c4121031eb1c9c8ac2a65fb9939895dfb03b6b053dc8135011c2ddde85f6ce6e2764678ffffffff02671a0000000000001976a9144bdc84d51cda8a66212fbb7f2efa38265c1b077588ac671a0000000000001976a914ca766fbabd09e5236bceffed47c2b761284aade688ac00000000"]'
+      });
+      let mockResponse = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+      rawTransactionsRoute(mockRequest, mockResponse);
+
+      mockResponse.on('end', () => {
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'transaction already in block chain');
         done();
       });
