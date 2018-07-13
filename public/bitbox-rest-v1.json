@@ -1807,7 +1807,7 @@
 				},
 			  "mempoolminfee": {
 					"type": "number"
-				},
+				}
 			}
 		},
 	  "RawMempool": {
@@ -2487,22 +2487,22 @@
 					"type": "object",
 					"properties": {
 					  "used": {
-							"type": "number",
+							"type": "number"
 						},
 					  "free": {
-							"type": "number",
+							"type": "number"
 						},
 					  "total": {
-							"type": "number",
+							"type": "number"
 						},
 					  "locked": {
-							"type": "number",
+							"type": "number"
 						},
 					  "chunks_used": {
-							"type": "number",
+							"type": "number"
 						},
 					  "chunks_free": {
-							"type": "number",
+							"type": "number"
 						}
 					}
 				}
@@ -2542,10 +2542,10 @@
 			}
 		},
 	  "NetworkHashps": {
-			"type": "number",
+			"type": "number"
 		},
 	  "ConnectionCount": {
-			"type": "number",
+			"type": "number"
 		},
 	  "MempoolAncestors": {
 			"type": "array",
