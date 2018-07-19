@@ -3,9 +3,7 @@ let router = express.Router();
 let axios = require('axios');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
-let BITBOX = new BITBOXCli({
-  restURL: "http://localhost:3000/v1/"
-});
+let BITBOX = new BITBOXCli();
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'address' });
