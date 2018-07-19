@@ -8,6 +8,10 @@ let basicAuth = require('express-basic-auth');
 let helmet = require('helmet');
 let RateLimit = require('express-rate-limit');
 
+let swStats = require('swagger-stats');
+let apiSpec = require('./public/bitbox-rest-v1.json');
+
+
 require('dotenv').config()
 
 let index = require('./routes/index');
@@ -24,6 +28,7 @@ let transaction = require('./routes/transaction');
 let util = require('./routes/util');
 
 let app = express();
+app.use(swStats.getMiddleware({swaggerSpec:apiSpec}));
 app.use(helmet());
 let cors = require('cors')
 app.use(cors())
