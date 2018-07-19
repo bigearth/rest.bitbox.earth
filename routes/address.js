@@ -3,7 +3,9 @@ let router = express.Router();
 let axios = require('axios');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
-let BITBOX = new BITBOXCli();
+let BITBOX = new BITBOXCli({
+  restURL: "http://localhost:3000/v1/"
+});
 
 router.get('/', (req, res, next) => {
   res.json({ status: 'address' });
@@ -14,11 +16,18 @@ router.get('/details/:address', (req, res, next) => {
     let addresses = JSON.parse(req.params.address);
     let result = [];
     addresses = addresses.map((address) => {
-      return BITBOX.Address.details(address)
+      let path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(address)}`;
+      return axios.get(path)
     })
     axios.all(addresses)
-    .then(axios.spread((...spread) => {
-      result.push(...spread);
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data;
+        parsed.legacyAddress = BITBOX.Address.toLegacyAddress(parsed.addrStr);
+        parsed.cashAddress = BITBOX.Address.toCashAddress(parsed.addrStr);
+        delete parsed.addrStr;
+        result.push(parsed);
+      }
       res.json(result);
     }));
   }
