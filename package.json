@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "nodemon app.js",
     "test": "nyc mocha --require babel-core/register --timeout 5000"
   },
   "engines": {
@@ -31,11 +32,13 @@
     "request": "^2.87.0",
     "sequelize": "^3.30.4",
     "serve-favicon": "~2.4.2",
+    "socket.io": "^2.1.1",
     "swagger-stats": "^0.95.6"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "node-mocks-http": "^1.7.0",
+    "nodemon": "^1.18.1",
     "nyc": "^11.6.0"
   }
 }

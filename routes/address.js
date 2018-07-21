@@ -9,6 +9,10 @@ router.get('/', (req, res, next) => {
   res.json({ status: 'address' });
 });
 
+router.get('/foobar/:address', (req, res, next) => {
+  req.io.emit('update', req.params.address); 
+});
+
 router.get('/details/:address', (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);

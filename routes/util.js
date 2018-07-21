@@ -2,9 +2,6 @@ let express = require('express');
 let router = express.Router();
 let axios = require('axios');
 
-let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
-let BITBOX = new BITBOXCli();
-
 let BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
 });
