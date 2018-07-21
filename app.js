@@ -142,38 +142,42 @@ var server = http.createServer(app);
 // });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  // console.log('a user connected');
 
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
-    io.emit('chat message', msg);
+  // socket.on('chat message', function(msg){
+  //   console.log('message: ' + msg);
+  //   io.emit('chat message', msg);
+  // });
+  // 
+  socket.on('block', function(msg){
+    io.emit('block', 'all the blockz');
   });
 
-  socket.on('transaction', function(txid){
-
-    axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`)
-    .then((response) => {
-      console.log(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`);
-      let parsed = response.data;
-      if(parsed && parsed.vin) {
-        parsed.vin.forEach((vin) => {
-          if(!vin.coinbase) {
-            let address = vin.addr;
-            vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
-            vin.cashAddress = BITBOX.Address.toCashAddress(address);
-            vin.value = vin.valueSat;
-            delete vin.addr;
-            delete vin.valueSat;
-            delete vin.doubleSpentTxID;
-          }
-        });
-      }
-      io.emit('transaction', parsed);
-    })
-    .catch((error) => {
-      res.send(error.response.data.error.message);
-    });
-  });
+  // socket.on('transaction', function(txid){
+  //
+  //   axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`)
+  //   .then((response) => {
+  //     console.log(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`);
+  //     let parsed = response.data;
+  //     if(parsed && parsed.vin) {
+  //       parsed.vin.forEach((vin) => {
+  //         if(!vin.coinbase) {
+  //           let address = vin.addr;
+  //           vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
+  //           vin.cashAddress = BITBOX.Address.toCashAddress(address);
+  //           vin.value = vin.valueSat;
+  //           delete vin.addr;
+  //           delete vin.valueSat;
+  //           delete vin.doubleSpentTxID;
+  //         }
+  //       });
+  //     }
+  //     io.emit('transaction', parsed);
+  //   })
+  //   .catch((error) => {
+  //     res.send(error.response.data.error.message);
+  //   });
+  // });
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
