@@ -144,7 +144,7 @@ io.on('connection', (socket) => {
     if(decoded === 'rawtx') {
       let network = {'pubKeyHash': 0x00, 'scriptHash': 0x05};
       let txd = new TxDecoder(message, network);
-      io.emit('rawtx', JSON.stringify(txd.toObject(), null, 2));
+      io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
     } else if(decoded === 'rawblock') {
     }
   });
