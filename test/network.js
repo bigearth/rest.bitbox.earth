@@ -72,7 +72,7 @@ describe("#NetworkRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [ 'version', 'subversion', 'protocolversion', 'localservices', 'localrelay', 'timeoffset', 'networkactive', 'connections', 'networks', 'relayfee', 'incrementalfee', 'localaddresses', 'warnings' ]);
+        assert.deepEqual(actualResponseBody, [ 'version', 'subversion', 'protocolversion', 'localservices', 'localrelay', 'timeoffset', 'networkactive', 'connections', 'networks', 'relayfee', 'excessutxocharge', 'incrementalfee', 'localaddresses', 'warnings' ]);
         done();
       });
     });

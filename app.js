@@ -148,10 +148,6 @@ io.on('connection', (socket) => {
     } else if(decoded === 'rawblock') {
     }
   });
-
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
 });
 /**
  * Listen on provided port, on all network interfaces.
