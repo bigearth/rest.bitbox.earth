@@ -21,7 +21,6 @@ let apiSpec = require('./public/bitbox-rest-v1.json');
 require('dotenv').config()
 
 let app = express();
-let io = require('socket.io').listen(app.listen(3001));
 
 let index = require('./routes/index');
 let healthCheck = require('./routes/health-check');
@@ -133,6 +132,7 @@ app.set('port', port);
  */
 
 let server = http.createServer(app);
+let io = require('socket.io').listen(server);
 
 io.on('connection', (socket) => {
 
