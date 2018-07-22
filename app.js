@@ -8,11 +8,12 @@ let basicAuth = require('express-basic-auth');
 let helmet = require('helmet');
 let RateLimit = require('express-rate-limit');
 let axios = require('axios');
-var debug = require('debug')('rest-cloud:server');
-var http = require('http');
+let debug = require('debug')('rest-cloud:server');
+let http = require('http');
+let TxDecoder = require('bitcoin-txdecoder');
 
-let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
-let BITBOX = new BITBOXCli();
+let zmq = require('zeromq')
+  , sock = zmq.socket('sub');
 
 let swStats = require('swagger-stats');
 let apiSpec = require('./public/bitbox-rest-v1.json');
@@ -119,65 +120,34 @@ app.use(function(err, req, res, next) {
     message: err.message
   });
 });
-// var io = require('socket.io')(http);
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+let port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+let server = http.createServer(app);
 
-// io.sockets.on('connection', function (socket) {
-//   console.log('client connect');
-//   socket.on('echo', function (data) {
-//   io.sockets.emit('message', data);
-//  });
-// });
+io.on('connection', (socket) => {
 
-io.on('connection', function(socket){
-  // console.log('a user connected');
+  sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
+  sock.subscribe('raw');
 
-  // socket.on('chat message', function(msg){
-  //   console.log('message: ' + msg);
-  //   io.emit('chat message', msg);
-  // });
-  // 
-  socket.on('block', function(msg){
-    io.emit('block', 'all the blockz');
+  sock.on('message', (topic, message) => {
+    let decoded = topic.toString('ascii');
+    if(decoded === 'rawtx') {
+      let network = {'pubKeyHash': 0x00, 'scriptHash': 0x05};
+      let txd = new TxDecoder(message, network);
+      io.emit('rawtx', JSON.stringify(txd.toObject(), null, 2));
+    } else if(decoded === 'rawblock') {
+    }
   });
-
-  // socket.on('transaction', function(txid){
-  //
-  //   axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`)
-  //   .then((response) => {
-  //     console.log(`${process.env.BITCOINCOM_BASEURL}tx/${txid}`);
-  //     let parsed = response.data;
-  //     if(parsed && parsed.vin) {
-  //       parsed.vin.forEach((vin) => {
-  //         if(!vin.coinbase) {
-  //           let address = vin.addr;
-  //           vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
-  //           vin.cashAddress = BITBOX.Address.toCashAddress(address);
-  //           vin.value = vin.valueSat;
-  //           delete vin.addr;
-  //           delete vin.valueSat;
-  //           delete vin.doubleSpentTxID;
-  //         }
-  //       });
-  //     }
-  //     io.emit('transaction', parsed);
-  //   })
-  //   .catch((error) => {
-  //     res.send(error.response.data.error.message);
-  //   });
-  // });
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
@@ -196,7 +166,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -220,7 +190,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -244,8 +214,8 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
