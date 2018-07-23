@@ -36,26 +36,26 @@ router.get('/getInfo', (req, res, next) => {
   });
 });
 
-router.get('/getMemoryInfo', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmemoryinfo",
-      method: "getmemoryinfo"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
+// router.get('/getMemoryInfo', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"getmemoryinfo",
+//       method: "getmemoryinfo"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
 //
 // router.get('/help', (req, res, next) => {
 //   BITBOX.Control.help()

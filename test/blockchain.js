@@ -407,63 +407,63 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
-
-  describe("#BlockchainPreciousBlock", () => {
-    it("should GET /preciousBlock/:hash", (done) => {
-      let mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: "/preciousBlock/00000000000000000108641af52e01a447b1f9d801571f93a0f20a8cbf80c236"
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      blockchainRoute(mockRequest, mockResponse);
-
-      mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
-        assert.equal(JSON.parse(actualResponseBody), "null" );
-        done();
-      });
-    });
-  });
-
-  describe("#BlockchainPruneBlockchain", () => {
-    it("should POST /pruneBlockchain/:height ", (done) => {
-      let mockRequest = httpMocks.createRequest({
-        method: "POST",
-        url: "/pruneBlockchain/530384"
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      blockchainRoute(mockRequest, mockResponse);
-
-      mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
-        assert.equal(actualResponseBody, "Cannot prune blocks because node is not in prune mode." );
-        done();
-      });
-    });
-  });
-
-  describe("#BlockchainVerifyChain", () => {
-    it("should GET /verifyChain", (done) => {
-      let mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: "/verifyChain"
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      blockchainRoute(mockRequest, mockResponse);
-
-      mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, true);
-        done();
-      });
-    });
-  });
+  //
+  // describe("#BlockchainPreciousBlock", () => {
+  //   it("should GET /preciousBlock/:hash", (done) => {
+  //     let mockRequest = httpMocks.createRequest({
+  //       method: "GET",
+  //       url: "/preciousBlock/00000000000000000108641af52e01a447b1f9d801571f93a0f20a8cbf80c236"
+  //     });
+  //     let mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require('events').EventEmitter
+  //     });
+  //     blockchainRoute(mockRequest, mockResponse);
+  //
+  //     mockResponse.on('end', () => {
+  //       let actualResponseBody = mockResponse._getData();
+  //       assert.equal(JSON.parse(actualResponseBody), "null" );
+  //       done();
+  //     });
+  //   });
+  // });
+  //
+  // describe("#BlockchainPruneBlockchain", () => {
+  //   it("should POST /pruneBlockchain/:height ", (done) => {
+  //     let mockRequest = httpMocks.createRequest({
+  //       method: "POST",
+  //       url: "/pruneBlockchain/530384"
+  //     });
+  //     let mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require('events').EventEmitter
+  //     });
+  //     blockchainRoute(mockRequest, mockResponse);
+  //
+  //     mockResponse.on('end', () => {
+  //       let actualResponseBody = mockResponse._getData();
+  //       assert.equal(actualResponseBody, "Cannot prune blocks because node is not in prune mode." );
+  //       done();
+  //     });
+  //   });
+  // });
+  //
+  // describe("#BlockchainVerifyChain", () => {
+  //   it("should GET /verifyChain", (done) => {
+  //     let mockRequest = httpMocks.createRequest({
+  //       method: "GET",
+  //       url: "/verifyChain"
+  //     });
+  //     let mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require('events').EventEmitter
+  //     });
+  //     blockchainRoute(mockRequest, mockResponse);
+  //
+  //     mockResponse.on('end', () => {
+  //       let actualResponseBody = JSON.parse(mockResponse._getData());
+  //       assert.equal(actualResponseBody, true);
+  //       done();
+  //     });
+  //   });
+  // });
 
   describe("#BlockchainVerifyTxOutProof", () => {
     it("should GET /verifyTxOutProof/:proof", (done) => {

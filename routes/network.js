@@ -46,111 +46,111 @@ router.get('/', (req, res, next) => {
 //   }, (err) => { console.log(err);
 //   });
 // });
-
-router.get('/getConnectionCount', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getconnectioncount",
-      method: "getconnectioncount"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.get('/getNetTotals', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getnettotals",
-      method: "getnettotals"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.get('/getNetworkInfo', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getnetworkinfo",
-      method: "getnetworkinfo"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.get('/getPeerInfo', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getpeerinfo",
-      method: "getpeerinfo"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.get('/ping', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"ping",
-      method: "ping"
-    }
-  })
-  .then((response) => {
-    res.json(JSON.stringify(response.data.result));
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
+//
+// router.get('/getConnectionCount', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"getconnectioncount",
+//       method: "getconnectioncount"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.get('/getNetTotals', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"getnettotals",
+//       method: "getnettotals"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.get('/getNetworkInfo', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"getnetworkinfo",
+//       method: "getnetworkinfo"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.get('/getPeerInfo', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"getpeerinfo",
+//       method: "getpeerinfo"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.get('/ping', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"ping",
+//       method: "ping"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(JSON.stringify(response.data.result));
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
 //
 // router.post('/setBan/:subnet/:command', (req, res, next) => {
 //   // TODO finish this

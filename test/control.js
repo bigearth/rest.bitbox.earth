@@ -39,23 +39,23 @@ describe("#ControlRouter", () => {
       });
     });
   });
-
-  describe("#GetMemoryInfo", () => {
-    it("should GET /getMemoryInfo ", (done) => {
-      let mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: "/getMemoryInfo"
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      controlRoute(mockRequest, mockResponse);
-
-      mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()).locked);
-        assert.deepEqual(actualResponseBody, [ 'used', 'free', 'total', 'locked', 'chunks_used', 'chunks_free' ]);
-        done();
-      });
-    });
-  });
+//
+//   describe("#GetMemoryInfo", () => {
+//     it("should GET /getMemoryInfo ", (done) => {
+//       let mockRequest = httpMocks.createRequest({
+//         method: "GET",
+//         url: "/getMemoryInfo"
+//       });
+//       let mockResponse = httpMocks.createResponse({
+//         eventEmitter: require('events').EventEmitter
+//       });
+//       controlRoute(mockRequest, mockResponse);
+//
+//       mockResponse.on('end', () => {
+//         let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()).locked);
+//         assert.deepEqual(actualResponseBody, [ 'used', 'free', 'total', 'locked', 'chunks_used', 'chunks_free' ]);
+//         done();
+//       });
+//     });
+//   });
 });

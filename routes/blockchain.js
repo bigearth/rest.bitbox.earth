@@ -398,75 +398,75 @@ router.get('/getTxOutProof/:txids', (req, res, next) => {
     res.send(error.response.data.error.message);
   });
 });
-
-router.get('/preciousBlock/:hash', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"preciousblock",
-      method: "preciousblock",
-      params: [
-        req.params.hash
-      ]
-    }
-  })
-  .then((response) => {
-    res.json(JSON.stringify(response.data.result));
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.post('/pruneBlockchain/:height', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"pruneblockchain",
-      method: "pruneblockchain",
-      params: [
-        req.params.height
-      ]
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
-
-router.get('/verifyChain', (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"verifychain",
-      method: "verifychain"
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
-});
+//
+// router.get('/preciousBlock/:hash', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"preciousblock",
+//       method: "preciousblock",
+//       params: [
+//         req.params.hash
+//       ]
+//     }
+//   })
+//   .then((response) => {
+//     res.json(JSON.stringify(response.data.result));
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.post('/pruneBlockchain/:height', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"pruneblockchain",
+//       method: "pruneblockchain",
+//       params: [
+//         req.params.height
+//       ]
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
+//
+// router.get('/verifyChain', (req, res, next) => {
+//   BitboxHTTP({
+//     method: 'post',
+//     auth: {
+//       username: username,
+//       password: password
+//     },
+//     data: {
+//       jsonrpc: "1.0",
+//       id:"verifychain",
+//       method: "verifychain"
+//     }
+//   })
+//   .then((response) => {
+//     res.json(response.data.result);
+//   })
+//   .catch((error) => {
+//     res.send(error.response.data.error.message);
+//   });
+// });
 
 router.get('/verifyTxOutProof/:proof', (req, res, next) => {
   BitboxHTTP({
