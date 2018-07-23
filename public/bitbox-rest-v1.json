@@ -52,14 +52,6 @@
 			}
 		},
 		{
-			"name": "network",
-			"description": "Interacting w/ the BCH Network",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/network"
-			}
-		},
-		{
 			"name": "rawtransactions",
 			"description": "Create transactions to be transmitted to the network.",
 			"externalDocs": {
