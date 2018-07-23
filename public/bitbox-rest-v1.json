@@ -44,14 +44,6 @@
 			}
 		},
 		{
-			"name": "generating",
-			"description": "Generating w/ the blockchain",
-			"externalDocs": {
-				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/generating"
-			}
-		},
-		{
 			"name": "mining",
 			"description": "Mining w/ the BCH Blockchain",
 			"externalDocs": {
