@@ -1,5 +1,5 @@
 ## REST
 
-[rest.bitbox.earth](https://rest.bitbox.earth/) is the REST layer for BITBOX Cloud.
+[rest.bitcoin.com](https://rest.bitcoin.com) is the REST layer for Bitcoin.com's Cloud.
 
-More info: [bitbox.earth](https://www.bitbox.earth). #bitbox chatroom [http://ambassador.cash](ambassador.cash)
+More info: [developer.bitcoin.com](https://developer.bitcoin.com). #bitbox chatroom [http://ambassador.cash](ambassador.cash)
