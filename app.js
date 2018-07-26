@@ -36,7 +36,7 @@ let rawtransactions = require('./routes/rawtransactions');
 let transaction = require('./routes/transaction');
 let util = require('./routes/util');
 
-app.use(swStats.getMiddleware({swaggerSpec:apiSpec}));
+app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }));
 
 app.use(helmet());
 let cors = require('cors')
@@ -48,8 +48,8 @@ let limiter = new RateLimit({
   delayMs: 0, // disable delaying - full speed until the max limit is reached
   handler: function (req, res, /*next*/) {
     res.format({
-      json: function(){
-        res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.'});
+      json: function () {
+        res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
       }
     });
   }
@@ -79,7 +79,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ));
 
 // Make io accessible to our router
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
   req.io = io;
   next();
 });
@@ -106,7 +106,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
 
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -135,24 +135,30 @@ let server = http.createServer(app);
 let io = require('socket.io').listen(server);
 
 io.on('connection', (socket) => {
+  console.log("Socket Connected")
 
-  sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
-  sock.subscribe('raw');
+  socket.on('disconnect', () => {
+    console.log("Socket Disconnected")
+  })
+});
 
-  sock.on('message', (topic, message) => {
-    let decoded = topic.toString('ascii');
-    if(decoded === 'rawtx') {
-      let network;
-      if(process.env.NETWORK === 'mainnet') {
-        network = {'pubKeyHash': 0x00, 'scriptHash': 0x05};
-      } else if(process.env.NETWORK === 'testnet') {
-        network = {'pubKeyHash': 0x6F, 'scriptHash': 0xC4};
-      }
-      let txd = new TxDecoder(message, network);
-      io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
-    } else if(decoded === 'rawblock') {
+sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
+sock.subscribe('raw');
+
+sock.on('message', (topic, message) => {
+  let decoded = topic.toString('ascii');
+  if (decoded === 'rawtx') {
+    let network;
+    if (process.env.NETWORK === 'mainnet') {
+      network = { 'pubKeyHash': 0x00, 'scriptHash': 0x05 };
+    } else if (process.env.NETWORK === 'testnet') {
+      network = { 'pubKeyHash': 0x6F, 'scriptHash': 0xC4 };
     }
-  });
+    let txd = new TxDecoder(message, network);
+
+    io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
+  } else if (decoded === 'rawblock') {
+  }
 });
 /**
  * Listen on provided port, on all network interfaces.
