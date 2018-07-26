@@ -142,7 +142,12 @@ io.on('connection', (socket) => {
   sock.on('message', (topic, message) => {
     let decoded = topic.toString('ascii');
     if(decoded === 'rawtx') {
-      let network = {'pubKeyHash': 0x00, 'scriptHash': 0x05};
+      let network;
+      if(process.env.NETWORK === 'mainnet') {
+        network = {'pubKeyHash': 0x00, 'scriptHash': 0x05};
+      } else if(process.env.NETWORK === 'testnet') {
+        network = {'pubKeyHash': 0x6F, 'scriptHash': 0xC4};
+      }
       let txd = new TxDecoder(message, network);
       io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
     } else if(decoded === 'rawblock') {
