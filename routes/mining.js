@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+let RateLimit = require('express-rate-limit');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -11,7 +12,30 @@ let BitboxHTTP = axios.create({
 let username = process.env.RPC_USERNAME;
 let password = process.env.RPC_PASSWORD;
 
-router.get('/', (req, res, next) => {
+let config = {
+  miningRateLimit1: undefined,
+  miningRateLimit2: undefined,
+  miningRateLimit3: undefined
+};
+
+let i = 1;
+while(i < 4) {
+  config[`miningRateLimit${i}`] = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
+    max: 60, // start blocking after 60 requests
+    handler: function (req, res, /*next*/) {
+      res.format({
+        json: function () {
+          res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
+        }
+      });
+    }
+  });
+  i++;
+}
+
+router.get('/', config.miningRateLimit1, (req, res, next) => {
   res.json({ status: 'mining' });
 });
 //
@@ -39,7 +63,7 @@ router.get('/', (req, res, next) => {
 //   });
 // });
 
-router.get('/getMiningInfo', (req, res, next) => {
+router.get('/getMiningInfo', config.miningRateLimit2, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -60,7 +84,7 @@ router.get('/getMiningInfo', (req, res, next) => {
   });
 });
 
-router.get('/getNetworkHashps', (req, res, next) => {
+router.get('/getNetworkHashps', config.miningRateLimit3, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {

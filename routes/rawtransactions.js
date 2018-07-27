@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+let RateLimit = require('express-rate-limit');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -11,11 +12,36 @@ let BitboxHTTP = axios.create({
 let username = process.env.RPC_USERNAME;
 let password = process.env.RPC_PASSWORD;
 
-router.get('/', (req, res, next) => {
+let config = {
+  rawTransactionsRateLimit1: undefined,
+  rawTransactionsRateLimit2: undefined,
+  rawTransactionsRateLimit3: undefined,
+  rawTransactionsRateLimit4: undefined,
+  rawTransactionsRateLimit5: undefined,
+};
+
+let i = 1;
+while(i < 6) {
+  config[`rawTransactionsRateLimit${i}`] = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
+    max: 60, // start blocking after 60 requests
+    handler: function (req, res, /*next*/) {
+      res.format({
+        json: function () {
+          res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
+        }
+      });
+    }
+  });
+  i++;
+}
+
+router.get('/', config.rawTransactionsRateLimit1, (req, res, next) => {
   res.json({ status: 'rawtransactions' });
 });
 
-router.get('/decodeRawTransaction/:hex', (req, res, next) => {
+router.get('/decodeRawTransaction/:hex', config.rawTransactionsRateLimit2, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -39,7 +65,7 @@ router.get('/decodeRawTransaction/:hex', (req, res, next) => {
   });
 });
 
-router.get('/decodeScript/:script', (req, res, next) => {
+router.get('/decodeScript/:script', config.rawTransactionsRateLimit3, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -63,7 +89,7 @@ router.get('/decodeScript/:script', (req, res, next) => {
   });
 });
 
-router.get('/getRawTransaction/:txid', (req, res, next) => {
+router.get('/getRawTransaction/:txid', config.rawTransactionsRateLimit4, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -93,7 +119,7 @@ router.get('/getRawTransaction/:txid', (req, res, next) => {
   });
 });
 
-router.post('/sendRawTransaction/:hex', (req, res, next) => {
+router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, res, next) => {
   try {
     let transactions = JSON.parse(req.params.hex);
     let result = [];

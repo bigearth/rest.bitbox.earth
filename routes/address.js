@@ -1,19 +1,40 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+let RateLimit = require('express-rate-limit');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
 
-router.get('/', (req, res, next) => {
+let config = {
+  addressRateLimit1: undefined,
+  addressRateLimit2: undefined,
+  addressRateLimit3: undefined,
+  addressRateLimit4: undefined
+};
+
+let i = 1;
+while(i < 5) {
+  config[`addressRateLimit${i}`] = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
+    max: 60, // start blocking after 60 requests
+    handler: function (req, res, /*next*/) {
+      res.format({
+        json: function () {
+          res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
+        }
+      });
+    }
+  });
+  i++;
+}
+
+router.get('/', config.addressRateLimit1, (req, res, next) => {
   res.json({ status: 'address' });
 });
 
-router.get('/foobar/:address', (req, res, next) => {
-  req.io.emit('update', req.params.address); 
-});
-
-router.get('/details/:address', (req, res, next) => {
+router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     let result = [];
@@ -53,7 +74,7 @@ router.get('/details/:address', (req, res, next) => {
   }
 });
 
-router.get('/utxo/:address', (req, res, next) => {
+router.get('/utxo/:address', config.addressRateLimit3, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     addresses = addresses.map((address) => {
@@ -100,7 +121,7 @@ router.get('/utxo/:address', (req, res, next) => {
   }
 });
 
-router.get('/unconfirmed/:address', (req, res, next) => {
+router.get('/unconfirmed/:address', config.addressRateLimit4, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     addresses = addresses.map((address) => {

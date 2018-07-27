@@ -1,15 +1,38 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+let RateLimit = require('express-rate-limit');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
 
-router.get('/', (req, res, next) => {
+let config = {
+  transactionRateLimit1: undefined,
+  transactionRateLimit2: undefined
+};
+
+let i = 1;
+while(i < 6) {
+  config[`transactionRateLimit${i}`] = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
+    max: 60, // start blocking after 60 requests
+    handler: function (req, res, /*next*/) {
+      res.format({
+        json: function () {
+          res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
+        }
+      });
+    }
+  });
+  i++;
+}
+
+router.get('/', config.transactionRateLimit1, (req, res, next) => {
   res.json({ status: 'transaction' });
 });
 
-router.get('/details/:txid', (req, res, next) => {
+router.get('/details/:txid', config.transactionRateLimit1, (req, res, next) => {
   try {
     let txs = JSON.parse(req.params.txid);
     let result = [];
@@ -46,7 +69,5 @@ router.get('/details/:txid', (req, res, next) => {
     });
   }
 });
-
-
 
 module.exports = router;

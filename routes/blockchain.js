@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let axios = require('axios');
+let RateLimit = require('express-rate-limit');
 
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
@@ -11,11 +12,47 @@ let BitboxHTTP = axios.create({
 let username = process.env.RPC_USERNAME;
 let password = process.env.RPC_PASSWORD;
 
-router.get('/', (req, res, next) => {
+let config = {
+  blockchainRateLimit1: undefined,
+  blockchainRateLimit2: undefined,
+  blockchainRateLimit3: undefined,
+  blockchainRateLimit4: undefined,
+  blockchainRateLimit5: undefined,
+  blockchainRateLimit6: undefined,
+  blockchainRateLimit7: undefined,
+  blockchainRateLimit8: undefined,
+  blockchainRateLimit9: undefined,
+  blockchainRateLimit10: undefined,
+  blockchainRateLimit11: undefined,
+  blockchainRateLimit12: undefined,
+  blockchainRateLimit13: undefined,
+  blockchainRateLimit14: undefined,
+  blockchainRateLimit15: undefined,
+  blockchainRateLimit16: undefined
+};
+
+let i = 1;
+while(i < 17) {
+  config[`blockchainRateLimit${i}`] = new RateLimit({
+    windowMs: 60*60*1000, // 1 hour window
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
+    max: 60, // start blocking after 60 requests
+    handler: function (req, res, /*next*/) {
+      res.format({
+        json: function () {
+          res.status(500).json({ error: 'Too many requests. Limits are 60 requests per minute.' });
+        }
+      });
+    }
+  });
+  i++;
+}
+
+router.get('/', config.blockchainRateLimit1, (req, res, next) => {
   res.json({ status: 'blockchain' });
 });
 
-router.get('/getBestBlockHash', (req, res, next) => {
+router.get('/getBestBlockHash', config.blockchainRateLimit2, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -36,7 +73,7 @@ router.get('/getBestBlockHash', (req, res, next) => {
   });
 });
 
-router.get('/getBlock/:hash', (req, res, next) => {
+router.get('/getBlock/:hash', config.blockchainRateLimit2, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -66,7 +103,7 @@ router.get('/getBlock/:hash', (req, res, next) => {
   });
 });
 
-router.get('/getBlockchainInfo', (req, res, next) => {
+router.get('/getBlockchainInfo', config.blockchainRateLimit3, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -87,7 +124,7 @@ router.get('/getBlockchainInfo', (req, res, next) => {
   });
 });
 
-router.get('/getBlockCount', (req, res, next) => {
+router.get('/getBlockCount', config.blockchainRateLimit4, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -108,7 +145,7 @@ router.get('/getBlockCount', (req, res, next) => {
   });
 });
 
-router.get('/getBlockHash/:height', (req, res, next) => {
+router.get('/getBlockHash/:height', config.blockchainRateLimit5, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -132,7 +169,7 @@ router.get('/getBlockHash/:height', (req, res, next) => {
   });
 });
 
-router.get('/getBlockHeader/:hash', (req, res, next) => {
+router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -162,7 +199,7 @@ router.get('/getBlockHeader/:hash', (req, res, next) => {
   });
 });
 
-router.get('/getChainTips', (req, res, next) => {
+router.get('/getChainTips', config.blockchainRateLimit7, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -183,7 +220,7 @@ router.get('/getChainTips', (req, res, next) => {
   });
 });
 
-router.get('/getDifficulty', (req, res, next) => {
+router.get('/getDifficulty', config.blockchainRateLimit8, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -204,7 +241,7 @@ router.get('/getDifficulty', (req, res, next) => {
   });
 });
 
-router.get('/getMempoolAncestors/:txid', (req, res, next) => {
+router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -239,7 +276,7 @@ router.get('/getMempoolAncestors/:txid', (req, res, next) => {
   });
 });
 
-router.get('/getMempoolDescendants/:txid', (req, res, next) => {
+router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -270,7 +307,7 @@ router.get('/getMempoolDescendants/:txid', (req, res, next) => {
   });
 });
 
-router.get('/getMempoolEntry/:txid', (req, res, next) => {
+router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -294,7 +331,7 @@ router.get('/getMempoolEntry/:txid', (req, res, next) => {
   });
 });
 
-router.get('/getMempoolInfo', (req, res, next) => {
+router.get('/getMempoolInfo', config.blockchainRateLimit12, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -315,7 +352,7 @@ router.get('/getMempoolInfo', (req, res, next) => {
   });
 });
 
-router.get('/getRawMempool', (req, res, next) => {
+router.get('/getRawMempool', config.blockchainRateLimit13, (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -344,7 +381,7 @@ router.get('/getRawMempool', (req, res, next) => {
   });
 });
 
-router.get('/getTxOut/:txid/:n', (req, res, next) => {
+router.get('/getTxOut/:txid/:n', config.blockchainRateLimit14, (req, res, next) => {
   let include_mempool = false;
   if(req.query.include_mempool && req.query.include_mempool === 'true') {
     include_mempool = true;
@@ -375,7 +412,7 @@ router.get('/getTxOut/:txid/:n', (req, res, next) => {
   });
 });
 
-router.get('/getTxOutProof/:txids', (req, res, next) => {
+router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
@@ -468,7 +505,7 @@ router.get('/getTxOutProof/:txids', (req, res, next) => {
 //   });
 // });
 
-router.get('/verifyTxOutProof/:proof', (req, res, next) => {
+router.get('/verifyTxOutProof/:proof', config.blockchainRateLimit16, (req, res, next) => {
   BitboxHTTP({
     method: 'post',
     auth: {
