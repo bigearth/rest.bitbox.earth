@@ -1,7 +1,7 @@
 {
 	"swagger": "2.0",
 	"info": {
-		"description": "rest.bitbox.earth is the REST layer for BITBOX Cloud. More info: https://www.bitbox.earth. #bitbox chatroom http://ambassador.cash",
+		"description": "rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info: https://developer.bitcoin.com. #bitbox chatroom http://ambassador.cash",
 		"version": "1.0.1",
 		"title": "REST",
 		"license": {
@@ -16,7 +16,7 @@
 			"description": "Address details and utxo",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/address"
+				"url": "https://developer.bitcoin.com/bitbox/docs/address.html"
 			}
 		},
 		{
@@ -24,7 +24,7 @@
 			"description": "Block Details",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/block"
+				"url": "https://developer.bitcoin.com/bitbox/docs/block.html"
 			}
 		},
 		{
@@ -32,7 +32,7 @@
 			"description": "Interacting w/ the BCH Blockchain",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/blockchain"
+				"url": "https://developer.bitcoin.com/bitbox/docs/blockchain.html"
 			}
 		},
 		{
@@ -40,7 +40,7 @@
 			"description": "Control your blockchain",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/control"
+				"url": "https://developer.bitcoin.com/bitbox/docs/control.html"
 			}
 		},
 		{
@@ -48,7 +48,7 @@
 			"description": "Mining w/ the BCH Blockchain",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/mining"
+				"url": "https://developer.bitcoin.com/bitbox/docs/mining.html"
 			}
 		},
 		{
@@ -64,7 +64,7 @@
 			"description": "Transaction details.",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/transaction"
+				"url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions.html"
 			}
 		},
 		{
@@ -72,7 +72,7 @@
 			"description": "Bitcoin Cash utilities.",
 			"externalDocs": {
 				"description": "Find out more",
-				"url": "https://www.bitbox.earth/bitboxcli/util"
+				"url": "https://developer.bitcoin.com/bitbox/docs/util.html"
 			}
 		}
 	],
