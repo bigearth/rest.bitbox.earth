@@ -10,7 +10,7 @@ let RateLimit = require('express-rate-limit');
 let axios = require('axios');
 let debug = require('debug')('rest-cloud:server');
 let http = require('http');
-let TxDecoder = require('bitcoin-txdecoder');
+let BitcoinCashZMQDecoder = require('bitcoincash-zmq-decoder');
 
 let zmq = require('zeromq')
   , sock = zmq.socket('sub');
@@ -129,6 +129,8 @@ io.on('connection', (socket) => {
   })
 });
 
+let bitcoincashZmqDecoder =  new BitcoinCashZMQDecoder();
+
 sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
 sock.subscribe('raw');
 
@@ -141,10 +143,12 @@ sock.on('message', (topic, message) => {
     } else if (process.env.NETWORK === 'testnet') {
       network = { 'pubKeyHash': 0x6F, 'scriptHash': 0xC4 };
     }
-    let txd = new TxDecoder(message, network);
-
-    io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
+    let txd = bitcoincashZmqDecoder.decodeTransaction(message, { 'pubKeyHash': 0x00, 'scriptHash': 0x05 });
+    io.emit('transactions', JSON.stringify(txd, null, 2));
   } else if (decoded === 'rawblock') {
+    // let blck = new TxDecoder(message, network, 'block');
+    // console.log('block', blck);
+    // io.emit('blocks', JSON.stringify(txd.toObject(), null, 2));
   }
 });
 /**

@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   description: >-
     rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info:
-    https://developer.bitcoin.com. #bitbox chatroom http://ambassador.cash
+    [https://developer.bitcoin.com](developer.bitcoin.com). #bitbox chatroom [http://ambassador.cash](ambassador.cash)
   version: 1.0.1
   title: REST
   license:
