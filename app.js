@@ -146,6 +146,7 @@ sock.on('message', (topic, message) => {
     let txd = bitcoincashZmqDecoder.decodeTransaction(message, network);
     io.emit('transactions', JSON.stringify(txd, null, 2));
   } else if (decoded === 'rawblock') {
+    let blck = bitcoincashZmqDecoder.decodeBlock(message, network);
     // let blck = new TxDecoder(message, network, 'block');
     // console.log('block', blck);
     // io.emit('blocks', JSON.stringify(txd.toObject(), null, 2));
