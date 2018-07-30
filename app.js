@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
   })
 });
 
-let bitcoincashZmqDecoder =  new BitcoinCashZMQDecoder();
+let bitcoincashZmqDecoder =  new BitcoinCashZMQDecoder(process.env.NETWORK === 'mainnet');
 
 sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
 sock.subscribe('raw');
@@ -137,16 +137,10 @@ sock.subscribe('raw');
 sock.on('message', (topic, message) => {
   let decoded = topic.toString('ascii');
   if (decoded === 'rawtx') {
-    let network;
-    if (process.env.NETWORK === 'mainnet') {
-      network = { 'pubKeyHash': 0x00, 'scriptHash': 0x05 };
-    } else if (process.env.NETWORK === 'testnet') {
-      network = { 'pubKeyHash': 0x6F, 'scriptHash': 0xC4 };
-    }
-    let txd = bitcoincashZmqDecoder.decodeTransaction(message, network);
+    let txd = bitcoincashZmqDecoder.decodeTransaction(message);
     io.emit('transactions', JSON.stringify(txd, null, 2));
   } else if (decoded === 'rawblock') {
-    let blck = bitcoincashZmqDecoder.decodeBlock(message, network);
+    let blck = bitcoincashZmqDecoder.decodeBlock(message);
     io.emit('blocks', JSON.stringify(blck, null, 2));
   }
 });
