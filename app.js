@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
   })
 });
 
-let bitcoincashZmqDecoder =  new BitcoinCashZMQDecoder(process.env.NETWORK === 'mainnet');
+let bitcoincashZmqDecoder =  new BitcoinCashZMQDecoder(process.env.NETWORK);
 
 sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`);
 sock.subscribe('raw');
