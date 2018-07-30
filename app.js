@@ -15,12 +15,6 @@ let BitcoinCashZMQDecoder = require('bitcoincash-zmq-decoder');
 let zmq = require('zeromq')
   , sock = zmq.socket('sub');
 
-let BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-});
-let username = process.env.RPC_USERNAME;
-let password = process.env.RPC_PASSWORD;
-
 let swStats = require('swagger-stats');
 let apiSpec = require('./public/bitcoin-com-rest-v1.json');
 
