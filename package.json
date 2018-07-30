@@ -13,7 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bitbox-cli": "^1.4.0",
-    "bitcoincash-zmq-decoder": "Bitcoin-com/bitcoincash-zmq-decoder#6e16eb67e6a5a2d588547f4b6fe45628a18d04d4",
+    "bitcoincash-zmq-decoder": "Bitcoin-com/bitcoincash-zmq-decoder#59c3639781e5b34b51766471d193d95cce97206b",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.3",
