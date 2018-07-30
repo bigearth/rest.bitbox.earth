@@ -143,7 +143,7 @@ sock.on('message', (topic, message) => {
     } else if (process.env.NETWORK === 'testnet') {
       network = { 'pubKeyHash': 0x6F, 'scriptHash': 0xC4 };
     }
-    let txd = bitcoincashZmqDecoder.decodeTransaction(message, { 'pubKeyHash': 0x00, 'scriptHash': 0x05 });
+    let txd = bitcoincashZmqDecoder.decodeTransaction(message, network);
     io.emit('transactions', JSON.stringify(txd, null, 2));
   } else if (decoded === 'rawblock') {
     // let blck = new TxDecoder(message, network, 'block');
