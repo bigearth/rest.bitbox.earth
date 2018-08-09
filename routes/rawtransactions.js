@@ -23,7 +23,7 @@ let config = {
 let i = 1;
 while(i < 6) {
   config[`rawTransactionsRateLimit${i}`] = new RateLimit({
-    windowMs: 60*60*1000, // 1 hour window
+    windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
     handler: function (req, res, /*next*/) {
