@@ -124,11 +124,28 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
     let transactions = JSON.parse(req.params.hex);
     let result = [];
     transactions = transactions.map((transaction) => {
-      return BITBOX.RawTransactions.sendRawTransaction(transaction)
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"sendrawtransaction",
+          method: "sendrawtransaction",
+          params: [
+            transaction
+          ]
+        }
+      })
     })
     axios.all(transactions)
-    .then(axios.spread((...spread) => {
-      result.push(...spread);
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
       res.json(result);
     }));
   }
