@@ -10,7 +10,8 @@ let RateLimit = require('express-rate-limit');
 let axios = require('axios');
 let debug = require('debug')('rest-cloud:server');
 let http = require('http');
-let TxDecoder = require('bitcoin-txdecoder');
+let BitcoinCashZMQDecoder = require('bitcoincash-zmq-decoder');
+let bitcoincashZmqDecoder = new BitcoinCashZMQDecoder(process.env.NETWORK);
 
 let zmq = require('zeromq')
   , sock = zmq.socket('sub');
@@ -147,19 +148,20 @@ sock.subscribe('raw');
 
 sock.on('message', (topic, message) => {
   let decoded = topic.toString('ascii');
-  if (decoded === 'rawtx') {
-    let network;
-    if (process.env.NETWORK === 'mainnet') {
-      network = { 'pubKeyHash': 0x00, 'scriptHash': 0x05 };
-    } else if (process.env.NETWORK === 'testnet') {
-      network = { 'pubKeyHash': 0x6F, 'scriptHash': 0xC4 };
-    }
-    let txd = new TxDecoder(message, network);
 
-    io.emit('transactions', JSON.stringify(txd.toObject(), null, 2));
+  if (decoded === 'rawtx') {
+
+    let txd = bitcoincashZmqDecoder.decodeTransaction(message)
+    io.emit('transactions', JSON.stringify(txd, null, 2));
+
   } else if (decoded === 'rawblock') {
+
+    let block = bitcoincashZmqDecoder.decodeBlock(message)
+    io.emit('blocks', JSON.stringify(block, null, 2))
+
   }
 });
+
 /**
  * Listen on provided port, on all network interfaces.
  */
