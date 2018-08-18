@@ -139,8 +139,7 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
           ]
         }
       })
-    })
-    .catch(error => {
+      .catch(error => {
         try {
           return {
             data: {
@@ -155,7 +154,7 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
           };
         }
       })
-    })
+    })    
     axios.all(transactions)
     .then(axios.spread((...args) => {
       for (let i = 0; i < args.length; i++) {
