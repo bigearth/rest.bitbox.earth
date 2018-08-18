@@ -114,5 +114,5 @@ describe("#RawTransactionsRouter", () => {
   //       done();
   //     });
   //   });
-// });
+  });
 });
