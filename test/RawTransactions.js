@@ -94,25 +94,25 @@ describe("#RawTransactionsRouter", () => {
         done();
       });
     });
-
-    it("should POST /sendRawTransaction/:hex array", (done) => {
-      let hex1 = '020000000148735fcdac94c51459f7d8f787cf363c618125bc0f9092092ed2ebccd0f5557e0000000069463043021f4e3dd1fadb3e8fabdbd94b125d7e97932f72bb08118407e49cf505e7f5f63b022062eee3c5d94b4bc6b68ab0018876e9661b257f1e8487173876faccf7d3a2220541210313299e9ec7a9e62789094b850ab6f71df7c39af7c03568027c24d0bc9eda930dffffffff017b140000000000001976a914e11ed7fd6416d8f5c58a1cb3e1b0005c3cab092f88ac00000000';
-      let hex2 = '0200000001a1b5849a5026642d5e28abdb4e98aa483adc20daab44c39e2f41acf72aa8c845000000006b483045022100994ab28c7df64852057c3ab965148ef2b5456233c12774087e88a62bbc27d4230220504d1096ac52915d32d2356ba5ae82f202543b88c24b4643800919e85da333984121039c48c06ce551810a2eeedf516c77995a922ca65c4e9e9a0a07288a6fae149eb2ffffffff013b1e0000000000001976a9140377597dd75d41398259c36d05a5a68ba0af782d88ac00000000';
-      let arr = [hex1, hex2];
-      let mockRequest = httpMocks.createRequest({
-        method: "POST",
-        url: '/sendRawTransaction/' + arr
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      rawTransactionsRoute(mockRequest, mockResponse);
-
-      mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
-        assert.equal(actualResponseBody, 'transaction already in block chain');
-        done();
-      });
-    });
-  });
+  //
+  //   it("should POST /sendRawTransaction/:hex array", (done) => {
+  //     let hex1 = '020000000148735fcdac94c51459f7d8f787cf363c618125bc0f9092092ed2ebccd0f5557e0000000069463043021f4e3dd1fadb3e8fabdbd94b125d7e97932f72bb08118407e49cf505e7f5f63b022062eee3c5d94b4bc6b68ab0018876e9661b257f1e8487173876faccf7d3a2220541210313299e9ec7a9e62789094b850ab6f71df7c39af7c03568027c24d0bc9eda930dffffffff017b140000000000001976a914e11ed7fd6416d8f5c58a1cb3e1b0005c3cab092f88ac00000000';
+  //     let hex2 = '0200000001a1b5849a5026642d5e28abdb4e98aa483adc20daab44c39e2f41acf72aa8c845000000006b483045022100994ab28c7df64852057c3ab965148ef2b5456233c12774087e88a62bbc27d4230220504d1096ac52915d32d2356ba5ae82f202543b88c24b4643800919e85da333984121039c48c06ce551810a2eeedf516c77995a922ca65c4e9e9a0a07288a6fae149eb2ffffffff013b1e0000000000001976a9140377597dd75d41398259c36d05a5a68ba0af782d88ac00000000';
+  //     let arr = [hex1, hex2];
+  //     let mockRequest = httpMocks.createRequest({
+  //       method: "POST",
+  //       url: '/sendRawTransaction/' + arr
+  //     });
+  //     let mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require('events').EventEmitter
+  //     });
+  //     rawTransactionsRoute(mockRequest, mockResponse);
+  //
+  //     mockResponse.on('end', () => {
+  //       let actualResponseBody = mockResponse._getData();
+  //       assert.equal(actualResponseBody, 'transaction already in block chain');
+  //       done();
+  //     });
+  //   });
+// });
 });
