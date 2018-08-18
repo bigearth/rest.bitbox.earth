@@ -140,6 +140,22 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
         }
       })
     })
+    .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
     axios.all(transactions)
     .then(axios.spread((...args) => {
       for (let i = 0; i < args.length; i++) {
