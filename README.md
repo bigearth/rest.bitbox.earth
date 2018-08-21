@@ -5,5 +5,3 @@
 More info: [developer.bitcoin.com](https://developer.bitcoin.com). #bitbox chatroom [http://ambassador.cash](ambassador.cash)
 
 Testnet available at [trest.bitcoin.com](https://trest.bitcoin.com)
-
-test for redeploy
