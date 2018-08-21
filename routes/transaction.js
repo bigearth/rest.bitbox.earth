@@ -35,6 +35,12 @@ router.get('/', config.transactionRateLimit1, (req, res, next) => {
 router.get('/details/:txid', config.transactionRateLimit1, (req, res, next) => {
   try {
     let txs = JSON.parse(req.params.txid);
+    if(txs.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 txids'
+      });
+    }
+
     let result = [];
     txs = txs.map(function(tx) {
       return BITBOX.Transaction.details(tx)

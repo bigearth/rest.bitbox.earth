@@ -24,7 +24,7 @@ describe("#TransactionRouter", () => {
     it("should GET /details/:txid single txid", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/details/78b5847f469f3e96b68c49097261d19c10ca5830c1e883333eb80e9252d9df86"
+        url: '/details/["78b5847f469f3e96b68c49097261d19c10ca5830c1e883333eb80e9252d9df86"%5D'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -32,7 +32,7 @@ describe("#TransactionRouter", () => {
       transactionRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
         assert.deepEqual(actualResponseBody, [ 'txid', 'version', 'locktime', 'vin', 'vout', 'blockhash', 'blockheight', 'confirmations', 'time', 'blocktime', 'valueOut', 'size', 'valueIn', 'fees' ]);
         done();
       });

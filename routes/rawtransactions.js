@@ -122,6 +122,12 @@ router.get('/getRawTransaction/:txid', config.rawTransactionsRateLimit4, (req, r
 router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, res, next) => {
   try {
     let transactions = JSON.parse(req.params.hex);
+    if(transactions.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 transactions'
+      });
+    }
+
     let result = [];
     transactions = transactions.map((transaction) => {
       return BitboxHTTP({
@@ -154,7 +160,7 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
           };
         }
       })
-    })    
+    })
     axios.all(transactions)
     .then(axios.spread((...args) => {
       for (let i = 0; i < args.length; i++) {

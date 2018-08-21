@@ -37,6 +37,11 @@ router.get('/', config.addressRateLimit1, (req, res, next) => {
 router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
+    if(addresses.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 addresses'
+      });
+    }
     let result = [];
     addresses = addresses.map((address) => {
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(address)}`;
@@ -77,6 +82,12 @@ router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
 router.get('/utxo/:address', config.addressRateLimit3, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
+    if(addresses.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 addresses'
+      });
+    }
+
     addresses = addresses.map((address) => {
       return BITBOX.Address.toLegacyAddress(address)
     })
@@ -124,6 +135,11 @@ router.get('/utxo/:address', config.addressRateLimit3, (req, res, next) => {
 router.get('/unconfirmed/:address', config.addressRateLimit4, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
+    if(addresses.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 addresses'
+      });
+    }
     addresses = addresses.map((address) => {
       return BITBOX.Address.toLegacyAddress(address)
     });

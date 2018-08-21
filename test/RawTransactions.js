@@ -81,7 +81,7 @@ describe("#RawTransactionsRouter", () => {
     it("should POST /sendRawTransaction/:hex single tx hex", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "POST",
-          url: "/sendRawTransaction/01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000"
+          url: '/sendRawTransaction/["01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000"%5D'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -89,7 +89,7 @@ describe("#RawTransactionsRouter", () => {
       rawTransactionsRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'transaction already in block chain');
         done();
       });
