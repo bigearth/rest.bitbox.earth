@@ -11,6 +11,22 @@ let config = {
   transactionRateLimit2: undefined
 };
 
+let processInputs = tx => {
+  if (tx.vin) {
+    tx.vin.forEach((vin) => {
+      if(!vin.coinbase) {
+        let address = vin.addr;
+        vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
+        vin.cashAddress = BITBOX.Address.toCashAddress(address);
+        vin.value = vin.valueSat;
+        delete vin.addr;
+        delete vin.valueSat;
+        delete vin.doubleSpentTxID;
+      }
+    });
+  }
+};
+
 let i = 1;
 while(i < 6) {
   config[`transactionRateLimit${i}`] = new RateLimit({
@@ -51,6 +67,9 @@ router.get('/details/:txid', config.transactionRateLimit1, (req, res, next) => {
         let parsed = args[i].data;
         result.push(parsed);
       }
+      result.forEach((tx) => {
+        processInputs(tx);
+      });
       res.json(result);
     }));
   }
@@ -58,18 +77,8 @@ router.get('/details/:txid', config.transactionRateLimit1, (req, res, next) => {
     axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${req.params.txid}`)
     .then((response) => {
       let parsed = response.data;
-      if(parsed && parsed.vin) {
-        parsed.vin.forEach((vin) => {
-          if(!vin.coinbase) {
-            let address = vin.addr;
-            vin.legacyAddress = BITBOX.Address.toLegacyAddress(address);
-            vin.cashAddress = BITBOX.Address.toCashAddress(address);
-            vin.value = vin.valueSat;
-            delete vin.addr;
-            delete vin.valueSat;
-            delete vin.doubleSpentTxID;
-          }
-        });
+      if(parsed) {
+        processInputs(parsed);
       }
       res.json(parsed);
     })
