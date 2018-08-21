@@ -43,7 +43,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlock/:id w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=true"
+        url: '/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=true'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -60,7 +60,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlock/:id w/ verbose=false", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=false"
+        url: '/getblock/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=false'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -117,7 +117,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlockHash/:height ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getBlockhash/532646"
+        url: "/getBlockhash/[0, 1, 2, 3, 532646]"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -125,8 +125,8 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, "00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc");
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
+        assert.equal(actualResponseBody, "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f");
         done();
       });
     });
@@ -136,7 +136,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlockHeader/:hash w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=true"
+        url: '/getBlockHeader/["00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"%5D?verbose=true'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -144,7 +144,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
         assert.deepEqual(actualResponseBody, [ 'hash', 'confirmations', 'height', 'version', 'versionHex', 'merkleroot', 'time', 'mediantime', 'nonce', 'bits', 'difficulty', 'chainwork', 'previousblockhash', 'nextblockhash' ]);
         done();
       });
@@ -153,7 +153,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getBlockHeader/:hash w/ verbose=false", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc?verbose=false"
+        url: '/getBlockHeader/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"%5D?verbose=false'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -210,7 +210,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getMempoolAncestors/:txid w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMempoolAncestors/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6?verbose=true"
+        url: '/getMempoolAncestors/["53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"%5D?verbose=true'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -218,7 +218,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'Transaction not in mempool');
         done();
       });
@@ -227,7 +227,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getMempoolAncestors/:txid w/ verbose=false", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMempoolAncestors/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6?verbose=false"
+        url: '/getMempoolAncestors/["53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"%5D?verbose=false'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -235,7 +235,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'Transaction not in mempool');
         done();
       });
@@ -246,7 +246,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getMempoolDescendants/:txid w/ verbose=true", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMempoolDescendants/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6?verbose=true"
+        url: '/getMempoolDescendants/["53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"%5D?verbose=true'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -254,7 +254,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'Transaction not in mempool');
         done();
       });
@@ -263,7 +263,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getMempoolDescendants/:txid w/ verbose=false", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMempoolDescendants/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6?verbose=false"
+        url: '/getMempoolDescendants/["53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"%5D?verbose=false'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -271,7 +271,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.equal(actualResponseBody, 'Transaction not in mempool');
         done();
       });
@@ -282,7 +282,7 @@ describe("#BlockchainRouter", () => {
     it("should GET /getMempoolEntry/:txid ", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMempoolEntry/53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"
+        url: '/getMempoolEntry/["53735a4ddb828825d6e3f52d045f4c151b2b3d51d631bc581e62f31184b151d6"%5D'
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require('events').EventEmitter
@@ -290,7 +290,7 @@ describe("#BlockchainRouter", () => {
       blockchainRoute(mockRequest, mockResponse);
 
       mockResponse.on('end', () => {
-        let actualResponseBody = mockResponse._getData();
+        let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         // TODO: create a tx send it to mempool. Then spend the utxo in another tx and call that enpoind w/ the 2nd txid.
         assert.equal(actualResponseBody, 'Transaction not in mempool');
         done();

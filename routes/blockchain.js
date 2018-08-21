@@ -358,7 +358,7 @@ router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, (req, res,
       });
     }
     let result = [];
-    txids = hashes.map((txid) => {
+    txids = txids.map((txid) => {
       return BitboxHTTP({
         method: 'post',
         auth: {
@@ -440,7 +440,7 @@ router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, r
       });
     }
     let result = [];
-    txids = hashes.map((txid) => {
+    txids = txids.map((txid) => {
       return BitboxHTTP({
         method: 'post',
         auth: {
@@ -509,27 +509,6 @@ router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, r
 });
 
 router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmempoolentry",
-      method: "getmempoolentry",
-      params: [
-        req.params.txid
-      ]
-    }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
   try {
     let txids = JSON.parse(req.params.txid);
     if(txids.length > 20) {
@@ -538,7 +517,7 @@ router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, ne
       });
     }
     let result = [];
-    txids = hashes.map((txid) => {
+    txids = txids.map((txid) => {
       return BitboxHTTP({
         method: 'post',
         auth: {
