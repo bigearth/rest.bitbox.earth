@@ -42,51 +42,153 @@ router.get('/', config.rawTransactionsRateLimit1, (req, res, next) => {
 });
 
 router.get('/decodeRawTransaction/:hex', config.rawTransactionsRateLimit2, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"decoderawtransaction",
-      method: "decoderawtransaction",
-      params: [
-        req.params.hex
-      ]
+  try {
+    let transactions = JSON.parse(req.params.hex);
+    if(transactions.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 transactions'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    transactions = transactions.map((transaction) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"decoderawtransaction",
+          method: "decoderawtransaction",
+          params: [
+            transaction
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(transactions)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"decoderawtransaction",
+        method: "decoderawtransaction",
+        params: [
+          req.params.hex
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/decodeScript/:script', config.rawTransactionsRateLimit3, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"decodescript",
-      method: "decodescript",
-      params: [
-        req.params.script
-      ]
+  try {
+    let scripts = JSON.parse(req.params.script);
+    if(scripts.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 scripts'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    scripts = scripts.map((script) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"decodescript",
+          method: "decodescript",
+          params: [
+            script
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(scripts)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"decodescript",
+        method: "decodescript",
+        params: [
+          req.params.script
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getRawTransaction/:txid', config.rawTransactionsRateLimit4, (req, res, next) => {
@@ -95,28 +197,80 @@ router.get('/getRawTransaction/:txid', config.rawTransactionsRateLimit4, (req, r
     verbose = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getrawtransaction",
-      method: "getrawtransaction",
-      params: [
-        req.params.txid,
-        verbose
-      ]
+  try {
+    let txids = JSON.parse(req.params.txid);
+    if(txids.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 txids'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    txids = txids.map((txid) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getrawtransaction",
+          method: "getrawtransaction",
+          params: [
+            txid,
+            verbose
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(txids)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getrawtransaction",
+        method: "getrawtransaction",
+        params: [
+          req.params.txid,
+          verbose
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, res, next) => {
