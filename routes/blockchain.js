@@ -146,27 +146,78 @@ router.get('/getBlockCount', config.blockchainRateLimit4, (req, res, next) => {
 });
 
 router.get('/getBlockHash/:height', config.blockchainRateLimit5, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getblockhash",
-      method: "getblockhash",
-      params: [
-        parseInt(req.params.height)
-      ]
+  try {
+    let heights = JSON.parse(req.params.height);
+    if(heights.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 heights'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    heights = heights.map((height) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getblockhash",
+          method: "getblockhash",
+          params: [
+            height
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(heights)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getblockhash",
+        method: "getblockhash",
+        params: [
+          parseInt(req.params.height)
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, (req, res, next) => {
@@ -174,29 +225,81 @@ router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, (req, res, next
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getblockheader",
-      method: "getblockheader",
-      params: [
-        req.params.hash,
-        verbose
-      ]
+
+  try {
+    let hashes = JSON.parse(req.params.hash);
+    if(hashes.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 hashes'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    // console.log(error)
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    hashes = hashes.map((hash) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getblockheader",
+          method: "getblockheader",
+          params: [
+            hash,
+            verbose
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(hashes)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getblockheader",
+        method: "getblockheader",
+        params: [
+          req.params.hash,
+          verbose
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getChainTips', config.blockchainRateLimit7, (req, res, next) => {
@@ -247,33 +350,80 @@ router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, (req, res,
     verbose = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmempoolancestors",
-      method: "getmempoolancestors",
-      params: [
-        req.params.txid,
-        verbose
-      ]
+  try {
+    let txids = JSON.parse(req.params.txid);
+    if(txids.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 txids'
+      });
     }
-  })
-  .then((response) => {
-    if(typeof respons.data.result === 'string') {
-      res.send(response.data.result);
-    } else {
+    let result = [];
+    txids = hashes.map((txid) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getmempoolancestors",
+          method: "getmempoolancestors",
+          params: [
+            txid,
+            verbose
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(txids)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getmempoolancestors",
+        method: "getmempoolancestors",
+        params: [
+          req.params.txid,
+          verbose
+        ]
+      }
+    })
+    .then((response) => {
       res.json(response.data.result);
-    }
-  })
-  .catch((error) => {
-    // console.log(error)
-    res.send(error.response.data.error.message);
-  });
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, res, next) => {
@@ -282,29 +432,80 @@ router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, r
     verbose = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmempooldescendants",
-      method: "getmempooldescendants",
-      params: [
-        req.params.txid,
-        verbose
-      ]
+  try {
+    let txids = JSON.parse(req.params.txid);
+    if(txids.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 txids'
+      });
     }
-  })
-  .then((response) => {
-    res.json(response.data.result);
-  })
-  .catch((error) => {
-    // console.log(error)
-    res.send(error.response.data.error.message);
-  });
+    let result = [];
+    txids = hashes.map((txid) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getmempooldescendants",
+          method: "getmempooldescendants",
+          params: [
+            txid,
+            verbose
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(txids)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getmempooldescendants",
+        method: "getmempooldescendants",
+        params: [
+          req.params.txid,
+          verbose
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, next) => {
@@ -329,6 +530,78 @@ router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, ne
   .catch((error) => {
     res.send(error.response.data.error.message);
   });
+  try {
+    let txids = JSON.parse(req.params.txid);
+    if(txids.length > 20) {
+      res.json({
+        error: 'Array too large. Max 20 txids'
+      });
+    }
+    let result = [];
+    txids = hashes.map((txid) => {
+      return BitboxHTTP({
+        method: 'post',
+        auth: {
+          username: username,
+          password: password
+        },
+        data: {
+          jsonrpc: "1.0",
+          id:"getmempoolentry",
+          method: "getmempoolentry",
+          params: [
+            txid
+          ]
+        }
+      })
+      .catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          };
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          };
+        }
+      })
+    })
+    axios.all(txids)
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data.result;
+        result.push(parsed);
+      }
+      res.json(result);
+    }));
+  }
+  catch(error) {
+    BitboxHTTP({
+      method: 'post',
+      auth: {
+        username: username,
+        password: password
+      },
+      data: {
+        jsonrpc: "1.0",
+        id:"getmempoolentry",
+        method: "getmempoolentry",
+        params: [
+          req.params.txid
+        ]
+      }
+    })
+    .then((response) => {
+      res.json(response.data.result);
+    })
+    .catch((error) => {
+      res.send(error.response.data.error.message);
+    });
+  }
 });
 
 router.get('/getMempoolInfo', config.blockchainRateLimit12, (req, res, next) => {
