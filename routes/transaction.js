@@ -42,12 +42,15 @@ router.get('/details/:txid', config.transactionRateLimit1, (req, res, next) => {
     }
 
     let result = [];
-    txs = txs.map(function(tx) {
-      return BITBOX.Transaction.details(tx)
+    txs = txs.map((tx) => {
+      return axios.get(`${process.env.BITCOINCOM_BASEURL}tx/${tx}`)
     })
     axios.all(txs)
-    .then(axios.spread(function (...spread) {
-      result.push(...spread);
+    .then(axios.spread((...args) => {
+      for (let i = 0; i < args.length; i++) {
+        let parsed = args[i].data;
+        result.push(parsed);
+      }
       res.json(result);
     }));
   }
