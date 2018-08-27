@@ -35,7 +35,18 @@ while(i < 4) {
   i++;
 }
 
-router.get('/', config.miningRateLimit1, (req, res, next) => {
+let requestConfig = {
+  method: 'post',
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
+
+router.get('/', config.miningRateLimit1, async (req, res, next) => {
   res.json({ status: 'mining' });
 });
 //
@@ -63,46 +74,30 @@ router.get('/', config.miningRateLimit1, (req, res, next) => {
 //   });
 // });
 
-router.get('/getMiningInfo', config.miningRateLimit2, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmininginfo",
-      method: "getmininginfo"
-    }
-  })
-  .then((response) => {
+router.get('/getMiningInfo', config.miningRateLimit2, async (req, res, next) => {
+  requestConfig.data.id = "getmininginfo";
+  requestConfig.data.method = "getmininginfo";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getNetworkHashps', config.miningRateLimit3, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getnetworkhashps",
-      method: "getnetworkhashps"
-    }
-  })
-  .then((response) => {
+router.get('/getNetworkHashps', config.miningRateLimit3, async (req, res, next) => {
+  requestConfig.data.id = "getnetworkhashps";
+  requestConfig.data.method = "getnetworkhashps";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 //
 // router.post('/submitBlock/:hex', (req, res, next) => {

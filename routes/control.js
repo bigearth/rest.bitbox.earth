@@ -34,29 +34,32 @@ while(i < 17) {
   i++;
 }
 
-router.get('/', config.controlRateLimit1, (req, res, next) => {
+let requestConfig = {
+  method: 'post',
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
+
+router.get('/', config.controlRateLimit1, async (req, res, next) => {
   res.json({ status: 'control' });
 });
 
-router.get('/getInfo', config.controlRateLimit1, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getinfo",
-      method: "getinfo"
-    }
-  })
-  .then((response) => {
+router.get('/getInfo', config.controlRateLimit1, async (req, res, next) => {
+  requestConfig.data.id = "getinfo";
+  requestConfig.data.method = "getinfo";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
 // router.get('/getMemoryInfo', (req, res, next) => {

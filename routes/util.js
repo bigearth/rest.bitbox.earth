@@ -31,32 +31,34 @@ while(i < 3) {
   i++;
 }
 
-router.get('/', config.utilRateLimit1, (req, res, next) => {
+let requestConfig = {
+  method: 'post',
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
+
+router.get('/', config.utilRateLimit1, async (req, res, next) => {
   res.json({ status: 'util' });
 });
 
-router.get('/validateAddress/:address', config.utilRateLimit2, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"validateaddress",
-      method: "validateaddress",
-      params: [
-        req.params.address
-      ]
-    }
-  })
-  .then((response) => {
+router.get('/validateAddress/:address', config.utilRateLimit2, async (req, res, next) => {
+  requestConfig.data.id = "validateaddress";
+  requestConfig.data.method = "validateaddress";
+  requestConfig.data.params = [
+    req.params.address
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
 module.exports = router;

@@ -48,104 +48,82 @@ while(i < 17) {
   i++;
 }
 
-router.get('/', config.blockchainRateLimit1, (req, res, next) => {
+let requestConfig = {
+  method: 'post',
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
+
+router.get('/', config.blockchainRateLimit1, async (req, res, next) => {
   res.json({ status: 'blockchain' });
 });
 
-router.get('/getBestBlockHash', config.blockchainRateLimit2, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getbestblockhash",
-      method: "getbestblockhash"
-    }
-  })
-  .then((response) => {
+router.get('/getBestBlockHash', config.blockchainRateLimit2, async (req, res, next) => {
+  requestConfig.data.id = "getbestblockhash";
+  requestConfig.data.method = "getbestblockhash";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getBlock/:hash', config.blockchainRateLimit2, (req, res, next) => {
+router.get('/getBlock/:hash', config.blockchainRateLimit2, async (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getblock",
-      method: "getblock",
-      params: [
-        req.params.hash,
-        verbose
-      ]
-    }
-  })
-  .then((response) => {
+  requestConfig.data.id = "getblock";
+  requestConfig.data.method = "getblock";
+  requestConfig.data.params = [
+    req.params.hash,
+    verbose
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getBlockchainInfo', config.blockchainRateLimit3, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getblockchaininfo",
-      method: "getblockchaininfo"
-    }
-  })
-  .then((response) => {
+router.get('/getBlockchainInfo', config.blockchainRateLimit3, async (req, res, next) => {
+  requestConfig.data.id = "getblockchaininfo";
+  requestConfig.data.method = "getblockchaininfo";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getBlockCount', config.blockchainRateLimit4, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getblockcount",
-      method: "getblockcount"
-    }
-  })
-  .then((response) => {
+router.get('/getBlockCount', config.blockchainRateLimit4, async (req, res, next) => {
+  requestConfig.data.id = "getblockcount";
+  requestConfig.data.method = "getblockcount";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getBlockHash/:height', config.blockchainRateLimit5, (req, res, next) => {
+router.get('/getBlockHash/:height', config.blockchainRateLimit5, async (req, res, next) => {
   try {
     let heights = JSON.parse(req.params.height);
     if(heights.length > 20) {
@@ -220,7 +198,7 @@ router.get('/getBlockHash/:height', config.blockchainRateLimit5, (req, res, next
   }
 });
 
-router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, (req, res, next) => {
+router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, async (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -302,49 +280,33 @@ router.get('/getBlockHeader/:hash', config.blockchainRateLimit6, (req, res, next
   }
 });
 
-router.get('/getChainTips', config.blockchainRateLimit7, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getchaintips",
-      method: "getchaintips"
-    }
-  })
-  .then((response) => {
+router.get('/getChainTips', config.blockchainRateLimit7, async (req, res, next) => {
+  requestConfig.data.id = "getchaintips";
+  requestConfig.data.method = "getchaintips";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getDifficulty', config.blockchainRateLimit8, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getdifficulty",
-      method: "getdifficulty"
-    }
-  })
-  .then((response) => {
-    res.json(JSON.stringify(response.data.result));
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+router.get('/getDifficulty', config.blockchainRateLimit8, async (req, res, next) => {
+  requestConfig.data.id = "getdifficulty";
+  requestConfig.data.method = "getdifficulty";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, (req, res, next) => {
+router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, async (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -426,7 +388,7 @@ router.get('/getMempoolAncestors/:txid', config.blockchainRateLimit9, (req, res,
   }
 });
 
-router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, res, next) => {
+router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, async (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
@@ -508,7 +470,7 @@ router.get('/getMempoolDescendants/:txid', config.blockchainRateLimit10, (req, r
   }
 });
 
-router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, next) => {
+router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, async (req, res, next) => {
   try {
     let txids = JSON.parse(req.params.txid);
     if(txids.length > 20) {
@@ -583,112 +545,77 @@ router.get('/getMempoolEntry/:txid', config.blockchainRateLimit11, (req, res, ne
   }
 });
 
-router.get('/getMempoolInfo', config.blockchainRateLimit12, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getmempoolinfo",
-      method: "getmempoolinfo"
-    }
-  })
-  .then((response) => {
+router.get('/getMempoolInfo', config.blockchainRateLimit12, async (req, res, next) => {
+  requestConfig.data.id = "getmempoolinfo";
+  requestConfig.data.method = "getmempoolinfo";
+  requestConfig.data.params = [ ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getRawMempool', config.blockchainRateLimit13, (req, res, next) => {
+router.get('/getRawMempool', config.blockchainRateLimit13, async (req, res, next) => {
   let verbose = false;
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"getrawmempool",
-      method: "getrawmempool",
-      params: [
-        verbose
-      ]
-    }
-  })
-  .then((response) => {
+  requestConfig.data.id = "getrawmempool";
+  requestConfig.data.method = "getrawmempool";
+  requestConfig.data.params = [
+    verbose
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getTxOut/:txid/:n', config.blockchainRateLimit14, (req, res, next) => {
+router.get('/getTxOut/:txid/:n', config.blockchainRateLimit14, async (req, res, next) => {
   let include_mempool = false;
   if(req.query.include_mempool && req.query.include_mempool === 'true') {
     include_mempool = true;
   }
 
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"gettxout",
-      method: "gettxout",
-      params: [
-        req.params.txid,
-        parseInt(req.params.n),
-        include_mempool
-      ]
-    }
-  })
-  .then((response) => {
+  requestConfig.data.id = "gettxout";
+  requestConfig.data.method = "gettxout";
+  requestConfig.data.params = [
+    req.params.txid,
+    parseInt(req.params.n),
+    include_mempool
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
-router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"gettxoutproof",
-      method: "gettxoutproof",
-      params: [
-        req.params.txids
-      ]
-    }
-  })
-  .then((response) => {
+router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, async (req, res, next) => {
+  requestConfig.data.id = "gettxoutproof";
+  requestConfig.data.method = "gettxoutproof";
+  requestConfig.data.params = [
+    req.params.txids
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 //
-// router.get('/preciousBlock/:hash', (req, res, next) => {
+// router.get('/preciousBlock/:hash', async (req, res, next) => {
 //   BitboxHTTP({
 //     method: 'post',
 //     auth: {
@@ -712,7 +639,7 @@ router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, (req, res, nex
 //   });
 // });
 //
-// router.post('/pruneBlockchain/:height', (req, res, next) => {
+// router.post('/pruneBlockchain/:height', async (req, res, next) => {
 //   BitboxHTTP({
 //     method: 'post',
 //     auth: {
@@ -736,7 +663,7 @@ router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, (req, res, nex
 //   });
 // });
 //
-// router.get('/verifyChain', (req, res, next) => {
+// router.get('/verifyChain', async (req, res, next) => {
 //   BitboxHTTP({
 //     method: 'post',
 //     auth: {
@@ -757,28 +684,19 @@ router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, (req, res, nex
 //   });
 // });
 
-router.get('/verifyTxOutProof/:proof', config.blockchainRateLimit16, (req, res, next) => {
-  BitboxHTTP({
-    method: 'post',
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0",
-      id:"verifytxoutproof",
-      method: "verifytxoutproof",
-      params: [
-        req.params.proof
-      ]
-    }
-  })
-  .then((response) => {
+router.get('/verifyTxOutProof/:proof', config.blockchainRateLimit16, async (req, res, next) => {
+  requestConfig.data.id = "verifytxoutproof";
+  requestConfig.data.method = "verifytxoutproof";
+  requestConfig.data.params = [
+    req.params.proof
+  ];
+
+  try {
+    let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
-  })
-  .catch((error) => {
-    res.send(error.response.data.error.message);
-  });
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
 });
 
 module.exports = router;
