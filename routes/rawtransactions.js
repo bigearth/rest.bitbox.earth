@@ -12,16 +12,28 @@ let BitboxHTTP = axios.create({
 let username = process.env.RPC_USERNAME;
 let password = process.env.RPC_PASSWORD;
 
+let WormholeHTTP = axios.create({
+  baseURL: process.env.WORMHOLE_RPC_BASEURL
+});
+let wh_username = process.env.WORMHOLE_RPC_USERNAME;
+let wh_password = process.env.WORMHOLE_RPC_PASSWORD;
+
 let config = {
   rawTransactionsRateLimit1: undefined,
   rawTransactionsRateLimit2: undefined,
   rawTransactionsRateLimit3: undefined,
   rawTransactionsRateLimit4: undefined,
   rawTransactionsRateLimit5: undefined,
+  rawTransactionsRateLimit6: undefined,
+  rawTransactionsRateLimit7: undefined,
+  rawTransactionsRateLimit8: undefined,
+  rawTransactionsRateLimit9: undefined,
+  rawTransactionsRateLimit10: undefined,
+  rawTransactionsRateLimit11: undefined
 };
 
 let i = 1;
-while(i < 6) {
+while(i < 12) {
   config[`rawTransactionsRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -36,6 +48,28 @@ while(i < 6) {
   });
   i++;
 }
+
+let requestConfig = {
+  method: 'post',
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
+
+let whRequestConfig = {
+  method: 'post',
+  auth: {
+    username: wh_username,
+    password: wh_password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+};
 
 router.get('/', config.rawTransactionsRateLimit1, (req, res, next) => {
   res.json({ status: 'rawtransactions' });
@@ -346,6 +380,128 @@ router.post('/sendRawTransaction/:hex', config.rawTransactionsRateLimit5, (req, 
     .catch((error) => {
       res.send(error.response.data.error.message);
     });
+  }
+});
+
+router.post('/change/:rawtx/:prevTxs/:destination/:fee', config.rawTransactionsRateLimit6, async (req, res, next) => {
+  let params = [
+    req.params.rawtx,
+    JSON.parse(req.params.prevTxs),
+    req.params.destination,
+    parseFloat(req.params.fee)
+  ];
+  if(req.query.position) {
+    params.push(parseInt(req.query.position));
+  }
+
+  whRequestConfig.data.id = "whc_createrawtx_change";
+  whRequestConfig.data.method = "whc_createrawtx_change";
+  whRequestConfig.data.params = params;
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    console.log(error.response.data)
+    res.status(500).send(error.response.data.error.message);
+  }
+});
+
+router.post('/input/:rawTx/:txid/:n', config.rawTransactionsRateLimit7, async (req, res, next) => {
+  whRequestConfig.data.id = "whc_createrawtx_input";
+  whRequestConfig.data.method = "whc_createrawtx_input";
+  whRequestConfig.data.params = [
+    req.params.rawTx,
+    req.params.txid,
+    parseInt(req.params.n)
+  ];
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
+});
+
+router.post('/opReturn/:rawTx/:payload', config.rawTransactionsRateLimit8, async (req, res, next) => {
+  whRequestConfig.data.id = "whc_createrawtx_opreturn";
+  whRequestConfig.data.method = "whc_createrawtx_opreturn";
+  whRequestConfig.data.params = [
+    req.params.rawTx,
+    req.params.payload
+  ];
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
+});
+
+router.post('/reference/:rawTx/:destination', config.rawTransactionsRateLimit9, async (req, res, next) => {
+  let params = [
+    req.params.rawTx,
+    req.params.destination
+  ];
+  if(req.query.amount) {
+    params.push(req.query.amount);
+  }
+
+  whRequestConfig.data.id = "whc_createrawtx_reference";
+  whRequestConfig.data.method = "whc_createrawtx_reference";
+  whRequestConfig.data.params = params;
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
+});
+
+router.post('/decodeTransaction/:rawTx', config.rawTransactionsRateLimit10, async (req, res, next) => {
+  let params = [
+    req.params.rawTx
+  ];
+  if(req.query.prevTxs) {
+    params.push(JSON.parse(req.query.prevTxs));
+  }
+  if(req.query.height) {
+    params.push(req.query.height);
+  }
+
+  whRequestConfig.data.id = "whc_decodetransaction";
+  whRequestConfig.data.method = "whc_decodetransaction";
+  whRequestConfig.data.params = params;
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
+  }
+});
+
+router.post('/create/:inputs/:outputs', config.rawTransactionsRateLimit11, async (req, res, next) => {
+  let params = [
+    JSON.parse(req.params.inputs),
+    JSON.parse(req.params.outputs)
+  ];
+  if(req.query.locktime) {
+    params.push(req.query.locktime);
+  }
+
+  whRequestConfig.data.id = "createrawtransaction";
+  whRequestConfig.data.method = "createrawtransaction";
+  whRequestConfig.data.params = params;
+
+  try {
+    let response = await WormholeHTTP(whRequestConfig);
+    res.json(response.data.result);
+  } catch (error) {
+    res.status(500).send(error.response.data.error.message);
   }
 });
 
