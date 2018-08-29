@@ -402,8 +402,7 @@ router.post('/change/:rawtx/:prevTxs/:destination/:fee', config.rawTransactionsR
     let response = await WormholeHTTP(whRequestConfig);
     res.json(response.data.result);
   } catch (error) {
-    console.log(error.response.data)
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -420,7 +419,7 @@ router.post('/input/:rawTx/:txid/:n', config.rawTransactionsRateLimit7, async (r
     let response = await WormholeHTTP(whRequestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -436,7 +435,7 @@ router.post('/opReturn/:rawTx/:payload', config.rawTransactionsRateLimit8, async
     let response = await WormholeHTTP(whRequestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -457,7 +456,7 @@ router.post('/reference/:rawTx/:destination', config.rawTransactionsRateLimit9, 
     let response = await WormholeHTTP(whRequestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 

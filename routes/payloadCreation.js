@@ -66,7 +66,7 @@ router.get('/burnBCH', config.payloadCreationRateLimit2, async (req, res, next) 
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -81,7 +81,7 @@ router.post('/changeIssuer/:propertyId', config.payloadCreationRateLimit2, async
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -96,7 +96,7 @@ router.post('/closeCrowdSale/:propertyId', config.payloadCreationRateLimit3, asy
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -117,7 +117,7 @@ router.post('/grant/:propertyId/:amount', config.payloadCreationRateLimit4, asyn
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -145,7 +145,7 @@ router.post('/crowdsale/:ecosystem/:propertyPrecision/:previousId/:category/:sub
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -168,7 +168,7 @@ router.post('/fixed/:ecosystem/:propertyPrecision/:previousId/:category/:subcate
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -190,7 +190,7 @@ router.post('/managed/:ecosystem/:propertyPrecision/:previousId/:category/:subca
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -205,7 +205,7 @@ router.post('/participateCrowdSale/:amount', config.payloadCreationRateLimit9, a
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -226,7 +226,7 @@ router.post('/revoke/:propertyId/:amount', config.payloadCreationRateLimit10, as
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -241,7 +241,7 @@ router.post('/sendAll/:ecosystem', config.payloadCreationRateLimit11, async (req
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -257,7 +257,7 @@ router.post('/simpleSend/:propertyId/:amount', config.payloadCreationRateLimit12
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -278,7 +278,7 @@ router.post('/STO/:propertyId/:amount', config.payloadCreationRateLimit13, async
     let response = await WormholeHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
