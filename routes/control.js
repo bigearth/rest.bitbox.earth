@@ -18,7 +18,7 @@ let config = {
 };
 
 let i = 1;
-while(i < 17) {
+while(i < 3) {
   config[`controlRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -49,7 +49,7 @@ router.get('/', config.controlRateLimit1, async (req, res, next) => {
   res.json({ status: 'control' });
 });
 
-router.get('/getInfo', config.controlRateLimit1, async (req, res, next) => {
+router.get('/getInfo', config.controlRateLimit2, async (req, res, next) => {
   requestConfig.data.id = "getinfo";
   requestConfig.data.method = "getinfo";
   requestConfig.data.params = [ ];
@@ -58,7 +58,7 @@ router.get('/getInfo', config.controlRateLimit1, async (req, res, next) => {
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
