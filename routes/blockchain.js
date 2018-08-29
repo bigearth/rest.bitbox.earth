@@ -72,7 +72,7 @@ router.get('/getBestBlockHash', config.blockchainRateLimit2, async (req, res, ne
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -93,7 +93,7 @@ router.get('/getBlock/:hash', config.blockchainRateLimit2, async (req, res, next
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -106,7 +106,7 @@ router.get('/getBlockchainInfo', config.blockchainRateLimit3, async (req, res, n
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -119,7 +119,7 @@ router.get('/getBlockCount', config.blockchainRateLimit4, async (req, res, next)
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -289,7 +289,7 @@ router.get('/getChainTips', config.blockchainRateLimit7, async (req, res, next) 
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -302,7 +302,7 @@ router.get('/getDifficulty', config.blockchainRateLimit8, async (req, res, next)
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -554,7 +554,7 @@ router.get('/getMempoolInfo', config.blockchainRateLimit12, async (req, res, nex
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -574,7 +574,7 @@ router.get('/getRawMempool', config.blockchainRateLimit13, async (req, res, next
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -596,7 +596,7 @@ router.get('/getTxOut/:txid/:n', config.blockchainRateLimit14, async (req, res, 
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -611,7 +611,7 @@ router.get('/getTxOutProof/:txids', config.blockchainRateLimit15, async (req, re
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 //
@@ -695,7 +695,7 @@ router.get('/verifyTxOutProof/:proof', config.blockchainRateLimit16, async (req,
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 

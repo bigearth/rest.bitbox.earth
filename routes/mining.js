@@ -83,7 +83,7 @@ router.get('/getMiningInfo', config.miningRateLimit2, async (req, res, next) => 
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
@@ -96,7 +96,7 @@ router.get('/getNetworkHashps', config.miningRateLimit3, async (req, res, next) 
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 //

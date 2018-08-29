@@ -57,7 +57,7 @@ router.get('/validateAddress/:address', config.utilRateLimit2, async (req, res, 
     let response = await BitboxHTTP(requestConfig);
     res.json(response.data.result);
   } catch (error) {
-    res.status(500).send(error.response.data.error.message);
+    res.status(500).send(error.response.data.error);
   }
 });
 
