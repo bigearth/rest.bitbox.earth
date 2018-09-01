@@ -6,6 +6,12 @@ let RateLimit = require('express-rate-limit');
 let BITBOXCli = require('bitbox-cli/lib/bitbox-cli').default;
 let BITBOX = new BITBOXCli();
 
+let WormholeHTTP = axios.create({
+  baseURL: process.env.WORMHOLE_RPC_BASEURL
+});
+let wh_username = process.env.WORMHOLE_RPC_USERNAME;
+let wh_password = process.env.WORMHOLE_RPC_PASSWORD;
+
 let config = {
   addressRateLimit1: undefined,
   addressRateLimit2: undefined,
@@ -30,11 +36,11 @@ while(i < 5) {
   i++;
 }
 
-router.get('/', config.addressRateLimit1, (req, res, next) => {
+router.get('/', config.addressRateLimit1, async (req, res, next) => {
   res.json({ status: 'address' });
 });
 
-router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
+router.get('/details/:address', config.addressRateLimit2, async (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     if(addresses.length > 20) {
@@ -79,7 +85,7 @@ router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
   }
 });
 
-router.get('/utxo/:address', config.addressRateLimit3, (req, res, next) => {
+router.get('/utxo/:address', config.addressRateLimit3, async (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     if(addresses.length > 20) {
@@ -132,7 +138,7 @@ router.get('/utxo/:address', config.addressRateLimit3, (req, res, next) => {
   }
 });
 
-router.get('/unconfirmed/:address', config.addressRateLimit4, (req, res, next) => {
+router.get('/unconfirmed/:address', config.addressRateLimit4, async (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
     if(addresses.length > 20) {
