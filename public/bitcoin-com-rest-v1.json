@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info: [developer.bitcoin.com](https://developer.bitcoin.com). #bitbox chatroom [ambassador.cash](http://ambassador.cash)",
-    "version": "1.0.1",
+    "description": "rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info: [developer.bitcoin.com](https://developer.bitcoin.com). Chatroom [geni.us/CashDev](http://geni.us/CashDev)",
+    "version": "1.5.10",
     "title": "REST",
     "license": {
       "name": "MIT",
