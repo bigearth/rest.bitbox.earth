@@ -402,7 +402,7 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = mockResponse._getData();
-        assert.equal(actualResponseBody, 'JSON value is not an array as expected');
+        assert.equal(actualResponseBody.message, 'JSON value is not an array as expected');
         done();
       });
     });
@@ -478,7 +478,7 @@ describe("#BlockchainRouter", () => {
 
       mockResponse.on('end', () => {
         let actualResponseBody = mockResponse._getData();
-        assert.equal(actualResponseBody, "CDataStream::read(): end of data: iostream error");
+        assert.equal(actualResponseBody.message, "CDataStream::read(): end of data: iostream error");
         done();
       });
     });
