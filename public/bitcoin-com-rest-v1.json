@@ -223,7 +223,7 @@
           {
             "name": "address",
             "in": "path",
-            "description": "the address or an array of addresses in cashAddr or legacy",
+            "description": "the address in cashAddr or legacy",
             "required": true,
             "example": "bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c",
             "schema": {
