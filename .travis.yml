@@ -19,8 +19,9 @@ before_install:
 script: "npm run test"
 
 # Send coverage data to Coveralls
-#after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-
+after_success:
+  - npm run coverage
+  
 #deploy:
 #  provider: script
 #  skip_cleanup: true

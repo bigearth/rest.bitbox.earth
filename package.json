@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "nyc mocha --require babel-core/register --timeout 5000"
+    "test": "nyc mocha --require babel-core/register --timeout 5000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": ">=8.11.3"
@@ -19,7 +20,6 @@
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.3",
-    "coveralls": "^3.0.2",
     "debug": "~2.6.3",
     "dotenv": "^4.0.0",
     "elasticsearch": "^13.0.1",
@@ -44,6 +44,7 @@
     "chai": "^4.1.2",
     "node-mocks-http": "^1.7.0",
     "nodemon": "^1.18.1",
-    "nyc": "^11.6.0"
+    "nyc": "^11.6.0",
+    "coveralls": "^3.0.2"
   }
 }
