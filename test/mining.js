@@ -1,21 +1,23 @@
-let chai = require('chai');
-let assert = require('assert');
-let expect = chai.expect;
-let httpMocks = require("node-mocks-http");
-let miningRoute = require('../routes/mining');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+//const expect = chai.expect;
+const httpMocks = require("node-mocks-http");
+const miningRoute = require("../routes/mining");
 
 describe("#MiningRouter", () => {
   describe("#root", () => {
     it("should return 'mining' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       miningRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'mining'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "mining",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
