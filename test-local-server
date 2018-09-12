@@ -1,0 +1,10 @@
+export RPC_BASEURL=http://192.168.0.12:18332/ 
+export RPC_PASSWORD=bitcoindpassword
+export RPC_USERNAME=trout 
+export NETWORK=testnet 
+export BITCOINCOM_BASEURL=https://test-bch-insight.bitpay.com/api/
+#export BITCOINCOM_BASEURL=https://bch-insight.bitpay.com/api/
+export ZEROMQ_URL=192.168.0.12
+export ZEROMQ_PORT=28332
+#npm run test
+mocha --require babel-core/register --timeout 10000 test/RawTransactions.js

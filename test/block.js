@@ -19,7 +19,7 @@ describe("#BlockRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+/*
   describe("#BlockDetails", () => {
     it("should GET /details/:id height", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -55,4 +55,5 @@ describe("#BlockRouter", () => {
       });
     });
   });
+  */
 });
