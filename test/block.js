@@ -1,25 +1,27 @@
-let chai = require('chai');
-let assert = require('assert');
-let httpMocks = require("node-mocks-http");
-let blockRoute = require('../routes/block');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+const httpMocks = require("node-mocks-http");
+const blockRoute = require("../routes/block");
 
 describe("#BlockRouter", () => {
   describe("#root", () => {
     it("should return 'block' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       blockRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'block'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "block",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-/*
+  /*
   describe("#BlockDetails", () => {
     it("should GET /details/:id height", (done) => {
       let mockRequest = httpMocks.createRequest({

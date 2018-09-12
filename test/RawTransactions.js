@@ -1,7 +1,9 @@
-let chai = require('chai');
-let assert = require('assert');
-let httpMocks = require("node-mocks-http");
-let rawTransactionsRoute = require('../routes/rawtransactions');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+const httpMocks = require("node-mocks-http");
+const rawTransactionsRoute = require("../routes/rawtransactions");
 
 const util = require("util");
 util.inspect.defaultOptions = {
@@ -9,19 +11,18 @@ util.inspect.defaultOptions = {
   colors: true,
 };
 
-
 describe("#RawTransactionsRouter", () => {
   describe("#root", () => {
     it("should return 'rawtransactions' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       rawTransactionsRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'rawtransactions'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "rawtransactions",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });

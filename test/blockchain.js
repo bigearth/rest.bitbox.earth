@@ -1,25 +1,27 @@
-let chai = require('chai');
-let assert = require('assert');
-let httpMocks = require("node-mocks-http");
-let blockchainRoute = require('../routes/blockchain');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+const httpMocks = require("node-mocks-http");
+const blockchainRoute = require("../routes/blockchain");
 
 describe("#BlockchainRouter", () => {
   describe("#root", () => {
     it("should return 'blockchain' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       blockchainRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'blockchain'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "blockchain",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-/*
+  /*
   describe("#BlockchainGetBestBlockHash", () => {
     it("should GET /getBestBlockHash ", (done) => {
       let mockRequest = httpMocks.createRequest({

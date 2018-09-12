@@ -1,21 +1,23 @@
-let chai = require('chai');
-let assert = require('assert');
-let expect = chai.expect;
-let httpMocks = require("node-mocks-http");
-let networkRoute = require('../routes/network');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+//const expect = chai.expect;
+const httpMocks = require("node-mocks-http");
+const networkRoute = require("../routes/network");
 
 describe("#NetworkRouter", () => {
   describe("#root", () => {
     it("should return 'network' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       networkRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'network'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "network",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
@@ -96,7 +98,7 @@ describe("#NetworkRouter", () => {
   //     });
   //   });
   // });
-  // 
+  //
   // describe("#NetworkPing", () => {
   //   it("should GET /ping", (done) => {
   //     let mockRequest = httpMocks.createRequest({
