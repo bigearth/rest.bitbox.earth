@@ -27,6 +27,7 @@ describe("#RawTransactionsRouter", () => {
     });
   });
 
+  /*
   describe("#DecodeRawTransaction", () => {
     it("should GET /decodeRawTransaction/:hex", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -128,5 +129,5 @@ describe("#RawTransactionsRouter", () => {
   //     });
   //   });
   });
-  //*/
+  */
 });

@@ -20,6 +20,7 @@ describe("#MiningRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
+  /*
   //
   // describe("#MiningGetBlockTemplate", () => {
   //   it("should GET /getBlockTemplate", (done) => {
@@ -96,4 +97,5 @@ describe("#MiningRouter", () => {
   //     });
   //   });
   // });
+  */
 });
