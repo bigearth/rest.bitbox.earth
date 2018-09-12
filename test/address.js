@@ -19,7 +19,7 @@ describe("#AddressRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+  /*
   describe("#AddressDetails", () => {
     it("should GET /details/:address single address", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -129,4 +129,5 @@ describe("#AddressRouter", () => {
       });
     });
   });
+  */
 });

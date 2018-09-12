@@ -19,7 +19,7 @@ describe("#BlockchainRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+/*
   describe("#BlockchainGetBestBlockHash", () => {
     it("should GET /getBestBlockHash ", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -483,4 +483,5 @@ describe("#BlockchainRouter", () => {
       });
     });
   });
+  */
 });

@@ -19,7 +19,7 @@ describe("#UtilRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+/*
   describe("#ValidateAddress", () => {
     it("should GET /validateAddress/:address", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -38,4 +38,5 @@ describe("#UtilRouter", () => {
       });
     });
   });
+*/
 });

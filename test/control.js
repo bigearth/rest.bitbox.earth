@@ -20,7 +20,7 @@ describe("#ControlRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+/*
   describe("#GetInfo", () => {
     it("should GET /getInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -58,4 +58,5 @@ describe("#ControlRouter", () => {
 //       });
 //     });
 //   });
+*/
 });
