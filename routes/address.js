@@ -37,16 +37,20 @@ router.get('/', config.addressRateLimit1, (req, res, next) => {
 router.get('/details/:address', config.addressRateLimit2, (req, res, next) => {
   try {
     let addresses = JSON.parse(req.params.address);
+
+    // Enforce no more than 20 addresses.
     if(addresses.length > 20) {
       res.json({
         error: 'Array too large. Max 20 addresses'
       });
     }
+
     let result = [];
     addresses = addresses.map((address) => {
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(address)}`;
-      return axios.get(path)
+      return axios.get(path) // Returns a promise.
     })
+
     axios.all(addresses)
     .then(axios.spread((...args) => {
       for (let i = 0; i < args.length; i++) {

@@ -3,6 +3,12 @@ let assert = require('assert');
 let httpMocks = require("node-mocks-http");
 let addressRoute = require('../routes/address');
 
+const util = require("util");
+util.inspect.defaultOptions = {
+  showHidden: true,
+  colors: true,
+};
+
 describe("#AddressRouter", () => {
   describe("#root", () => {
     it("should return 'address' for GET /", () => {
@@ -19,7 +25,7 @@ describe("#AddressRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-  /*
+/*
   describe("#AddressDetails", () => {
     it("should GET /details/:address single address", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -38,6 +44,7 @@ describe("#AddressRouter", () => {
       });
     });
 
+    /*
     it("should GET /details/:address array of addresses", (done) => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
@@ -54,8 +61,9 @@ describe("#AddressRouter", () => {
         done();
       });
     });
+    
   });
-
+/*
   describe("#AddressUtxo", () => {
     it("should GET /utxo/:address single address", (done) => {
       let mockRequest = httpMocks.createRequest({
