@@ -87,4 +87,4 @@ BITCOINCOM_BASEURL=https://bch-insight.bitpay.com/api/ RPC_BASEURL=http://your.n
 
 #### View in browser
 
-Finally open `http://localhost:3000/` and confirm you see the GUI.
+Finally open `http://localhost:3000/` and confirm you see the GUI
