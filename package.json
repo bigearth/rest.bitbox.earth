@@ -7,10 +7,11 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "mocha --require babel-core/register --timeout 5000",
+    "test": "nyc --reporter=text mocha --require babel-core/register --timeout 5000",
     "coverage":
       "./node_modules/nyc/bin/nyc.js report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
-    "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000"
+    "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000",
+    "coverage2": "nyc report --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": ">=8.11.3"
