@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/Bitcoin-com/rest.bitcoin.com/badge.svg?branch=ct-coveralls)](https://coveralls.io/github/Bitcoin-com/rest.bitcoin.com?branch=ct-coveralls)
+
 ## REST
 
 [rest.bitcoin.com](https://rest.bitcoin.com) is the REST layer for Bitcoin.com's Cloud.
