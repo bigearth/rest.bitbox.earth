@@ -19,8 +19,8 @@ before_install:
 script: "npm run test"
 
 # Send coverage data to Coveralls
-#after_success:
-#  - npm run coverage
+after_success:
+  - npm run coverage
 
 #deploy:
 #  provider: script
