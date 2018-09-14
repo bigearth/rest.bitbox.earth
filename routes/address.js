@@ -116,9 +116,19 @@ function details(req, res, next) {
 // A new implementation of details.
 function details2(req, res, next) {
   try {
-    console.log(`details2 executing...`);
+    //console.log(`details2 executing...`);
 
-    const legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
+    // Ensure the input is a valid BCH address.
+    try {
+      const legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
+    } catch (err) {
+      //console.log(`error: `, err);
+      res.status(400);
+      return res.send(
+        `Invalid BCH address. Double check your address is valid: ${req.params.address}`
+      );
+    }
+
     let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`;
 
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
@@ -128,8 +138,6 @@ function details2(req, res, next) {
       a: 1,
       b: 2,
     };
-
-    //JSON.parse("abc");
 
     return res.json(testObj);
 

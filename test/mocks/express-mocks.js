@@ -15,14 +15,14 @@ util.inspect.defaultOptions = {
 
 // mock for res.send()
 function fakeSend(arg) {
-  console.log(`res.send: ${util.inspect(arg)}`);
+  //console.log(`res.send: ${util.inspect(arg)}`);
   mockRes.output = arg;
   return arg;
 }
 
 // mock for res.json()
 function fakeJson(arg) {
-  console.log(`res.json: ${util.inspect(arg)}`);
+  //console.log(`res.json: ${util.inspect(arg)}`);
   mockRes.output = arg;
   return arg;
 }

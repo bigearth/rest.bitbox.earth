@@ -6,8 +6,9 @@
 
 "use strict";
 
-//const chai = require("chai");
-const assert = require("assert");
+const chai = require("chai");
+//const assert = require("assert");
+const assert = chai.assert;
 const httpMocks = require("node-mocks-http");
 const addressRoute = require("../routes/address");
 const { mockReq, mockRes } = require("./mocks/express-mocks");
@@ -47,7 +48,7 @@ describe("#AddressRouter", () => {
     it("should return status of 'address' for GET /", () => {
       const result = root(req, res);
 
-      assert(result, { status: "address" }, "Returns static string");
+      assert.equal(result.status, "address", "Returns static string");
     });
   });
 
@@ -90,6 +91,21 @@ describe("#AddressRouter", () => {
       });
     });
     */
+
+    it("should throw an error for an invalid address", async () => {
+      req.params = {
+        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
+      };
+
+      const result = await details(req, res);
+      //console.log(`test result: ${JSON.stringify(result)}`);
+      //console.log(`res.statusCode: ${res.statusCode}`);
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.");
+      assert.include(result, "Invalid BCH address", "Proper error message");
+    });
+
+    // Currently not working.
     it("v2: should GET /details/:address single address", async () => {
       req.params = {
         //address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
@@ -99,7 +115,7 @@ describe("#AddressRouter", () => {
       const result = await details(req, res);
       console.log(`test result: ${JSON.stringify(result)}`);
 
-      assert(true, true);
+      assert.equal(true, false);
     });
 
     /*
