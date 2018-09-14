@@ -119,12 +119,22 @@ function details(req, res, next) {
 // A new implementation of details.
 function details2(req, res, next) {
   try {
-    //console.log(`Caught error in details: `, error);
+    console.log(`details2 executing...`);
+
     const legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
     let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`;
+
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     console.log(`path: ${path}`);
 
+    const testObj = {
+      a: 1,
+      b: 2,
+    };
+
+    return res.json(testObj);
+
+    /*
     axios
       .get(path)
       .then(response => {
@@ -140,6 +150,7 @@ function details2(req, res, next) {
         //res.send(error.response.data.error.message);
         return res.send(error);
       });
+    */
   } catch (err) {
     console.log(`Error in details2: `, err);
     throw err;

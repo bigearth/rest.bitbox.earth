@@ -5,6 +5,7 @@ const assert = require("assert");
 const httpMocks = require("node-mocks-http");
 const addressRoute = require("../routes/address");
 const { mockReq, mockRes } = require("./mocks/express-mocks");
+const sinon = require("sinon");
 
 const util = require("util");
 util.inspect.defaultOptions = {
@@ -15,10 +16,10 @@ util.inspect.defaultOptions = {
 before(() => {
   if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://localhost/api/";
 
-  //const testMock = myarg => {
-  //  console.log(`testMock: ${util.inspect(myarg)}`);
-  //};
-  //testMock({ a: 1, b: 2 });
+  const testMock = myarg => {
+    console.log(`testMock: ${util.inspect(myarg)}`);
+  };
+  testMock({ a: 1, b: 2 });
 });
 
 describe("#AddressRouter", () => {
@@ -41,7 +42,7 @@ describe("#AddressRouter", () => {
   });
 
   describe("#AddressDetails", () => {
-    const details = addressRoute.testableComponents.details;
+    const details = addressRoute.testableComponents.details2;
 
     /*
     it("should GET /details/:address single address", done => {
@@ -84,7 +85,7 @@ describe("#AddressRouter", () => {
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
       };
 
-      const result = await details2(req, res);
+      const result = await details(req, res);
       console.log(`test result: ${JSON.stringify(result)}`);
 
       assert(true, true);

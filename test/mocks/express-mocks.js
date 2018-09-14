@@ -13,6 +13,16 @@ util.inspect.defaultOptions = {
   colors: true,
 };
 
+function fakeSend(arg) {
+  console.log(`res.send: ${util.inspect(arg)}`);
+  return arg;
+}
+
+function fakeJson(arg) {
+  console.log(`res.json: ${util.inspect(arg)}`);
+  return arg;
+}
+
 const mockReq = {
   accepts: sinon.stub().returns({}),
   acceptsCharsets: sinon.stub().returns({}),
@@ -37,14 +47,14 @@ const mockRes = {
   format: {},
   get: sinon.stub().returns({}),
   headersSent: sinon.stub().returns({}),
-  json: sinon.stub().returns({}),
+  json: sinon.stub().callsFake(fakeJson),
   jsonp: sinon.stub().returns({}),
   links: sinon.stub().returns({}),
   locals: {},
   location: sinon.stub().returns({}),
   redirect: sinon.stub().returns({}),
   render: sinon.stub().returns({}),
-  send: sinon.stub().returns(myarg => {console.log(`res.send: ${util.inspect(myarg)}`)}),
+  send: sinon.stub().callsFake(fakeSend),
   sendFile: sinon.stub().returns({}),
   sendStatus: sinon.stub().returns({}),
   set: sinon.stub().returns({}),
