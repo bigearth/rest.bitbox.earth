@@ -36,9 +36,12 @@ router.get("/", config.addressRateLimit1, (req, res, next) => {
   res.json({ status: "address" });
 });
 
-router.get("/details/:address", config.addressRateLimit2, (req, res, next) => {
+router.get("/details/:address", config.addressRateLimit2, details);
+
+function details(req, res, next) {
   try {
     let addresses = JSON.parse(req.params.address);
+    //console.log(`addresses: ${JSON.stringify(addresses,null,2)}`)
 
     // Enforce no more than 20 addresses.
     if (addresses.length > 20) {
@@ -52,6 +55,7 @@ router.get("/details/:address", config.addressRateLimit2, (req, res, next) => {
       const path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(
         address
       )}`;
+      //console.log(`URL path: ${path}`);
       return axios.get(path); // Returns a promise.
     });
 
@@ -86,7 +90,7 @@ router.get("/details/:address", config.addressRateLimit2, (req, res, next) => {
         res.send(error.response.data.error.message);
       });
   }
-});
+}
 
 router.get("/utxo/:address", config.addressRateLimit3, (req, res, next) => {
   try {
@@ -227,7 +231,7 @@ router.get("/transactions/:address", config.addressRateLimit5, (req, res, next) 
         )}`
       )
       .then(response => {
-        console.log(response.data);
+        //console.log(response.data);
         res.json(response.data);
       })
       .catch(error => {
@@ -236,4 +240,9 @@ router.get("/transactions/:address", config.addressRateLimit5, (req, res, next) 
   }
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  testableComponents: {
+    details
+  }
+}

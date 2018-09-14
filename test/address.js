@@ -27,23 +27,67 @@ describe("#AddressRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-  /*
+
   describe("#AddressDetails", () => {
-    it("should GET /details/:address single address", (done) => {
-      let mockRequest = httpMocks.createRequest({
+    const details = addressRoute.testableComponents.details;
+
+    /*
+    it("should GET /details/:address single address", done => {
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: '/details/["qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D'
+        url: '/details/["qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D',
       });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
+      const mockResponse = httpMocks.createResponse({
+        eventEmitter: require("events").EventEmitter,
       });
+      //console.log(`mockRequest: ${util.inspect(mockRequest)}`);
+      //console.log(`mockResponse: ${util.inspect(mockResponse)}`);
       addressRoute(mockRequest, mockResponse);
 
-      mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
-        assert.deepEqual(actualResponseBody, [ 'balance', 'balanceSat', 'totalReceived', 'totalReceivedSat', 'totalSent', 'totalSentSat', 'unconfirmedBalance', 'unconfirmedBalanceSat', 'unconfirmedTxApperances', 'txApperances', 'transactions', 'legacyAddress', 'cashAddress' ]);
+      mockResponse.on("end", () => {
+        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
+        //console.log(`actualResponseBody: ${util.inspect(actualResponseBody)}`);
+        assert.deepEqual(actualResponseBody, [
+          "balance",
+          "balanceSat",
+          "totalReceived",
+          "totalReceivedSat",
+          "totalSent",
+          "totalSentSat",
+          "unconfirmedBalance",
+          "unconfirmedBalanceSat",
+          "unconfirmedTxApperances",
+          "txApperances",
+          "transactions",
+          "legacyAddress",
+          "cashAddress",
+        ]);
         done();
       });
+    });
+    */
+
+    it("v2: should GET /details/:address single address", async () => {
+      const req = {
+        params: {
+          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
+        },
+        query: {},
+      };
+
+      const res = {
+        json: function(arg) {
+          this.output = arg;
+        },
+        send: function(arg) {
+          this.output = arg;
+        },
+      };
+
+      const result = details(req, res);
+      console.log(`test result: ${JSON.stringify(result)}`);
+
+      assert(true, true);
     });
 
     /*
@@ -63,9 +107,9 @@ describe("#AddressRouter", () => {
         done();
       });
     });
-
+    */
   });
-/*
+  /*
   describe("#AddressUtxo", () => {
     it("should GET /utxo/:address single address", (done) => {
       let mockRequest = httpMocks.createRequest({
