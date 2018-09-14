@@ -5,6 +5,12 @@ const router = express.Router();
 const axios = require("axios");
 const RateLimit = require("express-rate-limit");
 
+const util = require("util");
+util.inspect.defaultOptions = {
+  showHidden: true,
+  colors: true,
+};
+
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 const BITBOX = new BITBOXCli();
 
@@ -32,11 +38,15 @@ while (i < 6) {
   i++;
 }
 
-router.get("/", config.addressRateLimit1, (req, res, next) => {
-  res.json({ status: "address" });
-});
-
+router.get("/", config.addressRateLimit1, root);
 router.get("/details/:address", config.addressRateLimit2, details);
+
+function root(req, res, next) {
+  //console.log(`req: ${util.inspect(req)}`);
+  //console.log(`res: ${util.inspect(res)}`);
+
+  res.json({ status: "address" });
+}
 
 function details(req, res, next) {
   try {
@@ -243,6 +253,7 @@ router.get("/transactions/:address", config.addressRateLimit5, (req, res, next) 
 module.exports = {
   router,
   testableComponents: {
-    details
-  }
-}
+    root,
+    details,
+  },
+};
