@@ -43,10 +43,7 @@ router.get("/details/:address", config.addressRateLimit2, details2);
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
-  //console.log(`req: ${util.inspect(req)}`);
-  //console.log(`res: ${util.inspect(res)}`);
-
-  res.json({ status: "address" });
+  return res.json({ status: "address" });
 }
 
 // Retrieve details on an address.
@@ -132,6 +129,8 @@ function details2(req, res, next) {
       b: 2,
     };
 
+    //JSON.parse("abc");
+
     return res.json(testObj);
 
     /*
@@ -152,8 +151,9 @@ function details2(req, res, next) {
       });
     */
   } catch (err) {
-    console.log(`Error in details2: `, err);
-    throw err;
+    console.log(`Error in address.js/details2()`);
+    res.status(500);
+    return res.send("Interal error in details2.");
   }
 }
 

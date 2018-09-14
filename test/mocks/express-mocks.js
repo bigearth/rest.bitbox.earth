@@ -13,15 +13,24 @@ util.inspect.defaultOptions = {
   colors: true,
 };
 
+// mock for res.send()
 function fakeSend(arg) {
   console.log(`res.send: ${util.inspect(arg)}`);
+  mockRes.output = arg;
   return arg;
 }
 
+// mock for res.json()
 function fakeJson(arg) {
   console.log(`res.json: ${util.inspect(arg)}`);
+  mockRes.output = arg;
   return arg;
 }
+
+// mock for res.setStatus(num)
+const setStatusCode = arg => {
+  mockRes.statusCode = arg;
+};
 
 const mockReq = {
   accepts: sinon.stub().returns({}),
@@ -52,13 +61,15 @@ const mockRes = {
   links: sinon.stub().returns({}),
   locals: {},
   location: sinon.stub().returns({}),
+  output: null, // Used for retrieving output data.
   redirect: sinon.stub().returns({}),
   render: sinon.stub().returns({}),
   send: sinon.stub().callsFake(fakeSend),
   sendFile: sinon.stub().returns({}),
   sendStatus: sinon.stub().returns({}),
   set: sinon.stub().returns({}),
-  status: sinon.stub().returns({}),
+  status: sinon.stub().callsFake(setStatusCode),
+  statusCode: null, // Default value before calling stats();
   type: sinon.stub().returns({}),
   vary: sinon.stub().returns({}),
   write: sinon.stub().returns({}),

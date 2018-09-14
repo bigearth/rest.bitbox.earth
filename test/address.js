@@ -1,3 +1,9 @@
+/*
+  Tests the /details endpoint.
+
+
+*/
+
 "use strict";
 
 //const chai = require("chai");
@@ -14,7 +20,9 @@ util.inspect.defaultOptions = {
 };
 
 before(() => {
-  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://localhost/api/";
+  if (!process.env.TEST) process.env.TEST = "unit";
+
+  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/";
 
   const testMock = myarg => {
     console.log(`testMock: ${util.inspect(myarg)}`);
@@ -27,21 +35,24 @@ describe("#AddressRouter", () => {
 
   // Setup the mocks before each test.
   beforeEach(() => {
+    // Mock the req and res objects used by Express routes.
     req = mockReq;
     res = mockRes;
   });
 
   describe("#root", () => {
+    // root route handler.
     const root = addressRoute.testableComponents.root;
 
-    it("should return 'address' for GET /", () => {
+    it("should return status of 'address' for GET /", () => {
       const result = root(req, res);
-      console.log(`result: ${result}`);
-      assert(true, true);
+
+      assert(result, { status: "address" }, "Returns static string");
     });
   });
 
   describe("#AddressDetails", () => {
+    // details route handler.
     const details = addressRoute.testableComponents.details2;
 
     /*
@@ -79,9 +90,9 @@ describe("#AddressRouter", () => {
       });
     });
     */
-
     it("v2: should GET /details/:address single address", async () => {
       req.params = {
+        //address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
       };
 
