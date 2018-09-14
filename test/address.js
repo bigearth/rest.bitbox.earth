@@ -12,50 +12,25 @@ util.inspect.defaultOptions = {
   colors: true,
 };
 
+before(() => {
+  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://localhost/api/";
+
+  //const testMock = myarg => {
+  //  console.log(`testMock: ${util.inspect(myarg)}`);
+  //};
+  //testMock({ a: 1, b: 2 });
+});
+
 describe("#AddressRouter", () => {
   let req, res;
 
   // Setup the mocks before each test.
   beforeEach(() => {
-    /*
-    req = {
-      params: {
-        address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
-      },
-      query: {},
-    };
-
-    res = {
-      json: arg => {
-        this.output = arg;
-      },
-      send: arg => {
-        this.output = arg;
-      },
-    };
-    */
-
     req = mockReq;
     res = mockRes;
   });
 
   describe("#root", () => {
-    /*
-    it("should return 'address' for GET /", () => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: "/",
-      });
-      const mockResponse = httpMocks.createResponse();
-      addressRoute(mockRequest, mockResponse);
-      const actualResponseBody = mockResponse._getData();
-      const expectedResponseBody = {
-        status: "address",
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-    */
-
     const root = addressRoute.testableComponents.root;
 
     it("should return 'address' for GET /", () => {
@@ -109,7 +84,7 @@ describe("#AddressRouter", () => {
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
       };
 
-      const result = details(req, res);
+      const result = await details2(req, res);
       console.log(`test result: ${JSON.stringify(result)}`);
 
       assert(true, true);

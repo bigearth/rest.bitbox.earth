@@ -39,8 +39,9 @@ while (i < 6) {
 }
 
 router.get("/", config.addressRateLimit1, root);
-router.get("/details/:address", config.addressRateLimit2, details);
+router.get("/details/:address", config.addressRateLimit2, details2);
 
+// Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
   //console.log(`req: ${util.inspect(req)}`);
   //console.log(`res: ${util.inspect(res)}`);
@@ -48,12 +49,15 @@ function root(req, res, next) {
   res.json({ status: "address" });
 }
 
+// Retrieve details on an address.
 function details(req, res, next) {
+  //console.log(`executing details. req.params: ${JSON.stringify(req.params)}`);
   try {
+    // --> This code path never executes. Can you give me a CURL statement that would execute it?
     let addresses = JSON.parse(req.params.address);
     //console.log(`addresses: ${JSON.stringify(addresses,null,2)}`)
 
-    // Enforce no more than 20 addresses.
+    // Enforce: no more than 20 addresses.
     if (addresses.length > 20) {
       res.json({
         error: "Array too large. Max 20 addresses",
@@ -62,12 +66,16 @@ function details(req, res, next) {
 
     const result = [];
     addresses = addresses.map(address => {
+      console.log(`executing addresses.map...`);
       const path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(
         address
       )}`;
       //console.log(`URL path: ${path}`);
-      return axios.get(path); // Returns a promise.
+      const temp = axios.get(path); // Returns a promise.
+      console.log(`axios returned: ${util.inspect(temp)}`);
+      return temp;
     });
+    console.log(`addresses: ${JSON.stringify(addresses)}`);
 
     axios.all(addresses).then(
       axios.spread((...args) => {
@@ -81,11 +89,15 @@ function details(req, res, next) {
         res.json(result);
       })
     );
+
+    // Typically executes because JSON.parse() errors out.
   } catch (error) {
+    //console.log(`Caught error in details: `, error);
     let path = `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(
       req.params.address
     )}`;
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
+    console.log(`path: ${path}`);
 
     axios
       .get(path)
@@ -97,8 +109,40 @@ function details(req, res, next) {
         res.json(parsed);
       })
       .catch(error => {
+        //console.error(`details caught: `, error);
+        console.error(`details errored out.`);
         res.send(error.response.data.error.message);
       });
+  }
+}
+
+// A new implementation of details.
+function details2(req, res, next) {
+  try {
+    //console.log(`Caught error in details: `, error);
+    const legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
+    let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`;
+    if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
+    console.log(`path: ${path}`);
+
+    axios
+      .get(path)
+      .then(response => {
+        const parsed = response.data;
+        delete parsed.addrStr;
+        parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+        parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+        res.json(parsed);
+      })
+      .catch(error => {
+        //console.error(`details caught: `, error);
+        console.error(`details errored out.`);
+        //res.send(error.response.data.error.message);
+        return res.send(error);
+      });
+  } catch (err) {
+    console.log(`Error in details2: `, err);
+    throw err;
   }
 }
 
@@ -255,5 +299,6 @@ module.exports = {
   testableComponents: {
     root,
     details,
+    details2,
   },
 };

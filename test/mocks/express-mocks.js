@@ -6,6 +6,13 @@
 
 const sinon = require("sinon");
 
+// Inspect JS Objects.
+const util = require("util");
+util.inspect.defaultOptions = {
+  showHidden: true,
+  colors: true,
+};
+
 const mockReq = {
   accepts: sinon.stub().returns({}),
   acceptsCharsets: sinon.stub().returns({}),
@@ -37,7 +44,7 @@ const mockRes = {
   location: sinon.stub().returns({}),
   redirect: sinon.stub().returns({}),
   render: sinon.stub().returns({}),
-  send: sinon.stub().returns({}),
+  send: sinon.stub().returns(myarg => {console.log(`res.send: ${util.inspect(myarg)}`)}),
   sendFile: sinon.stub().returns({}),
   sendStatus: sinon.stub().returns({}),
   set: sinon.stub().returns({}),
