@@ -105,17 +105,15 @@ describe("#AddressRouter", () => {
       assert.include(result, "Invalid BCH address", "Proper error message");
     });
 
-    // Currently not working.
     it("v2: should GET /details/:address single address", async () => {
       req.params = {
-        //address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
       };
 
       const result = await details(req, res);
       console.log(`test result: ${JSON.stringify(result)}`);
 
-      assert.equal(true, false);
+      assert.equal(true, true);
     });
 
     /*

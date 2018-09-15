@@ -114,13 +114,13 @@ function details(req, res, next) {
 }
 
 // A new implementation of details.
-function details2(req, res, next) {
+async function details2(req, res, next) {
   try {
     //console.log(`details2 executing...`);
 
     // Ensure the input is a valid BCH address.
     try {
-      const legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
+      var legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
     } catch (err) {
       //console.log(`error: `, err);
       res.status(400);
@@ -134,12 +134,12 @@ function details2(req, res, next) {
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     console.log(`path: ${path}`);
 
-    const testObj = {
-      a: 1,
-      b: 2,
-    };
+    //const testObj = {
+    //  a: 1,
+    //  b: 2,
+    //};
 
-    return res.json(testObj);
+    //return res.json(testObj);
 
     /*
     axios
@@ -158,10 +158,20 @@ function details2(req, res, next) {
         return res.send(error);
       });
     */
+
+    // Query the Insight server.
+    const response = await axios.get(path);
+
+    const parsed = response.data;
+    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
+    parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+
+    return res.json(parsed);
   } catch (err) {
-    console.log(`Error in address.js/details2()`);
+    console.log(`Error in address.js/details2()`, err);
     res.status(500);
-    return res.send("Interal error in details2.");
+    //return res.send("Interal error in details2.");
+    return res.json(err);
   }
 }
 
