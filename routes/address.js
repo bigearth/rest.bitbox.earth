@@ -116,7 +116,6 @@ function details(req, res, next) {
 // A new implementation of details.
 async function details2(req, res, next) {
   try {
-    //console.log(`details2 executing...`);
 
     // Ensure the input is a valid BCH address.
     try {
@@ -131,7 +130,7 @@ async function details2(req, res, next) {
     let path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}`;
 
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
-    console.log(`path: ${path}`);
+    //console.log(`path: ${path}`);
 
     /*
     axios
@@ -160,9 +159,12 @@ async function details2(req, res, next) {
 
     return res.json(parsed);
   } catch (err) {
-    console.log(`Error in address.js/details2():`, err);
+    // Write out error to console or debug log.
+    //console.log(`Error in address.js/details()`);
+
+    // Return an error message to the caller.
     res.status(500);
-    return res.json(err);
+    return res.json(`Error in address.js/details(): ${err.message}`);
   }
 }
 

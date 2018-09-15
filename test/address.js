@@ -100,6 +100,17 @@ describe("#AddressRouter", () => {
       assert.include(result, "Invalid BCH address", "Proper error message");
     });
 
+    it("should throw 500 for an error", async () => {
+      req.params = {
+        address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
+      };
+
+      const result = await details(req, res);
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.");
+      assert.include(result, "Error", "Error message expected");
+    });
+
     it("should GET /details/:address single address", async () => {
       req.params = {
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
@@ -107,14 +118,13 @@ describe("#AddressRouter", () => {
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
-        var insight = nock(`${process.env.BITCOINCOM_BASEURL}`)
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
           .reply(200, mockData.mockAddressDetails);
       }
 
       // Call the details API.
       const result = await details(req, res);
-      console.log(`test result: ${JSON.stringify(result, null, 2)}`);
 
       // Assert that required fields exist in the returned object.
       assert.exists(result.addrStr);
