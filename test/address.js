@@ -7,13 +7,15 @@
 "use strict";
 
 const chai = require("chai");
-//const assert = require("assert");
 const assert = chai.assert;
-const httpMocks = require("node-mocks-http");
-const addressRoute = require("../routes/address");
-const { mockReq, mockRes } = require("./mocks/express-mocks");
-const sinon = require("sinon");
+const addressRoute = require("../routes/address"); // Library to test.
+const nock = require("nock"); // HTTP mocking
 
+// Mocking data.
+const { mockReq, mockRes } = require("./mocks/express-mocks");
+const mockData = require("./mocks/address-mock");
+
+// used for debugging - remove this.
 const util = require("util");
 util.inspect.defaultOptions = {
   showHidden: true,
@@ -21,14 +23,9 @@ util.inspect.defaultOptions = {
 };
 
 before(() => {
+  // Set default environment variables for unit tests.
   if (!process.env.TEST) process.env.TEST = "unit";
-
-  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/";
-
-  const testMock = myarg => {
-    console.log(`testMock: ${util.inspect(myarg)}`);
-  };
-  testMock({ a: 1, b: 2 });
+  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://fakeurl/api";
 });
 
 describe("#AddressRouter", () => {
@@ -98,22 +95,42 @@ describe("#AddressRouter", () => {
       };
 
       const result = await details(req, res);
-      //console.log(`test result: ${JSON.stringify(result)}`);
-      //console.log(`res.statusCode: ${res.statusCode}`);
 
       assert.equal(res.statusCode, 400, "HTTP status code 400 expected.");
       assert.include(result, "Invalid BCH address", "Proper error message");
     });
 
-    it("v2: should GET /details/:address single address", async () => {
+    it("should GET /details/:address single address", async () => {
       req.params = {
         address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
       };
 
-      const result = await details(req, res);
-      console.log(`test result: ${JSON.stringify(result)}`);
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        var insight = nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
+          .reply(200, mockData.mockAddressDetails);
+      }
 
-      assert.equal(true, true);
+      // Call the details API.
+      const result = await details(req, res);
+      console.log(`test result: ${JSON.stringify(result, null, 2)}`);
+
+      // Assert that required fields exist in the returned object.
+      assert.exists(result.addrStr);
+      assert.exists(result.balance);
+      assert.exists(result.balanceSat);
+      assert.exists(result.totalReceived);
+      assert.exists(result.totalReceivedSat);
+      assert.exists(result.totalSent);
+      assert.exists(result.totalSentSat);
+      assert.exists(result.unconfirmedBalance);
+      assert.exists(result.unconfirmedBalanceSat);
+      assert.exists(result.unconfirmedTxApperances);
+      assert.exists(result.txApperances);
+      assert.isArray(result.transactions);
+      assert.exists(result.legacyAddress);
+      assert.exists(result.cashAddress);
     });
 
     /*

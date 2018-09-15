@@ -122,24 +122,16 @@ async function details2(req, res, next) {
     try {
       var legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
     } catch (err) {
-      //console.log(`error: `, err);
       res.status(400);
       return res.send(
         `Invalid BCH address. Double check your address is valid: ${req.params.address}`
       );
     }
 
-    let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`;
+    let path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}`;
 
     if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
     console.log(`path: ${path}`);
-
-    //const testObj = {
-    //  a: 1,
-    //  b: 2,
-    //};
-
-    //return res.json(testObj);
 
     /*
     axios
@@ -168,9 +160,8 @@ async function details2(req, res, next) {
 
     return res.json(parsed);
   } catch (err) {
-    console.log(`Error in address.js/details2()`, err);
+    console.log(`Error in address.js/details2():`, err);
     res.status(500);
-    //return res.send("Interal error in details2.");
     return res.json(err);
   }
 }
