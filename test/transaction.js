@@ -1,25 +1,27 @@
-let chai = require('chai');
-let assert = require('assert');
-let httpMocks = require("node-mocks-http");
-let transactionRoute = require('../routes/transaction');
+"use strict";
+
+//const chai = require("chai");
+const assert = require("assert");
+const httpMocks = require("node-mocks-http");
+const transactionRoute = require("../routes/transaction");
 
 describe("#TransactionRouter", () => {
   describe("#root", () => {
     it("should return 'transaction' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/"
+        url: "/",
       });
-      let mockResponse = httpMocks.createResponse();
+      const mockResponse = httpMocks.createResponse();
       transactionRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'transaction'
+      const actualResponseBody = mockResponse._getData();
+      const expectedResponseBody = {
+        status: "transaction",
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-
+  /*
   describe("#TransactionDetails", () => {
     it("should GET /details/:txid single txid", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -55,4 +57,5 @@ describe("#TransactionRouter", () => {
       });
     });
   });
+  */
 });
