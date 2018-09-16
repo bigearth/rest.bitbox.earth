@@ -81,6 +81,11 @@ router.get('/getBlock/:hash', config.blockchainRateLimit2, async (req, res, next
   if(req.query.verbose && req.query.verbose === 'true') {
     verbose = true;
   }
+  
+  let showTxs = true;
+  if(req.query.txs && req.query.txs === 'false') {
+    showTxs = false;
+  }
 
   requestConfig.data.id = "getblock";
   requestConfig.data.method = "getblock";
@@ -91,6 +96,7 @@ router.get('/getBlock/:hash', config.blockchainRateLimit2, async (req, res, next
 
   try {
     let response = await BitboxHTTP(requestConfig);
+    if(!showTxs) delete response.data.result.tx;
     res.json(response.data.result);
   } catch (error) {
     res.status(500).send(error.response.data.error);
