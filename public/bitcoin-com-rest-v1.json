@@ -314,7 +314,7 @@
           "blockchain"
         ],
         "summary": "Information about block hash.",
-        "description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash.",
+        "description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash. The list of transactions hashes can be omitted from the object by setting txs to false",
         "operationId": "getBlock",
         "parameters": [
           {
@@ -331,6 +331,16 @@
             "name": "verbose",
             "in": "query",
             "description": "true for a json object, false for the hex encoded data",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "txs",
+            "in": "query",
+            "description": "true to return list of tx hashes, false to omit list of tx hashes",
             "required": false,
             "schema": {
               "type": "boolean",
