@@ -1,6 +1,9 @@
 /*
   Tests the /details endpoint.
 
+  This test file uses the environment variable TEST to switch between unit
+  and integration tests. By default, TEST is set to 'unit'. Set this variable
+  to 'integration' to run the tests against BCH mainnet.
 
 */
 
@@ -53,42 +56,6 @@ describe("#AddressRouter", () => {
     // details route handler.
     const details = addressRoute.testableComponents.details2;
 
-    /*
-    it("should GET /details/:address single address", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: '/details/["qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D',
-      });
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
-      });
-      //console.log(`mockRequest: ${util.inspect(mockRequest)}`);
-      //console.log(`mockResponse: ${util.inspect(mockResponse)}`);
-      addressRoute(mockRequest, mockResponse);
-
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
-        //console.log(`actualResponseBody: ${util.inspect(actualResponseBody)}`);
-        assert.deepEqual(actualResponseBody, [
-          "balance",
-          "balanceSat",
-          "totalReceived",
-          "totalReceivedSat",
-          "totalSent",
-          "totalSentSat",
-          "unconfirmedBalance",
-          "unconfirmedBalanceSat",
-          "unconfirmedTxApperances",
-          "txApperances",
-          "transactions",
-          "legacyAddress",
-          "cashAddress",
-        ]);
-        done();
-      });
-    });
-    */
-
     it("should throw an error for an invalid address", async () => {
       req.params = {
         address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
@@ -100,7 +67,7 @@ describe("#AddressRouter", () => {
       assert.include(result, "Invalid BCH address", "Proper error message");
     });
 
-    it("should throw 500 for network issues", async () => {
+    it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL;
 
       try {
@@ -138,43 +105,55 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res);
+      //console.log(`result1: ${JSON.stringify(result, null, 2)}`); // Used for debugging.
 
       // Assert that required fields exist in the returned object.
-      assert.exists(result.addrStr);
-      assert.exists(result.balance);
-      assert.exists(result.balanceSat);
-      assert.exists(result.totalReceived);
-      assert.exists(result.totalReceivedSat);
-      assert.exists(result.totalSent);
-      assert.exists(result.totalSentSat);
-      assert.exists(result.unconfirmedBalance);
-      assert.exists(result.unconfirmedBalanceSat);
-      assert.exists(result.unconfirmedTxApperances);
-      assert.exists(result.txApperances);
-      assert.isArray(result.transactions);
-      assert.exists(result.legacyAddress);
-      assert.exists(result.cashAddress);
+      assert.exists(result[0].addrStr);
+      assert.exists(result[0].balance);
+      assert.exists(result[0].balanceSat);
+      assert.exists(result[0].totalReceived);
+      assert.exists(result[0].totalReceivedSat);
+      assert.exists(result[0].totalSent);
+      assert.exists(result[0].totalSentSat);
+      assert.exists(result[0].unconfirmedBalance);
+      assert.exists(result[0].unconfirmedBalanceSat);
+      assert.exists(result[0].unconfirmedTxApperances);
+      assert.exists(result[0].txApperances);
+      assert.isArray(result[0].transactions);
+      assert.exists(result[0].legacyAddress);
+      assert.exists(result[0].cashAddress);
     });
 
-    /*
-    it("should GET /details/:address array of addresses", (done) => {
-      let mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: '/details/["qql6r7khtjgwy3ufnjtsczvaf925hyw49cudht57tr", "qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D'
-      });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-      });
-      addressRoute(mockRequest, mockResponse);
+    it("should GET /details/:address array of addresses", async () => {
+      //await _sleep(1000); // Used for debugging.
 
-      mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
-        assert.deepEqual(actualResponseBody, [ 'balance', 'balanceSat', 'totalReceived', 'totalReceivedSat', 'totalSent', 'totalSentSat', 'unconfirmedBalance', 'unconfirmedBalanceSat', 'unconfirmedTxApperances', 'txApperances', 'transactions', 'legacyAddress', 'cashAddress' ]);
-        done();
-      });
+      req.params = {
+        address: [
+          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
+          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
+        ],
+      };
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
+          .reply(200, mockData.mockAddressDetails);
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4`)
+          .reply(200, mockData.mockAddressDetails);
+      }
+
+      // Call the details API.
+      const result = await details(req, res);
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`);
+
+      assert.isArray(result);
+      assert.equal(result.length, 2, "2 outputs for 2 inputs");
     });
-    */
   });
+
   /*
   describe("#AddressUtxo", () => {
     it("should GET /utxo/:address single address", (done) => {
@@ -251,3 +230,8 @@ describe("#AddressRouter", () => {
   });
   */
 });
+
+// Promise-based sleep.
+function _sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

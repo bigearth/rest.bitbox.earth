@@ -9,6 +9,7 @@ const util = require("util");
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,
+  depth: 1,
 };
 
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
@@ -116,51 +117,56 @@ function details(req, res, next) {
 // A new implementation of details.
 async function details2(req, res, next) {
   try {
+    //console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
+    const addresses = req.params.address;
 
-    // Ensure the input is a valid BCH address.
-    try {
-      var legacyAddr = BITBOX.Address.toLegacyAddress(req.params.address);
-    } catch (err) {
+    // Enforce: no more than 20 addresses.
+    if (addresses.length > 20) {
       res.status(400);
-      return res.send(
-        `Invalid BCH address. Double check your address is valid: ${req.params.address}`
-      );
+      return res.json({
+        error: "Array too large. Max 20 addresses",
+      });
     }
 
-    let path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}`;
+    const retArray = [];
+    for (var i = 0; i < addresses.length; i++) {
+      const thisAddress = addresses[i]; // Current address.
 
-    if (req.query.from && req.query.to) path = `${path}?from=${req.query.from}&to=${req.query.to}`;
-    //console.log(`path: ${path}`);
+      // Ensure the input is a valid BCH address.
+      try {
+        var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress);
+      } catch (err) {
+        res.status(400);
+        return res.send(`Invalid BCH address. Double check your address is valid: ${thisAddress}`);
+      }
+      //console.log(`legacyAddr: ${legacyAddr}`);  // Used for debugging.
 
-    /*
-    axios
-      .get(path)
-      .then(response => {
-        const parsed = response.data;
-        delete parsed.addrStr;
-        parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
-        parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
-        res.json(parsed);
-      })
-      .catch(error => {
-        //console.error(`details caught: `, error);
-        console.error(`details errored out.`);
-        //res.send(error.response.data.error.message);
-        return res.send(error);
-      });
-    */
+      let path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}`;
 
-    // Query the Insight server.
-    const response = await axios.get(path);
+      // Not sure what this is doing?
+      if (req.query.from && req.query.to)
+        path = `${path}?from=${req.query.from}&to=${req.query.to}`;
+      //console.log(`path: ${path}`); // Used for debugging.
 
-    const parsed = response.data;
-    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(req.params.address);
-    parsed.cashAddress = BITBOX.Address.toCashAddress(req.params.address);
+      // Query the Insight server.
+      const response = await axios.get(path);
 
-    return res.json(parsed);
+      // Parse the returned data.
+      const parsed = response.data;
+      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+
+      retArray.push(parsed);
+
+      //await _sleep(1000); // Wait 1 second before the next query?
+    }
+
+    // Return the array of retrieved address information.
+    res.status(200);
+    return res.json(retArray);
   } catch (err) {
     // Write out error to console or debug log.
-    //console.log(`Error in address.js/details()`);
+    //console.log(`Error in address.js/details(): `, err);
 
     // Return an error message to the caller.
     res.status(500);
@@ -315,6 +321,11 @@ router.get("/transactions/:address", config.addressRateLimit5, (req, res, next) 
       });
   }
 });
+
+// Promise-based sleep.
+function _sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 module.exports = {
   router,
