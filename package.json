@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "mocha --require babel-core/register --timeout 5000",
+    "test": "nyc mocha --require babel-core/register --timeout 5000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000"
   },
