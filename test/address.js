@@ -1,10 +1,14 @@
 /*
-  Tests the /details endpoint.
+  TESTS FOR THE ADDRESS.JS LIBRARY
 
   This test file uses the environment variable TEST to switch between unit
   and integration tests. By default, TEST is set to 'unit'. Set this variable
   to 'integration' to run the tests against BCH mainnet.
 
+  
+  To-Do:
+  -/details/:address
+  --Verify to/from query options work correctly.
 */
 
 "use strict";
