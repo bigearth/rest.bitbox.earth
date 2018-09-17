@@ -100,15 +100,28 @@ describe("#AddressRouter", () => {
       assert.include(result, "Invalid BCH address", "Proper error message");
     });
 
-    it("should throw 500 for an error", async () => {
-      req.params = {
-        address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
-      };
+    it("should throw 500 for network issues", async () => {
+      const savedUrl = process.env.BITCOINCOM_BASEURL;
 
-      const result = await details(req, res);
+      try {
+        req.params = {
+          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`],
+        };
 
-      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.");
-      assert.include(result, "Error", "Error message expected");
+        // Switch the Insight URL to something that will error out.
+        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api";
+
+        const result = await details(req, res);
+
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl;
+
+        assert.equal(res.statusCode, 500, "HTTP status code 500 expected.");
+        assert.include(result, "Error", "Error message expected");
+      } catch (err) {
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl;
+      }
     });
 
     it("should GET /details/:address single address", async () => {
