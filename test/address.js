@@ -5,7 +5,7 @@
   and integration tests. By default, TEST is set to 'unit'. Set this variable
   to 'integration' to run the tests against BCH mainnet.
 
-  
+
   To-Do:
   -/details/:address
   --Verify to/from query options work correctly.
@@ -128,6 +128,39 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].cashAddress);
     });
 
+    it("should GET non-array single address", async () => {
+      req.params = {
+        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
+      };
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
+          .reply(200, mockData.mockAddressDetails);
+      }
+
+      // Call the details API.
+      const result = await details(req, res);
+      //console.log(`result1: ${JSON.stringify(result, null, 2)}`); // Used for debugging.
+
+      // Assert that required fields exist in the returned object.
+      assert.exists(result[0].addrStr);
+      assert.exists(result[0].balance);
+      assert.exists(result[0].balanceSat);
+      assert.exists(result[0].totalReceived);
+      assert.exists(result[0].totalReceivedSat);
+      assert.exists(result[0].totalSent);
+      assert.exists(result[0].totalSentSat);
+      assert.exists(result[0].unconfirmedBalance);
+      assert.exists(result[0].unconfirmedBalanceSat);
+      assert.exists(result[0].unconfirmedTxApperances);
+      assert.exists(result[0].txApperances);
+      assert.isArray(result[0].transactions);
+      assert.exists(result[0].legacyAddress);
+      assert.exists(result[0].cashAddress);
+    });
+
     it("should GET /details/:address array of addresses", async () => {
       //await _sleep(1000); // Used for debugging.
 
@@ -194,7 +227,8 @@ describe("#AddressRouter", () => {
       });
     });
   });
-
+  */
+  /*
   describe("#AddressUnconfirmed", () => {
     it("should GET /unconfirmed/:address single address", (done) => {
       let mockRequest = httpMocks.createRequest({
