@@ -123,7 +123,7 @@ function details(req, res, next) {
 // A new implementation of details.
 async function details2(req, res, next) {
   try {
-    console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
+    //console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
     let addresses = req.params.address;
 
     //console.log(`parsed: ${JSON.parse(addresses)}`);
