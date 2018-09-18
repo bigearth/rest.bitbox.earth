@@ -21,24 +21,30 @@ describe("#UtilRouter", () => {
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
   });
-  /*
+
   describe("#ValidateAddress", () => {
-    it("should GET /validateAddress/:address", (done) => {
-      let mockRequest = httpMocks.createRequest({
+    it("should GET /validateAddress/:address", done => {
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/validateAddress/bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"
+        url: "/validateAddress/bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c",
       });
-      let mockResponse = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
+      const mockResponse = httpMocks.createResponse({
+        eventEmitter: require("events").EventEmitter,
       });
       utilRoute(mockRequest, mockResponse);
 
-      mockResponse.on('end', () => {
-        let actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, ['isvalid', 'address', 'scriptPubKey', 'ismine', 'iswatchonly', 'isscript']);
+      mockResponse.on("end", () => {
+        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        assert.deepEqual(actualResponseBody, [
+          "isvalid",
+          "address",
+          "scriptPubKey",
+          "ismine",
+          "iswatchonly",
+          "isscript",
+        ]);
         done();
       });
     });
   });
-*/
 });
