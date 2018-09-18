@@ -1,5 +1,5 @@
 /*
-  
+
 */
 
 "use strict";
@@ -43,8 +43,10 @@ while (i < 6) {
   i++;
 }
 
+// Connect the route endpoints to their handler functions.
 router.get("/", config.addressRateLimit1, root);
 router.get("/details/:address", config.addressRateLimit2, details2);
+router.get("/utxo/:address", config.addressRateLimit3, utxo);
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
@@ -53,7 +55,7 @@ function root(req, res, next) {
 
 // Retrieve details on an address.
 function details(req, res, next) {
-  //console.log(`executing details. req.params: ${JSON.stringify(req.params)}`);
+  console.log(`executing details. req.params: ${JSON.stringify(req.params)}`);
   try {
     // --> This code path never executes. Can you give me a CURL statement that would execute it?
     let addresses = JSON.parse(req.params.address);
@@ -112,7 +114,7 @@ function details(req, res, next) {
       })
       .catch(error => {
         //console.error(`details caught: `, error);
-        console.error(`details errored out.`);
+        console.error(`details errored out.`, error);
         res.send(error.response.data.error.message);
       });
   }
@@ -121,8 +123,11 @@ function details(req, res, next) {
 // A new implementation of details.
 async function details2(req, res, next) {
   try {
-    //console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
-    const addresses = req.params.address;
+    console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
+    let addresses = req.params.address;
+
+    // Force the input to be an array if it isn't.
+    if (!Array.isArray(addresses)) addresses = [addresses];
 
     // Enforce: no more than 20 addresses.
     if (addresses.length > 20) {
@@ -132,6 +137,7 @@ async function details2(req, res, next) {
       });
     }
 
+    // Loop through each address.
     const retArray = [];
     for (var i = 0; i < addresses.length; i++) {
       const thisAddress = addresses[i]; // Current address.
@@ -178,7 +184,57 @@ async function details2(req, res, next) {
   }
 }
 
-router.get("/utxo/:address", config.addressRateLimit3, (req, res, next) => {
+async function utxo2(req, res, next) {
+  try {
+    const addresses = req.params.address;
+
+    // Enforce: no more than 20 addresses.
+    if (addresses.length > 20) {
+      res.status(400);
+      return res.json({
+        error: "Array too large. Max 20 addresses",
+      });
+    }
+
+    // Loop through each address.
+    const retArray = [];
+    for (var i = 0; i < addresses.length; i++) {
+      const thisAddress = addresses[i]; // Current address.
+
+      // Ensure the input is a valid BCH address.
+      try {
+        var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress);
+      } catch (err) {
+        res.status(400);
+        return res.send(`Invalid BCH address. Double check your address is valid: ${thisAddress}`);
+      }
+
+      const path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}/utxo`;
+
+      // Query the Insight server.
+      const response = await axios.get(path);
+
+      // Parse the returned data.
+      const parsed = response.data;
+      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+
+      retArray.push(parsed);
+
+      //await _sleep(1000); // Wait 1 second before the next query?
+    }
+
+    // Return the array of retrieved address information.
+    res.status(200);
+    return res.json(retArray);
+  } catch (err) {
+    // Return an error message to the caller.
+    res.status(500);
+    return res.json(`Error in address.js/details(): ${err.message}`);
+  }
+}
+
+async function utxo(req, res, next) {
   try {
     let addresses = JSON.parse(req.params.address);
     if (addresses.length > 20) {
@@ -230,7 +286,7 @@ router.get("/utxo/:address", config.addressRateLimit3, (req, res, next) => {
         res.send(error.response.data.error.message);
       });
   }
-});
+}
 
 router.get("/unconfirmed/:address", config.addressRateLimit4, (req, res, next) => {
   try {
