@@ -126,8 +126,6 @@ async function details2(req, res, next) {
     //console.log(`address param: ${JSON.stringify(req.params.address, null, 2)}`); // Used for debugging.
     let addresses = req.params.address;
 
-    //console.log(`parsed: ${JSON.parse(addresses)}`);
-
     // Force the input to be an array if it isn't.
     if (!Array.isArray(addresses)) addresses = [addresses];
 
@@ -137,8 +135,7 @@ async function details2(req, res, next) {
       // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
     } catch (err) {
       // Dev Note: This block triggered by non-array input, such as a curl
-      // statement.
-      // It silently exits.
+      // statement. It should silently exit this catch statement.
     }
 
     // Enforce: no more than 20 addresses.
