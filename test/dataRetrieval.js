@@ -179,7 +179,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
+
         assert.deepEqual(actualResponseBody, ["propertyid", "name", "issuer", "creationtxid", "totaltokens", "issuances"]);
         done();
       });
@@ -266,7 +266,8 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /STO/:txid", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/STO/ac2df919be43fa793ff4955019195481878e0f0cab39834ad911124fdacfc603/*",
+        //url: "/STO/ac2df919be43fa793ff4955019195481878e0f0cab39834ad911124fdacfc603/*",
+        url: "/STO/744b6b3c287d836814c615b532737c080d07ddb48d891f9b0159196ee910b45c/*",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -308,7 +309,8 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /transaction/:txid", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/transaction/ac2df919be43fa793ff4955019195481878e0f0cab39834ad911124fdacfc603",
+        //url: "/transaction/ac2df919be43fa793ff4955019195481878e0f0cab39834ad911124fdacfc603",
+        url: "/transaction/744b6b3c287d836814c615b532737c080d07ddb48d891f9b0159196ee910b45c",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -317,6 +319,8 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
+
         assert.deepEqual(actualResponseBody, [
           "txid",
           "fee",
@@ -327,13 +331,13 @@ describe("#dataRetrievalRouter", () => {
           "type",
           "propertyid",
           "precision",
-          "ecosystem",
-          "category",
-          "subcategory",
-          "propertyname",
-          "data",
-          "url",
-          "amount",
+          //"ecosystem",
+          //"category",
+          //"subcategory",
+          //"propertyname",
+          //"data",
+          //"url",
+          //"amount",
           "valid",
           "blockhash",
           "blocktime",
