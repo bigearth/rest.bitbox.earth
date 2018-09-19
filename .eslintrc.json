@@ -44,7 +44,7 @@
     "prettier/prettier": [
       "warn",
       {
-        "printWidth": 100,
+        "printWidth": 250,
         "trailingComma": "es5"
       }
     ]
