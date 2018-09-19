@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info: [developer.bitcoin.com](https://developer.bitcoin.com). #bitbox chatroom [ambassador.cash](http://ambassador.cash)",
-    "version": "1.0.1",
+    "description": "rest.bitcoin.com is the REST layer for Bitcoin.com's Cloud. More info: [developer.bitcoin.com](https://developer.bitcoin.com). Chatroom [geni.us/CashDev](http://geni.us/CashDev)",
+    "version": "1.5.10",
     "title": "REST",
     "license": {
       "name": "MIT",
@@ -235,6 +235,36 @@
         }
       }
     },
+    "/address/transactions/{address}": {
+      "get": {
+        "tags": [
+          "address"
+        ],
+        "summary": "Transactions for an address",
+        "description": "Returns the list of transactions for an address",
+        "operationId": "transactions",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "the address in cashAddr or legacy",
+            "required": true,
+            "example": "bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid value/s - Null"
+          }
+        }
+      }
+    },
     "/block/details/{id}": {
       "get": {
         "tags": [
@@ -308,7 +338,7 @@
           "blockchain"
         ],
         "summary": "Information about block hash.",
-        "description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash.",
+        "description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash. The list of transactions hashes can be omitted from the object by setting txs to false",
         "operationId": "getBlock",
         "parameters": [
           {
@@ -325,6 +355,16 @@
             "name": "verbose",
             "in": "query",
             "description": "true for a json object, false for the hex encoded data",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "txs",
+            "in": "query",
+            "description": "true to return list of tx hashes, false to omit list of tx hashes",
             "required": false,
             "schema": {
               "type": "boolean",
