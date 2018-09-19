@@ -122,7 +122,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
+
         assert.deepEqual(actualResponseBody, [
           "propertyid",
           "name",
@@ -170,7 +170,7 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /grants/:propertyId", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/grants/3",
+        url: "/grants/189",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -179,6 +179,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
         assert.deepEqual(actualResponseBody, ["propertyid", "name", "issuer", "creationtxid", "totaltokens", "issuances"]);
         done();
       });
