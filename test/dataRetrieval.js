@@ -209,7 +209,7 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /payload/:txid", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/payload/ac2df919be43fa793ff4955019195481878e0f0cab39834ad911124fdacfc603",
+        url: "/payload/709d1346a781e7e0064393c9b3f0e846ee445958946352b5928084e8d9a410cc",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
