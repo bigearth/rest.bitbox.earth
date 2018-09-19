@@ -11,13 +11,13 @@ describe("#ControlRouter", () => {
     it("should return 'control' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       controlRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "control",
+        status: "control"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });

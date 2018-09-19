@@ -11,13 +11,13 @@ describe("#NetworkRouter", () => {
     it("should return 'network' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       networkRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "network",
+        status: "network"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });

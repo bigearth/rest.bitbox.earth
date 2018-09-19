@@ -10,13 +10,13 @@ describe("#HealthCheckRouter", () => {
     it("should return 'winnging' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       healthCheckRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "winning",
+        status: "winning"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
