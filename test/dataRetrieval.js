@@ -113,7 +113,7 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /crowdSale/:propertyId", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/crowdSale/127",
+        url: "/crowdSale/190",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -122,6 +122,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
         assert.deepEqual(actualResponseBody, [
           "propertyid",
           "name",
@@ -136,6 +137,10 @@ describe("#dataRetrievalRouter", () => {
           "amountraised",
           "tokensissued",
           "addedissuertokens",
+          "closedearly",
+          "maxtokens",
+          "endedtime",
+          "closetx",
         ]);
         done();
       });
@@ -174,14 +179,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [
-          "propertyid",
-          "name",
-          "issuer",
-          "creationtxid",
-          "totaltokens",
-          "issuances",
-        ]);
+        assert.deepEqual(actualResponseBody, ["propertyid", "name", "issuer", "creationtxid", "totaltokens", "issuances"]);
         done();
       });
     });
@@ -200,17 +198,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [
-          "wormholeversion_int",
-          "wormholeversion",
-          "bitcoincoreversion",
-          "block",
-          "blocktime",
-          "blocktransactions",
-          "totaltrades",
-          "totaltransactions",
-          "alerts",
-        ]);
+        assert.deepEqual(actualResponseBody, ["wormholeversion_int", "wormholeversion", "bitcoincoreversion", "block", "blocktime", "blocktransactions", "totaltrades", "totaltransactions", "alerts"]);
         done();
       });
     });
@@ -248,20 +236,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
-        assert.deepEqual(actualResponseBody, [
-          "propertyid",
-          "name",
-          "category",
-          "subcategory",
-          "data",
-          "url",
-          "precision",
-          "issuer",
-          "creationtxid",
-          "fixedissuance",
-          "managedissuance",
-          "totaltokens",
-        ]);
+        assert.deepEqual(actualResponseBody, ["propertyid", "name", "category", "subcategory", "data", "url", "precision", "issuer", "creationtxid", "fixedissuance", "managedissuance", "totaltokens"]);
         done();
       });
     });
@@ -421,15 +396,7 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData())[0]);
-        assert.deepEqual(actualResponseBody, [
-          "propertyid",
-          "name",
-          "category",
-          "subcategory",
-          "data",
-          "url",
-          "precision",
-        ]);
+        assert.deepEqual(actualResponseBody, ["propertyid", "name", "category", "subcategory", "data", "url", "precision"]);
         done();
       });
     });
