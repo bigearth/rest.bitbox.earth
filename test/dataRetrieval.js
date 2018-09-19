@@ -49,7 +49,7 @@ describe("#dataRetrievalRouter", () => {
     it("should GET /balancesForId/:propertyId", done => {
       let mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/balancesForId/127"
+        url: "/balancesForId/189"
       });
       let mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter
@@ -59,8 +59,8 @@ describe("#dataRetrievalRouter", () => {
       mockResponse.on("end", () => {
         let actualResponseBody = JSON.parse(mockResponse._getData())[0];
         assert.deepEqual(actualResponseBody, {
-          address: "bchtest:qp6luqzaddprw2rdw2y0e2gq9ywf4juj4sa2xx0ljv",
-          balance: "10.0",
+          address: "bitcoincash:qqnjqejdq77pjqhg2y009fck50wdzzh3mc667y7075",
+          balance: "1.0",
           reserved: "0.0"
         });
         done();
