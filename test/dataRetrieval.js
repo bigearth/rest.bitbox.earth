@@ -261,7 +261,7 @@ describe("#dataRetrievalRouter", () => {
       });
     });
   });
-
+/*
   describe("#STO", () => {
     it("should GET /STO/:txid", done => {
       const mockRequest = httpMocks.createRequest({
@@ -304,7 +304,7 @@ describe("#dataRetrievalRouter", () => {
       });
     });
   });
-
+*/
   describe("#transaction", () => {
     it("should GET /transaction/:txid", done => {
       const mockRequest = httpMocks.createRequest({
