@@ -11,13 +11,13 @@ describe("#MiningRouter", () => {
     it("should return 'mining' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       miningRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "mining",
+        status: "mining"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
@@ -47,15 +47,17 @@ describe("#MiningRouter", () => {
     it("should GET /getMiningInfo", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMiningInfo",
+        url: "/getMiningInfo"
       });
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
+        eventEmitter: require("events").EventEmitter
       });
       miningRoute(mockRequest, mockResponse);
 
       mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        );
         assert.deepEqual(actualResponseBody, [
           "blocks",
           "currentblocksize",
@@ -65,7 +67,7 @@ describe("#MiningRouter", () => {
           "errors",
           "networkhashps",
           "pooledtx",
-          "chain",
+          "chain"
         ]);
         done();
       });
@@ -76,10 +78,10 @@ describe("#MiningRouter", () => {
     it("should GET /getNetworkHashps", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getNetworkHashps",
+        url: "/getNetworkHashps"
       });
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
+        eventEmitter: require("events").EventEmitter
       });
       miningRoute(mockRequest, mockResponse);
 

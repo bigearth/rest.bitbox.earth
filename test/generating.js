@@ -11,13 +11,13 @@ describe("#GeneratingRouter", () => {
     it("should return 'generating' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       generatingRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "generating",
+        status: "generating"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });

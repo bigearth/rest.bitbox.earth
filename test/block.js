@@ -10,13 +10,13 @@ describe("#BlockRouter", () => {
     it("should return 'block' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
+        url: "/"
       });
       const mockResponse = httpMocks.createResponse();
       blockRoute(mockRequest, mockResponse);
       const actualResponseBody = mockResponse._getData();
       const expectedResponseBody = {
-        status: "block",
+        status: "block"
       };
       assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
     });
@@ -26,15 +26,17 @@ describe("#BlockRouter", () => {
     it("should GET /details/:id height", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/details/500000",
+        url: "/details/500000"
       });
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
+        eventEmitter: require("events").EventEmitter
       });
       blockRoute(mockRequest, mockResponse);
 
       mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        );
         assert.deepEqual(actualResponseBody, [
           "hash",
           "size",
@@ -52,7 +54,7 @@ describe("#BlockRouter", () => {
           "nextblockhash",
           "reward",
           "isMainChain",
-          "poolInfo",
+          "poolInfo"
         ]);
         done();
       });
@@ -61,15 +63,18 @@ describe("#BlockRouter", () => {
     it("should GET /details/:id hash", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/details/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc",
+        url:
+          "/details/00000000000000000182bf5782f3d43b1a8fceccb50253eb61e58cba7b240edc"
       });
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
+        eventEmitter: require("events").EventEmitter
       });
       blockRoute(mockRequest, mockResponse);
 
       mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        );
         assert.deepEqual(actualResponseBody, [
           "hash",
           "size",
@@ -87,7 +92,7 @@ describe("#BlockRouter", () => {
           "nextblockhash",
           "reward",
           "isMainChain",
-          "poolInfo",
+          "poolInfo"
         ]);
         done();
       });
