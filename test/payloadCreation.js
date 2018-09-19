@@ -33,7 +33,6 @@ describe("#payloadCreationRouter", () => {
       payloadCreation(mockRequest, mockResponse);
 
       mockResponse.on("end", () => {
-        console.log(mockResponse._getData());
         const actualResponseBody = JSON.parse(mockResponse._getData());
         assert.equal(actualResponseBody, "00000044");
         done();
@@ -92,7 +91,6 @@ describe("#payloadCreationRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = JSON.parse(mockResponse._getData());
-        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
 
         assert.equal(actualResponseBody, "00000037000000bd000000000001117000");
         done();
@@ -183,7 +181,8 @@ describe("#payloadCreationRouter", () => {
     it("should POST /revoke/:propertyId/:amount", done => {
       const mockRequest = httpMocks.createRequest({
         method: "POST",
-        url: "/revoke/3/100",
+        //url: "/revoke/3/100", // testnet
+        url: "/revoke/189/100",
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -192,7 +191,9 @@ describe("#payloadCreationRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, "0000003800000003000000000000006400");
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
+
+        assert.equal(actualResponseBody, "00000038000000bd00000000000003e800");
         done();
       });
     });
@@ -202,7 +203,8 @@ describe("#payloadCreationRouter", () => {
     it("should POST /sendAll/:ecosystem", done => {
       const mockRequest = httpMocks.createRequest({
         method: "POST",
-        url: "/sendAll/2",
+        //url: "/sendAll/2", // testnet
+        url: "/sendAll/1", // mainnet
       });
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter,
@@ -211,7 +213,9 @@ describe("#payloadCreationRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = JSON.parse(mockResponse._getData());
-        assert.equal(actualResponseBody, "0000000402");
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
+
+        assert.equal(actualResponseBody, "0000000401");
         done();
       });
     });
