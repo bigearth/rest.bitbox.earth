@@ -59,8 +59,10 @@ describe("#dataRetrievalRouter", () => {
 
       mockResponse.on("end", () => {
         const actualResponseBody = JSON.parse(mockResponse._getData())[0]
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`)
+
         assert.deepEqual(actualResponseBody, {
-          address: "bitcoincash:qqnjqejdq77pjqhg2y009fck50wdzzh3mc667y7075",
+          address: "bitcoincash:qzgvcvfkupltwn2k8c0y8hddhwffxg7p35s834qcuz",
           balance: "1.0",
           reserved: "0.0"
         })
@@ -380,7 +382,6 @@ describe("#dataRetrievalRouter", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
         )
-        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`);
 
         assert.deepEqual(actualResponseBody, [
           "txid",
