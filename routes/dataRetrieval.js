@@ -97,8 +97,8 @@ router.get(
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error)
-      res.status(500);
-      return res.send(error);
+      res.status(500)
+      return res.send(error)
     }
   }
 )

@@ -1,10 +1,10 @@
-"use strict";
+"use strict"
 
 // const chai = require("chai");
-const assert = require("assert");
+const assert = require("assert")
 // const expect = chai.expect;
-const httpMocks = require("node-mocks-http");
-const generatingRoute = require("../routes/generating");
+const httpMocks = require("node-mocks-http")
+const generatingRoute = require("../routes/generating")
 
 describe("#GeneratingRouter", () => {
   describe("#root", () => {
@@ -12,16 +12,16 @@ describe("#GeneratingRouter", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
-      });
-      const mockResponse = httpMocks.createResponse();
-      generatingRoute(mockRequest, mockResponse);
-      const actualResponseBody = mockResponse._getData();
+      })
+      const mockResponse = httpMocks.createResponse()
+      generatingRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
       const expectedResponseBody = {
         status: "generating"
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
   //
   //   describe("#GeneratingGenerateToAddress", () => {
   //     it("should POST /generateToAddress/:n/:address ", (done) => {
@@ -41,4 +41,4 @@ describe("#GeneratingRouter", () => {
   //       });
   //     });
   //   });
-});
+})

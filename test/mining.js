@@ -1,10 +1,10 @@
-"use strict";
+"use strict"
 
 //const chai = require("chai");
-const assert = require("assert");
+const assert = require("assert")
 //const expect = chai.expect;
-const httpMocks = require("node-mocks-http");
-const miningRoute = require("../routes/mining");
+const httpMocks = require("node-mocks-http")
+const miningRoute = require("../routes/mining")
 
 describe("#MiningRouter", () => {
   describe("#root", () => {
@@ -12,16 +12,16 @@ describe("#MiningRouter", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
-      });
-      const mockResponse = httpMocks.createResponse();
-      miningRoute(mockRequest, mockResponse);
-      const actualResponseBody = mockResponse._getData();
+      })
+      const mockResponse = httpMocks.createResponse()
+      miningRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
       const expectedResponseBody = {
         status: "mining"
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
 
   //
   // describe("#MiningGetBlockTemplate", () => {
@@ -48,16 +48,16 @@ describe("#MiningRouter", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getMiningInfo"
-      });
+      })
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter
-      });
-      miningRoute(mockRequest, mockResponse);
+      })
+      miningRoute(mockRequest, mockResponse)
 
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
-        );
+        )
         assert.deepEqual(actualResponseBody, [
           "blocks",
           "currentblocksize",
@@ -68,30 +68,30 @@ describe("#MiningRouter", () => {
           "networkhashps",
           "pooledtx",
           "chain"
-        ]);
-        done();
-      });
-    });
-  });
+        ])
+        done()
+      })
+    })
+  })
 
   describe("#MiningGetNetworkHashps", () => {
     it("should GET /getNetworkHashps", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/getNetworkHashps"
-      });
+      })
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter
-      });
-      miningRoute(mockRequest, mockResponse);
+      })
+      miningRoute(mockRequest, mockResponse)
 
       mockResponse.on("end", () => {
-        const actualResponseBody = parseInt(mockResponse._getData());
-        assert.equal(typeof actualResponseBody, "number");
-        done();
-      });
-    });
-  });
+        const actualResponseBody = parseInt(mockResponse._getData())
+        assert.equal(typeof actualResponseBody, "number")
+        done()
+      })
+    })
+  })
   //
   // describe("#MiningSubmitBlock", () => {
   //   it("should POST /SubmitBlock", (done) => {
@@ -111,4 +111,4 @@ describe("#MiningRouter", () => {
   //     });
   //   });
   // });
-});
+})

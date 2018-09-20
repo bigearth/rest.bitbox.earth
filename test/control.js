@@ -1,10 +1,10 @@
-"use strict";
+"use strict"
 
 //const chai = require("chai");
-const assert = require("assert");
+const assert = require("assert")
 //const expect = chai.expect;
-const httpMocks = require("node-mocks-http");
-const controlRoute = require("../routes/control");
+const httpMocks = require("node-mocks-http")
+const controlRoute = require("../routes/control")
 
 describe("#ControlRouter", () => {
   describe("#root", () => {
@@ -12,16 +12,16 @@ describe("#ControlRouter", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
-      });
-      const mockResponse = httpMocks.createResponse();
-      controlRoute(mockRequest, mockResponse);
-      const actualResponseBody = mockResponse._getData();
+      })
+      const mockResponse = httpMocks.createResponse()
+      controlRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
       const expectedResponseBody = {
         status: "control"
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
   /*
   describe("#GetInfo", () => {
     it("should GET /getInfo", (done) => {
@@ -61,4 +61,4 @@ describe("#ControlRouter", () => {
 //     });
 //   });
 */
-});
+})

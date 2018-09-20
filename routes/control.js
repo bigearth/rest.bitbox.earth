@@ -1,25 +1,25 @@
-"use strict";
+"use strict"
 
-const express = require("express");
-const router = express.Router();
-const axios = require("axios");
-const RateLimit = require("express-rate-limit");
+const express = require("express")
+const router = express.Router()
+const axios = require("axios")
+const RateLimit = require("express-rate-limit")
 
 //const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 //const BITBOX = new BITBOXCli();
 
 const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL,
-});
-const username = process.env.RPC_USERNAME;
-const password = process.env.RPC_PASSWORD;
+  baseURL: process.env.RPC_BASEURL
+})
+const username = process.env.RPC_USERNAME
+const password = process.env.RPC_PASSWORD
 
 const config = {
   controlRateLimit1: undefined,
-  controlRateLimit2: undefined,
-};
+  controlRateLimit2: undefined
+}
 
-let i = 1;
+let i = 1
 while (i < 3) {
   config[`controlRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
@@ -28,41 +28,43 @@ while (i < 3) {
     handler: function(req, res /*next*/) {
       res.format({
         json: function() {
-          res.status(500).json({ error: "Too many requests. Limits are 60 requests per minute." });
-        },
-      });
-    },
-  });
-  i++;
+          res.status(500).json({
+            error: "Too many requests. Limits are 60 requests per minute."
+          })
+        }
+      })
+    }
+  })
+  i++
 }
 
 const requestConfig = {
   method: "post",
   auth: {
     username: username,
-    password: password,
+    password: password
   },
   data: {
-    jsonrpc: "1.0",
-  },
-};
+    jsonrpc: "1.0"
+  }
+}
 
 router.get("/", config.controlRateLimit1, async (req, res, next) => {
-  res.json({ status: "control" });
-});
+  res.json({ status: "control" })
+})
 
 router.get("/getInfo", config.controlRateLimit2, async (req, res, next) => {
-  requestConfig.data.id = "getinfo";
-  requestConfig.data.method = "getinfo";
-  requestConfig.data.params = [];
+  requestConfig.data.id = "getinfo"
+  requestConfig.data.method = "getinfo"
+  requestConfig.data.params = []
 
   try {
-    const response = await BitboxHTTP(requestConfig);
-    res.json(response.data.result);
+    const response = await BitboxHTTP(requestConfig)
+    res.json(response.data.result)
   } catch (error) {
-    res.status(500).send(error.response.data.error);
+    res.status(500).send(error.response.data.error)
   }
-});
+})
 
 // router.get('/getMemoryInfo', (req, res, next) => {
 //   BitboxHTTP({
@@ -101,4 +103,4 @@ router.get("/getInfo", config.controlRateLimit2, async (req, res, next) => {
 //   });
 // });
 
-module.exports = router;
+module.exports = router
