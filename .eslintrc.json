@@ -1,11 +1,11 @@
 {
   "root": true,
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 2018
   },
   "plugins": ["prettier"],
   "rules": {
-    "no-debugger": ["error"],
+    "no-debugger": ["warn"],
     "no-regex-spaces": ["error"],
     "no-unsafe-negation": ["error"],
     "curly": ["error", "multi-or-nest", "consistent"],
@@ -27,7 +27,7 @@
     "no-lonely-if": ["error"],
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
     "no-whitespace-before-property": ["error"],
-    "semi": ["error", "always"],
+    "semi": ["error", "never"],
     "arrow-body-style": ["error", "as-needed"],
     "arrow-parens": ["error", "as-needed"],
     "arrow-spacing": ["error"],
@@ -44,8 +44,10 @@
     "prettier/prettier": [
       "warn",
       {
-        "printWidth": 250,
-        "trailingComma": "es5"
+        "printWidth": 80,
+        "trailingComma": "none",
+        "singleQuote": false,
+        "semi": false
       }
     ]
   }
