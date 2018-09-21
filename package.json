@@ -1,19 +1,23 @@
 {
-  "name": "rest-cloud",
-  "version": "1.4.1",
-  "private": true,
+  "name": "rest.bitcoin.com",
+  "version": "1.6.0",
+  "description": "REST API for Bitcoin.com's Cloud",
+  "author": "Gabriel Cardona @ Bitcoin.com",
+  "license": "MIT",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "nyc mocha --require babel-core/register --timeout 5000"
+    "test": "nyc --reporter=text mocha --require babel-core/register --timeout 5000",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 5000"
   },
   "engines": {
-    "node": ">=10.3.0"
+    "node": ">=8.11.3"
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "bitbox-cli": "^1.4.0",
-    "bitcoin-txdecoder": "0.0.3",
+    "bitbox-cli": "^1.5.10",
+    "bitcoincash-zmq-decoder": "0.1.5",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.3",
@@ -39,8 +43,15 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.5.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-standard": "^4.0.0",
     "node-mocks-http": "^1.7.0",
     "nodemon": "^1.18.1",
-    "nyc": "^11.6.0"
+    "nyc": "^11.6.0",
+    "prettier": "^1.14.2"
   }
 }

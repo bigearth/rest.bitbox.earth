@@ -1,22 +1,24 @@
-let chai = require('chai');
-let assert = require('assert');
-let httpMocks = require("node-mocks-http");
-let healthCheckRoute = require('../routes/health-check');
+"use strict"
+
+//const chai = require("chai");
+const assert = require("assert")
+const httpMocks = require("node-mocks-http")
+const healthCheckRoute = require("../routes/health-check")
 
 describe("#HealthCheckRouter", () => {
   describe("#root", () => {
     it("should return 'winnging' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
-      });
-      let mockResponse = httpMocks.createResponse();
-      healthCheckRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'winning'
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
-});
+      })
+      const mockResponse = httpMocks.createResponse()
+      healthCheckRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
+      const expectedResponseBody = {
+        status: "winning"
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
+})

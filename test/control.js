@@ -1,26 +1,28 @@
-let chai = require('chai');
-let assert = require('assert');
-let expect = chai.expect;
-let httpMocks = require("node-mocks-http");
-let controlRoute = require('../routes/control');
+"use strict"
+
+//const chai = require("chai");
+const assert = require("assert")
+//const expect = chai.expect;
+const httpMocks = require("node-mocks-http")
+const controlRoute = require("../routes/control")
 
 describe("#ControlRouter", () => {
   describe("#root", () => {
     it("should return 'control' for GET /", () => {
-      let mockRequest = httpMocks.createRequest({
+      const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
-      });
-      let mockResponse = httpMocks.createResponse();
-      controlRoute(mockRequest, mockResponse);
-      let actualResponseBody = mockResponse._getData();
-      let expectedResponseBody = {
-        status: 'control'
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
-
+      })
+      const mockResponse = httpMocks.createResponse()
+      controlRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
+      const expectedResponseBody = {
+        status: "control"
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
+  /*
   describe("#GetInfo", () => {
     it("should GET /getInfo", (done) => {
       let mockRequest = httpMocks.createRequest({
@@ -58,4 +60,5 @@ describe("#ControlRouter", () => {
 //       });
 //     });
 //   });
-});
+*/
+})
