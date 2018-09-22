@@ -448,7 +448,9 @@ describe("#dataRetrievalRouter", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
         )
-        assert.deepEqual(actualResponseBody, [])
+        //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody,null,2)}`)
+
+        assert.deepEqual(actualResponseBody, [0])
         done()
       })
     })
