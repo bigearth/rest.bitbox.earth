@@ -1,26 +1,26 @@
-"use strict";
+"use strict"
 
-const express = require("express");
-const router = express.Router();
-const axios = require("axios");
-const RateLimit = require("express-rate-limit");
+const express = require("express")
+const router = express.Router()
+const axios = require("axios")
+const RateLimit = require("express-rate-limit")
 
 //const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 //const BITBOX = new BITBOXCli();
 
 const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL,
-});
-const username = process.env.RPC_USERNAME;
-const password = process.env.RPC_PASSWORD;
+  baseURL: process.env.RPC_BASEURL
+})
+const username = process.env.RPC_USERNAME
+const password = process.env.RPC_PASSWORD
 
 const config = {
   miningRateLimit1: undefined,
   miningRateLimit2: undefined,
-  miningRateLimit3: undefined,
-};
+  miningRateLimit3: undefined
+}
 
-let i = 1;
+let i = 1
 while (i < 4) {
   config[`miningRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
@@ -29,28 +29,30 @@ while (i < 4) {
     handler: function(req, res /*next*/) {
       res.format({
         json: function() {
-          res.status(500).json({ error: "Too many requests. Limits are 60 requests per minute." });
-        },
-      });
-    },
-  });
-  i++;
+          res.status(500).json({
+            error: "Too many requests. Limits are 60 requests per minute."
+          })
+        }
+      })
+    }
+  })
+  i++
 }
 
 const requestConfig = {
   method: "post",
   auth: {
     username: username,
-    password: password,
+    password: password
   },
   data: {
-    jsonrpc: "1.0",
-  },
-};
+    jsonrpc: "1.0"
+  }
+}
 
 router.get("/", config.miningRateLimit1, async (req, res, next) => {
-  res.json({ status: "mining" });
-});
+  res.json({ status: "mining" })
+})
 //
 // router.get('/getBlockTemplate/:templateRequest', (req, res, next) => {
 //   BitboxHTTP({
@@ -76,31 +78,39 @@ router.get("/", config.miningRateLimit1, async (req, res, next) => {
 //   });
 // });
 
-router.get("/getMiningInfo", config.miningRateLimit2, async (req, res, next) => {
-  requestConfig.data.id = "getmininginfo";
-  requestConfig.data.method = "getmininginfo";
-  requestConfig.data.params = [];
+router.get(
+  "/getMiningInfo",
+  config.miningRateLimit2,
+  async (req, res, next) => {
+    requestConfig.data.id = "getmininginfo"
+    requestConfig.data.method = "getmininginfo"
+    requestConfig.data.params = []
 
-  try {
-    const response = await BitboxHTTP(requestConfig);
-    res.json(response.data.result);
-  } catch (error) {
-    res.status(500).send(error.response.data.error);
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
   }
-});
+)
 
-router.get("/getNetworkHashps", config.miningRateLimit3, async (req, res, next) => {
-  requestConfig.data.id = "getnetworkhashps";
-  requestConfig.data.method = "getnetworkhashps";
-  requestConfig.data.params = [];
+router.get(
+  "/getNetworkHashps",
+  config.miningRateLimit3,
+  async (req, res, next) => {
+    requestConfig.data.id = "getnetworkhashps"
+    requestConfig.data.method = "getnetworkhashps"
+    requestConfig.data.params = []
 
-  try {
-    const response = await BitboxHTTP(requestConfig);
-    res.json(response.data.result);
-  } catch (error) {
-    res.status(500).send(error.response.data.error);
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
   }
-});
+)
 //
 // router.post('/submitBlock/:hex', (req, res, next) => {
 //   let parameters = '';
@@ -132,4 +142,4 @@ router.get("/getNetworkHashps", config.miningRateLimit3, async (req, res, next) 
 //   });
 // });
 
-module.exports = router;
+module.exports = router
