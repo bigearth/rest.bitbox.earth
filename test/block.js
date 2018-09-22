@@ -37,6 +37,10 @@ describe("#BlockRouter", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
         )
+        //console.log(
+        //  `actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`
+        //)
+
         assert.deepEqual(actualResponseBody, [
           "hash",
           "size",

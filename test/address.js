@@ -1,4 +1,3 @@
-
 "use strict"
 
 //const chai = require("chai");
@@ -14,22 +13,22 @@ util.inspect.defaultOptions = {
 
 before(() => {
   // Set default environment variables for unit tests.
-  if (!process.env.TEST) process.env.TEST = "unit";
-  if (process.env.TEST === "unit") process.env.BITCOINCOM_BASEURL = "http://fakeurl/api";
-});
+  if (!process.env.TEST) process.env.TEST = "unit"
+  if (process.env.TEST === "unit")
+    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+})
 
 describe("#AddressRouter", () => {
-  let req, res;
+  //let req, res
 
   // Setup the mocks before each test.
   beforeEach(() => {
     // Mock the req and res objects used by Express routes.
-    req = mockReq;
-    res = mockRes;
-  });
+    //req = mockReq
+    //res = mockRes
+  })
 
   describe("#root", () => {
-
     it("should return 'address' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
@@ -155,7 +154,6 @@ describe("#AddressRouter", () => {
       })
       addressRoute(mockRequest, mockResponse)
 
-
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())[1][0]
@@ -175,7 +173,6 @@ describe("#AddressRouter", () => {
       })
     })
   })
-
 
   describe("#AddressUnconfirmed", () => {
     it("should GET /unconfirmed/:address single address", done => {
@@ -221,4 +218,3 @@ describe("#AddressRouter", () => {
     })
   })
 })
-
