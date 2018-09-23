@@ -450,7 +450,7 @@ describe("#dataRetrievalRouter", () => {
         )
         //console.log(`actualResponseBody: ${JSON.stringify(actualResponseBody,null,2)}`)
 
-        assert.deepEqual(actualResponseBody, [0])
+        assert.deepEqual(actualResponseBody, [])
         done()
       })
     })
