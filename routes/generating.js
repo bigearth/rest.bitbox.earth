@@ -1,9 +1,9 @@
-"use strict";
+"use strict"
 
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 //const axios = require("axios");
-const RateLimit = require("express-rate-limit");
+const RateLimit = require("express-rate-limit")
 
 //const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 //const BITBOX = new BITBOXCli();
@@ -15,10 +15,10 @@ const RateLimit = require("express-rate-limit");
 //const password = process.env.RPC_PASSWORD;
 
 const config = {
-  generatingRateLimit1: undefined,
-};
+  generatingRateLimit1: undefined
+}
 
-let i = 1;
+let i = 1
 while (i < 2) {
   config[`generatingRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
@@ -27,17 +27,19 @@ while (i < 2) {
     handler: function(req, res /*next*/) {
       res.format({
         json: function() {
-          res.status(500).json({ error: "Too many requests. Limits are 60 requests per minute." });
-        },
-      });
-    },
-  });
-  i++;
+          res.status(500).json({
+            error: "Too many requests. Limits are 60 requests per minute."
+          })
+        }
+      })
+    }
+  })
+  i++
 }
 
 router.get("/", config.generatingRateLimit1, (req, res, next) => {
-  res.json({ status: "generating" });
-});
+  res.json({ status: "generating" })
+})
 //
 // router.post('/generateToAddress/:nblocks/:address', (req, res, next) => {
 //   let maxtries = 1000000;
@@ -70,4 +72,4 @@ router.get("/", config.generatingRateLimit1, (req, res, next) => {
 //   });
 // });
 
-module.exports = router;
+module.exports = router
