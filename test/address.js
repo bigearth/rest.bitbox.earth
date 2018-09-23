@@ -19,6 +19,8 @@ const assert = chai.assert
 const addressRoute = require("../routes/address")
 const nock = require("nock") // HTTP mocking
 
+let originalUrl // Used during transition from integration to unit tests.
+
 const util = require("util")
 util.inspect.defaultOptions = {
   showHidden: true,
@@ -29,12 +31,18 @@ util.inspect.defaultOptions = {
 const { mockReq, mockRes } = require("./mocks/express-mocks")
 const mockData = require("./mocks/address-mock")
 
-before(() => {
+function beforeTests() {
+  originalUrl = process.env.BITCOINCOM_BASEURL
+
   // Set default environment variables for unit tests.
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
-})
+
+  // Activate nock if it's inactive.
+  if (!nock.isActive()) nock.activate()
+}
+beforeTests()
 
 describe("#AddressRouter", () => {
   let req, res
@@ -44,6 +52,17 @@ describe("#AddressRouter", () => {
     // Mock the req and res objects used by Express routes.
     req = mockReq
     res = mockRes
+  })
+
+  after(() => {
+    // Clean up HTTP mocks.
+    nock.cleanAll() // clear interceptor list.
+    nock.restore()
+
+    process.env.BITCOINCOM_BASEURL = originalUrl
+
+    console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
+    console.log(`Nock isActive: ${nock.isActive()}`)
   })
 
   describe("#root", () => {
