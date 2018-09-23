@@ -47,7 +47,8 @@ router.get("/utxo/:address", config.addressRateLimit3, utxo)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
-  res.json({ status: "address" })
+  console.log(`Entering root()`)
+  return res.json({ status: "address" })
 }
 
 // Retrieve details on an address.
@@ -403,6 +404,7 @@ module.exports = {
   testableComponents: {
     root,
     details,
-    details2
+    details2,
+    utxo2
   }
 }
