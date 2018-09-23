@@ -17,6 +17,7 @@ const assert = chai.assert
 //const assert = require("assert")
 //const httpMocks = require("node-mocks-http")
 const addressRoute = require("../routes/address")
+const nock = require("nock") // HTTP mocking
 
 const util = require("util")
 util.inspect.defaultOptions = {
@@ -33,8 +34,6 @@ before(() => {
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
-
-  console.log(`BITCOINCOM_BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
 })
 
 describe("#AddressRouter", () => {
@@ -52,9 +51,8 @@ describe("#AddressRouter", () => {
     const root = addressRoute.testableComponents.root
 
     it("should return 'address' for GET /", async () => {
-      console.log(`req: ${JSON.stringify(req, null, 2)}`)
       const result = root(req, res)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.equal(result.status, "address", "Returns static string")
     })
@@ -113,7 +111,7 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      //console.log(`result1: ${JSON.stringify(result, null, 2)}`); // Used for debugging.
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
 
       // Assert that required fields exist in the returned object.
       assert.exists(result[0].addrStr)
