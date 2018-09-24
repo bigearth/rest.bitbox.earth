@@ -43,7 +43,7 @@ while (i < 6) {
 // Connect the route endpoints to their handler functions.
 router.get("/", config.addressRateLimit1, root)
 router.get("/details/:address", config.addressRateLimit2, details2)
-router.get("/utxo/:address", config.addressRateLimit3, utxo)
+router.get("/utxo/:address", config.addressRateLimit3, utxo2)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
@@ -186,6 +186,18 @@ async function utxo2(req, res, next) {
   try {
     const addresses = req.params.address
 
+    // Force the input to be an array if it isn't.
+    if (!Array.isArray(addresses)) addresses = [addresses]
+
+    // Parse the array.
+    try {
+      addresses = JSON.parse(addresses)
+      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
+    } catch (err) {
+      // Dev Note: This block triggered by non-array input, such as a curl
+      // statement. It should silently exit this catch statement.
+    }
+
     // Enforce: no more than 20 addresses.
     if (addresses.length > 20) {
       res.status(400)
@@ -228,9 +240,10 @@ async function utxo2(req, res, next) {
     res.status(200)
     return res.json(retArray)
   } catch (err) {
+    console.log(`Error in utxo2`)
     // Return an error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/details(): ${err.message}`)
+    return res.json(`Error in address.js/utxo(): ${err.message}`)
   }
 }
 

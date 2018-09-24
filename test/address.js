@@ -38,9 +38,6 @@ function beforeTests() {
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
-
-  // Activate nock if it's inactive.
-  if (!nock.isActive()) nock.activate()
 }
 beforeTests()
 
@@ -52,17 +49,22 @@ describe("#AddressRouter", () => {
     // Mock the req and res objects used by Express routes.
     req = mockReq
     res = mockRes
+
+    // Activate nock if it's inactive.
+    if (!nock.isActive()) nock.activate()
   })
 
-  after(() => {
+  afterEach(() => {
     // Clean up HTTP mocks.
     nock.cleanAll() // clear interceptor list.
     nock.restore()
 
-    process.env.BITCOINCOM_BASEURL = originalUrl
-
     console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
     console.log(`Nock isActive: ${nock.isActive()}`)
+  })
+
+  after(() => {
+    process.env.BITCOINCOM_BASEURL = originalUrl
   })
 
   describe("#root", () => {
@@ -183,7 +185,7 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /details/:address array of addresses", async () => {
-      //await _sleep(1000); // Used for debugging.
+      //await _sleep(1000); // Used for debugging
 
       req.params = {
         address: [
@@ -212,8 +214,60 @@ describe("#AddressRouter", () => {
     })
   })
 
-  /*
   describe("#AddressUtxo", () => {
+    // utxo route handler.
+    const utxo = addressRoute.testableComponents.utxo2
+
+    it("should throw an error for an invalid address", async () => {
+      req.params = {
+        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await utxo(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result, "Invalid BCH address", "Proper error message")
+    })
+
+    it("NEW should GET /details/:address single address", async () => {
+      const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
+      req.params = {
+        address: [testAddr]
+      }
+
+      // Mock the Insight URL for unit tests.
+      /*
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/address/utxo/${testAddr}`)
+          .reply(200, mockData.mockAddressDetails)
+      }
+      */
+
+      // Call the details API.
+      const result = await utxo(req, res)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
+
+      // Assert that required fields exist in the returned object.
+      /*
+      assert.exists(result[0].addrStr)
+      assert.exists(result[0].balance)
+      assert.exists(result[0].balanceSat)
+      assert.exists(result[0].totalReceived)
+      assert.exists(result[0].totalReceivedSat)
+      assert.exists(result[0].totalSent)
+      assert.exists(result[0].totalSentSat)
+      assert.exists(result[0].unconfirmedBalance)
+      assert.exists(result[0].unconfirmedBalanceSat)
+      assert.exists(result[0].unconfirmedTxApperances)
+      assert.exists(result[0].txApperances)
+      assert.isArray(result[0].transactions)
+      assert.exists(result[0].legacyAddress)
+      assert.exists(result[0].cashAddress)
+      */
+      assert.equal(true, true)
+    })
+
     it("should GET /utxo/:address single address", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
@@ -274,6 +328,7 @@ describe("#AddressRouter", () => {
     })
   })
 
+  /*
   describe("#AddressUnconfirmed", () => {
     it("should GET /unconfirmed/:address single address", done => {
       const mockRequest = httpMocks.createRequest({
