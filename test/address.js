@@ -59,8 +59,8 @@ describe("#AddressRouter", () => {
     nock.cleanAll() // clear interceptor list.
     nock.restore()
 
-    console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
-    console.log(`Nock isActive: ${nock.isActive()}`)
+    //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
+    //console.log(`Nock isActive: ${nock.isActive()}`)
   })
 
   after(() => {
@@ -229,6 +229,30 @@ describe("#AddressRouter", () => {
       assert.include(result, "Invalid BCH address", "Proper error message")
     })
 
+    it("should throw 500 when network issues", async () => {
+      const savedUrl = process.env.BITCOINCOM_BASEURL
+
+      try {
+        req.params = {
+          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        }
+
+        // Switch the Insight URL to something that will error out.
+        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+
+        const result = await utxo(req, res)
+
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+
+        assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+        assert.include(result, "Error", "Error message expected")
+      } catch (err) {
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+      }
+    })
+
     it("NEW should GET /details/:address single address", async () => {
       const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
       req.params = {
@@ -236,13 +260,11 @@ describe("#AddressRouter", () => {
       }
 
       // Mock the Insight URL for unit tests.
-      /*
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/address/utxo/${testAddr}`)
           .reply(200, mockData.mockAddressDetails)
       }
-      */
 
       // Call the details API.
       const result = await utxo(req, res)
