@@ -1,4 +1,3 @@
-
 "use strict"
 const express = require("express")
 const path = require("path")
@@ -72,7 +71,6 @@ app.use(express.static(path.join(__dirname, "public")))
 
 // Make io accessible to our router
 app.use(function(req, res, next) {
-
   req.io = io
   next()
 })
@@ -80,7 +78,7 @@ app.use(function(req, res, next) {
 const prefix = "v1"
 app.use("/", index)
 app.use(`/${prefix}/` + `health-check`, healthCheck)
-app.use(`/${prefix}/` + `address`, address)
+app.use(`/${prefix}/` + `address`, address.router)
 app.use(`/${prefix}/` + `blockchain`, blockchain)
 app.use(`/${prefix}/` + `block`, block)
 app.use(`/${prefix}/` + `control`, control)
@@ -100,13 +98,11 @@ app.use((req, res, next) => {
   next(err)
 })
 
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get("env") === "development" ? err : {}
-
 
   // render the error page
   res.status(err.status || 500)
@@ -117,13 +113,11 @@ app.use(function(err, req, res, next) {
   })
 })
 
-
 /**
  * Get port from environment and store in Express.
  */
 const port = normalizePort(process.env.PORT || "3000")
 app.set("port", port)
-
 
 /**
  * Create HTTP server.
@@ -169,7 +163,6 @@ server.on("listening", onListening)
 
 function normalizePort(val) {
   const port = parseInt(val, 10)
-
 
   if (isNaN(port)) {
     // named pipe
