@@ -2,35 +2,35 @@
   Contains mocks of Express req and res objects.
 */
 
-"use strict";
+"use strict"
 
-const sinon = require("sinon");
+const sinon = require("sinon")
 
 // Inspect JS Objects.
-const util = require("util");
+const util = require("util")
 util.inspect.defaultOptions = {
   showHidden: true,
-  colors: true,
-};
+  colors: true
+}
 
 // mock for res.send()
 function fakeSend(arg) {
   //console.log(`res.send: ${util.inspect(arg)}`);
-  mockRes.output = arg;
-  return arg;
+  mockRes.output = arg
+  return arg
 }
 
 // mock for res.json()
 function fakeJson(arg) {
   //console.log(`res.json: ${util.inspect(arg)}`);
-  mockRes.output = arg;
-  return arg;
+  mockRes.output = arg
+  return arg
 }
 
 // mock for res.setStatus(num)
 const setStatusCode = arg => {
-  mockRes.statusCode = arg;
-};
+  mockRes.statusCode = arg
+}
 
 const mockReq = {
   accepts: sinon.stub().returns({}),
@@ -43,8 +43,8 @@ const mockReq = {
   is: sinon.stub().returns({}),
   params: {},
   query: {},
-  session: {},
-};
+  session: {}
+}
 
 const mockRes = {
   append: sinon.stub().returns({}),
@@ -72,10 +72,10 @@ const mockRes = {
   statusCode: null, // Default value before calling stats();
   type: sinon.stub().returns({}),
   vary: sinon.stub().returns({}),
-  write: sinon.stub().returns({}),
-};
+  write: sinon.stub().returns({})
+}
 
 module.exports = {
   mockReq,
-  mockRes,
-};
+  mockRes
+}
