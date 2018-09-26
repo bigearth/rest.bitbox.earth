@@ -184,7 +184,7 @@ async function details2(req, res, next) {
 
 async function utxo2(req, res, next) {
   try {
-    const addresses = req.params.address
+    let addresses = req.params.address
 
     // Force the input to be an array if it isn't.
     if (!Array.isArray(addresses)) addresses = [addresses]
@@ -222,6 +222,7 @@ async function utxo2(req, res, next) {
       }
 
       const path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}/utxo`
+      //console.log(`path: ${path}`)
 
       // Query the Insight server.
       const response = await axios.get(path)

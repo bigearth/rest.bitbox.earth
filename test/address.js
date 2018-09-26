@@ -37,7 +37,8 @@ function beforeTests() {
   // Set default environment variables for unit tests.
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
-    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
+    //process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
+    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
 }
 beforeTests()
 
@@ -253,73 +254,111 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("NEW should GET /details/:address single address", async () => {
+    it("should GET /utxo/:address single address", async () => {
       const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
       req.params = {
         address: [testAddr]
       }
 
+      //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
+
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/address/utxo/${testAddr}`)
-          .reply(200, mockData.mockAddressDetails)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
       }
 
       // Call the details API.
       const result = await utxo(req, res)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
 
       // Assert that required fields exist in the returned object.
+      const firstResult = result[0][0]
+      //console.log(`firstResult: ${JSON.stringify(firstResult, null, 2)}`)
+
+      assert.isArray(result[0], "result should be an array")
+
+      // Validate data structure.
+      assert.exists(firstResult.address)
+      assert.exists(firstResult.txid)
+      assert.exists(firstResult.vout)
+      assert.exists(firstResult.scriptPubKey)
+      assert.exists(firstResult.amount)
+      assert.exists(firstResult.satoshis)
+      assert.exists(firstResult.height)
+      assert.exists(firstResult.confirmations)
+    })
+
+    it("should GET /utxo/:address for non-array single address", async () => {
+      const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
+      req.params = {
+        address: testAddr
+      }
+
+      //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
+      }
+
+      // Call the details API.
+      const result = await utxo(req, res)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
+
+      // Assert that required fields exist in the returned object.
+      const firstResult = result[0][0]
+      //console.log(`firstResult: ${JSON.stringify(firstResult, null, 2)}`)
+
+      assert.isArray(result[0], "result should be an array")
+
+      // Validate data structure.
+      assert.exists(firstResult.address)
+      assert.exists(firstResult.txid)
+      assert.exists(firstResult.vout)
+      assert.exists(firstResult.scriptPubKey)
+      assert.exists(firstResult.amount)
+      assert.exists(firstResult.satoshis)
+      assert.exists(firstResult.height)
+      assert.exists(firstResult.confirmations)
+    })
+
+    it("should GET /utxo/:address array of addresses", async () => {
+      //await _sleep(1000); // Used for debugging
+
+      req.params = {
+        address: [
+          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
+          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`
+        ]
+      }
+
+      // Mock the Insight URL for unit tests.
       /*
-      assert.exists(result[0].addrStr)
-      assert.exists(result[0].balance)
-      assert.exists(result[0].balanceSat)
-      assert.exists(result[0].totalReceived)
-      assert.exists(result[0].totalReceivedSat)
-      assert.exists(result[0].totalSent)
-      assert.exists(result[0].totalSentSat)
-      assert.exists(result[0].unconfirmedBalance)
-      assert.exists(result[0].unconfirmedBalanceSat)
-      assert.exists(result[0].unconfirmedTxApperances)
-      assert.exists(result[0].txApperances)
-      assert.isArray(result[0].transactions)
-      assert.exists(result[0].legacyAddress)
-      assert.exists(result[0].cashAddress)
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
+      }
       */
-      assert.equal(true, true)
+
+      // Call the details API.
+      const result = await utxo(req, res)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
 
-    it("should GET /utxo/:address single address", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: '/utxo/["qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D'
-      })
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter
-      })
-      addressRoute(mockRequest, mockResponse)
-
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(
-          JSON.parse(mockResponse._getData())[0][0]
-        )
-        assert.deepEqual(actualResponseBody, [
-          "txid",
-          "vout",
-          "scriptPubKey",
-          "amount",
-          "satoshis",
-          "height",
-          "confirmations",
-          "legacyAddress",
-          "cashAddress"
-        ])
-        done()
-      })
-    })
-
-    it("should GET /utxo/:address array of addresses", done => {
+    /*
+    it("OLD should GET /utxo/:address array of addresses", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url:
@@ -348,6 +387,7 @@ describe("#AddressRouter", () => {
         done()
       })
     })
+    */
   })
 
   /*
