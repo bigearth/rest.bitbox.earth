@@ -485,49 +485,71 @@ describe("#AddressRouter", () => {
     })
   })
 
-  /*
-  describe("#AddressUnconfirmed", () => {
-    it("should GET /unconfirmed/:address single address", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: '/unconfirmed/["qql6r7khtjgwy3ufnjtsczvaf925hyw49cudht57tr"%5D'
-      })
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter
-      })
-      addressRoute(mockRequest, mockResponse)
+  describe("#AddressTransactions", () => {
+    // unconfirmed route handler.
+    const transactions = addressRoute.testableComponents.transactions
 
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(
-          JSON.parse(mockResponse._getData())[0]
-        )
-        assert.deepEqual(actualResponseBody, [])
-        // assert.deepEqual(actualResponseBody, [ 'txid', 'vout', 'scriptPubKey', 'amount', 'satoshis', 'height', 'confirmations', 'legacyAddress', 'cashAddress']);
-        done()
-      })
+    it("should throw an error for an invalid address", async () => {
+      req.params = {
+        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await transactions(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result, "Invalid BCH address", "Proper error message")
     })
 
-    it("should GET /unconfirmed/:address array of addresses", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url:
-          '/unconfirmed/["qql6r7khtjgwy3ufnjtsczvaf925hyw49cudht57tr", "qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D'
-      })
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter
-      })
-      addressRoute(mockRequest, mockResponse)
+    it("should throw 500 when network issues", async () => {
+      const savedUrl = process.env.BITCOINCOM_BASEURL
 
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(
-          JSON.parse(mockResponse._getData())[0]
-        )
-        assert.deepEqual(actualResponseBody, [])
-        // assert.deepEqual(actualResponseBody, [ 'txid', 'vout', 'scriptPubKey', 'amount', 'satoshis', 'height', 'confirmations', 'legacyAddress', 'cashAddress']);
+      try {
+        req.params = {
+          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        }
 
-        done()
-      })
+        // Switch the Insight URL to something that will error out.
+        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+
+        const result = await transactions(req, res)
+
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+
+        assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+        assert.include(result, "Error", "Error message expected")
+      } catch (err) {
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+      }
+    })
+
+    it("should GET /transactions/:address single address", async () => {
+      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+      req.params = {
+        address: [testAddr]
+      }
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(
+            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+          )
+          .reply(200, mockData.mockTransactions)
+      }
+
+      // Call the details API.
+      const result = await transactions(req, res)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result, "result should be an array")
+
+      assert.exists(result[0].pagesTotal)
+      assert.exists(result[0].txs)
+      assert.isArray(result[0].txs)
+      assert.exists(result[0].legacyAddress)
+      assert.exists(result[0].cashAddress)
     })
   })
-  */
 })

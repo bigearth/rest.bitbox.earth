@@ -52,6 +52,11 @@ router.get("/", config.addressRateLimit1, root)
 router.get("/details/:address", config.addressRateLimit2, details2)
 router.get("/utxo/:address", config.addressRateLimit3, utxo2)
 router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
+router.get(
+  "/transactions/:address",
+  config.addressRateLimit5,
+  _old_transactions
+)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
@@ -382,7 +387,7 @@ async function unconfirmed(req, res, next) {
     res.status(200)
     return res.json(retArray)
   } catch (err) {
-    console.log(`Error in address.js/unconfirmed().`)
+    //console.log(`Error in address.js/unconfirmed().`)
 
     // Return an error message to the caller.
     res.status(500)
@@ -449,49 +454,111 @@ async function _old_unconfirmed(req, res, next) {
   }
 }
 
-router.get(
-  "/transactions/:address",
-  config.addressRateLimit5,
-  (req, res, next) => {
+async function transactions(req, res, next) {
+  try {
+    let addresses = req.params.address
+
+    // Force the input to be an array if it isn't.
+    if (!Array.isArray(addresses)) addresses = [addresses]
+
+    // Parse the array.
     try {
-      let addresses = JSON.parse(req.params.address)
-      if (addresses.length > 20) {
-        res.json({
-          error: "Array too large. Max 20 addresses"
-        })
-      }
-      addresses = addresses.map(address =>
-        BITBOX.Address.toLegacyAddress(address)
-      )
-      const final = []
-      addresses.forEach(address => {
-        final.push([])
-      })
-      axios
-        .get(`${process.env.BITCOINCOM_BASEURL}txs/?address=${addresses}`)
-        .then(response => {
-          res.json(response.data)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
-    } catch (error) {
-      axios
-        .get(
-          `${
-            process.env.BITCOINCOM_BASEURL
-          }txs/?address=${BITBOX.Address.toLegacyAddress(req.params.address)}`
-        )
-        .then(response => {
-          //console.log(response.data);
-          res.json(response.data)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
+      addresses = JSON.parse(addresses)
+      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
+    } catch (err) {
+      // Dev Note: This block triggered by non-array input, such as a curl
+      // statement. It should silently exit this catch statement.
     }
+
+    // Enforce: no more than 20 addresses.
+    if (addresses.length > 20) {
+      res.status(400)
+      return res.json({
+        error: "Array too large. Max 20 addresses"
+      })
+    }
+
+    // Loop through each address.
+    const retArray = []
+    for (let i = 0; i < addresses.length; i++) {
+      const thisAddress = addresses[i] // Current address.
+
+      // Ensure the input is a valid BCH address.
+      try {
+        var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
+      } catch (err) {
+        res.status(400)
+        return res.send(
+          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        )
+      }
+
+      const path = `${process.env.BITCOINCOM_BASEURL}/txs/?address=${addresses}`
+      //console.log(`path: ${path}`)
+
+      // Query the Insight server.
+      const response = await axios.get(path)
+      //console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+
+      // Parse the returned data.
+      const parsed = response.data
+      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+
+      retArray.push(parsed)
+    }
+
+    // Return the array of retrieved address information.
+    res.status(200)
+    return res.json(retArray)
+  } catch (err) {
+    //console.log(`Error in address.js/transactions().`)
+
+    // Return an error message to the caller.
+    res.status(500)
+    return res.json(`Error in address.js/transactions(): ${err.message}`)
   }
-)
+}
+
+async function _old_transactions(req, res, next) {
+  try {
+    let addresses = JSON.parse(req.params.address)
+    if (addresses.length > 20) {
+      res.json({
+        error: "Array too large. Max 20 addresses"
+      })
+    }
+    addresses = addresses.map(address =>
+      BITBOX.Address.toLegacyAddress(address)
+    )
+    const final = []
+    addresses.forEach(address => {
+      final.push([])
+    })
+    axios
+      .get(`${process.env.BITCOINCOM_BASEURL}txs/?address=${addresses}`)
+      .then(response => {
+        res.json(response.data)
+      })
+      .catch(error => {
+        res.send(error.response.data.error.message)
+      })
+  } catch (error) {
+    axios
+      .get(
+        `${
+          process.env.BITCOINCOM_BASEURL
+        }txs/?address=${BITBOX.Address.toLegacyAddress(req.params.address)}`
+      )
+      .then(response => {
+        //console.log(response.data);
+        res.json(response.data)
+      })
+      .catch(error => {
+        res.send(error.response.data.error.message)
+      })
+  }
+}
 
 module.exports = {
   router,
@@ -500,7 +567,8 @@ module.exports = {
     details,
     details2,
     utxo2,
-    unconfirmed
+    unconfirmed,
+    transactions
   }
 }
 
