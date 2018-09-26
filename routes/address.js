@@ -293,7 +293,7 @@ async function transactions(req, res, next) {
 
       // Ensure the input is a valid BCH address.
       try {
-        var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
+        BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
         return res.send(
@@ -301,7 +301,7 @@ async function transactions(req, res, next) {
         )
       }
 
-      const path = `${process.env.BITCOINCOM_BASEURL}/txs/?address=${addresses}`
+      const path = `${process.env.BITCOINCOM_BASEURL}txs/?address=${addresses}`
 
       // Query the Insight server.
       const response = await axios.get(path)
