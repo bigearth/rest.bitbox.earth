@@ -51,6 +51,7 @@ while (i < 6) {
 router.get("/", config.addressRateLimit1, root)
 router.get("/details/:address", config.addressRateLimit2, details2)
 router.get("/utxo/:address", config.addressRateLimit3, utxo2)
+router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
@@ -389,68 +390,64 @@ async function unconfirmed(req, res, next) {
   }
 }
 
-router.get(
-  "/unconfirmed/:address",
-  config.addressRateLimit4,
-  (req, res, next) => {
-    try {
-      let addresses = JSON.parse(req.params.address)
-      if (addresses.length > 20) {
-        res.json({
-          error: "Array too large. Max 20 addresses"
-        })
-      }
-      addresses = addresses.map(address =>
-        BITBOX.Address.toLegacyAddress(address)
-      )
-      const final = []
-      addresses.forEach(address => {
-        final.push([])
+async function _old_unconfirmed(req, res, next) {
+  try {
+    let addresses = JSON.parse(req.params.address)
+    if (addresses.length > 20) {
+      res.json({
+        error: "Array too large. Max 20 addresses"
       })
-      axios
-        .get(`${process.env.BITCOINCOM_BASEURL}addrs/${addresses}/utxo`)
-        .then(response => {
-          const parsed = response.data
-          parsed.forEach(data => {
-            data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address)
-            data.cashAddress = BITBOX.Address.toCashAddress(data.address)
-            delete data.address
-            if (data.confirmations === 0) {
-              addresses.forEach((address, index) => {
-                if (addresses[index] === data.legacyAddress)
-                  final[index].push(data)
-              })
-            }
-          })
-          res.json(final)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
-    } catch (error) {
-      axios
-        .get(
-          `${
-            process.env.BITCOINCOM_BASEURL
-          }addr/${BITBOX.Address.toLegacyAddress(req.params.address)}/utxo`
-        )
-        .then(response => {
-          const parsed = response.data
-          const unconfirmed = []
-          parsed.forEach(data => {
-            data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address)
-            data.cashAddress = BITBOX.Address.toCashAddress(data.address)
-            delete data.address
-            if (data.confirmations === 0) unconfirmed.push(data)
-          })
-          res.json(unconfirmed)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
     }
+    addresses = addresses.map(address =>
+      BITBOX.Address.toLegacyAddress(address)
+    )
+    const final = []
+    addresses.forEach(address => {
+      final.push([])
+    })
+    axios
+      .get(`${process.env.BITCOINCOM_BASEURL}addrs/${addresses}/utxo`)
+      .then(response => {
+        const parsed = response.data
+        parsed.forEach(data => {
+          data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address)
+          data.cashAddress = BITBOX.Address.toCashAddress(data.address)
+          delete data.address
+          if (data.confirmations === 0) {
+            addresses.forEach((address, index) => {
+              if (addresses[index] === data.legacyAddress)
+                final[index].push(data)
+            })
+          }
+        })
+        res.json(final)
+      })
+      .catch(error => {
+        res.send(error.response.data.error.message)
+      })
+  } catch (error) {
+    axios
+      .get(
+        `${process.env.BITCOINCOM_BASEURL}addr/${BITBOX.Address.toLegacyAddress(
+          req.params.address
+        )}/utxo`
+      )
+      .then(response => {
+        const parsed = response.data
+        const unconfirmed = []
+        parsed.forEach(data => {
+          data.legacyAddress = BITBOX.Address.toLegacyAddress(data.address)
+          data.cashAddress = BITBOX.Address.toCashAddress(data.address)
+          delete data.address
+          if (data.confirmations === 0) unconfirmed.push(data)
+        })
+        res.json(unconfirmed)
+      })
+      .catch(error => {
+        res.send(error.response.data.error.message)
+      })
   }
-)
+}
 
 router.get(
   "/transactions/:address",

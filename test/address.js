@@ -482,8 +482,6 @@ describe("#AddressRouter", () => {
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
-      //assert.equal(result.length, 3, "3 outputs for 3 inputs")
-      //assert.equal(true, true)
     })
   })
 
