@@ -16,19 +16,10 @@
 
 const chai = require("chai")
 const assert = chai.assert
-//const assert = require("assert")
-//const httpMocks = require("node-mocks-http")
 const addressRoute = require("../routes/address")
 const nock = require("nock") // HTTP mocking
 
 let originalUrl // Used during transition from integration to unit tests.
-
-const util = require("util")
-util.inspect.defaultOptions = {
-  showHidden: true,
-  colors: true,
-  depth: 1
-}
 
 // Mocking data.
 const { mockReq, mockRes } = require("./mocks/express-mocks")
@@ -40,7 +31,6 @@ function beforeTests() {
   // Set default environment variables for unit tests.
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
-    //process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/v1"
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
 }
 beforeTests()
@@ -62,9 +52,6 @@ describe("#AddressRouter", () => {
     // Clean up HTTP mocks.
     nock.cleanAll() // clear interceptor list.
     nock.restore()
-
-    //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
-    //console.log(`Nock isActive: ${nock.isActive()}`)
   })
 
   after(() => {
@@ -77,7 +64,6 @@ describe("#AddressRouter", () => {
 
     it("should return 'address' for GET /", async () => {
       const result = root(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.equal(result.status, "address", "Returns static string")
     })
@@ -85,7 +71,7 @@ describe("#AddressRouter", () => {
 
   describe("#AddressDetails", () => {
     // details route handler.
-    const details = addressRoute.testableComponents.details2
+    const details = addressRoute.testableComponents.details
 
     it("should throw an error for an invalid address", async () => {
       req.params = {
@@ -136,7 +122,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
 
       // Assert that required fields exist in the returned object.
       assert.exists(result[0].addrStr)
@@ -169,7 +154,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      //console.log(`result1: ${JSON.stringify(result, null, 2)}`); // Used for debugging.
 
       // Assert that required fields exist in the returned object.
       assert.exists(result[0].addrStr)
@@ -211,7 +195,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`);
 
       assert.isArray(result)
       assert.equal(result.length, 2, "2 outputs for 2 inputs")
@@ -220,7 +203,7 @@ describe("#AddressRouter", () => {
 
   describe("#AddressUtxo", () => {
     // utxo route handler.
-    const utxo = addressRoute.testableComponents.utxo2
+    const utxo = addressRoute.testableComponents.utxo
 
     it("should throw an error for an invalid address", async () => {
       req.params = {
@@ -263,8 +246,6 @@ describe("#AddressRouter", () => {
         address: [testAddr]
       }
 
-      //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
-
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
@@ -274,11 +255,9 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await utxo(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
 
       // Assert that required fields exist in the returned object.
       const firstResult = result[0][0]
-      //console.log(`firstResult: ${JSON.stringify(firstResult, null, 2)}`)
 
       assert.isArray(result[0], "result should be an array")
 
@@ -299,8 +278,6 @@ describe("#AddressRouter", () => {
         address: testAddr
       }
 
-      //console.log(`BASEURL: ${process.env.BITCOINCOM_BASEURL}`)
-
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
@@ -310,11 +287,9 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await utxo(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`) // Used for debugging.
 
       // Assert that required fields exist in the returned object.
       const firstResult = result[0][0]
-      //console.log(`firstResult: ${JSON.stringify(firstResult, null, 2)}`)
 
       assert.isArray(result[0], "result should be an array")
 
@@ -330,8 +305,6 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /utxo/:address array of addresses", async () => {
-      //await _sleep(1000); // Used for debugging
-
       req.params = {
         address: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
@@ -341,7 +314,6 @@ describe("#AddressRouter", () => {
       }
 
       // Mock the Insight URL for unit tests.
-
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
@@ -358,7 +330,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await utxo(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
       assert.equal(result.length, 3, "3 outputs for 3 inputs")
@@ -451,8 +422,6 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /unconfirmed/:address array of addresses", async () => {
-      //await _sleep(1000); // Used for debugging
-
       req.params = {
         address: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
@@ -462,7 +431,6 @@ describe("#AddressRouter", () => {
       }
 
       // Mock the Insight URL for unit tests.
-
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
@@ -479,7 +447,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await unconfirmed(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
     })
@@ -541,7 +508,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await transactions(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result, "result should be an array")
 
