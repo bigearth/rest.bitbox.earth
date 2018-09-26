@@ -24,7 +24,8 @@ let originalUrl // Used during transition from integration to unit tests.
 const util = require("util")
 util.inspect.defaultOptions = {
   showHidden: true,
-  colors: true
+  colors: true,
+  depth: 1
 }
 
 // Mocking data.
@@ -332,12 +333,13 @@ describe("#AddressRouter", () => {
       req.params = {
         address: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
-          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`
+          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
+          `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
         ]
       }
 
       // Mock the Insight URL for unit tests.
-      /*
+
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
@@ -346,15 +348,18 @@ describe("#AddressRouter", () => {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
           .reply(200, mockData.mockUtxoDetails)
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1NDLJswUhu1bGZ9FiFy98FekNDtFujbACP/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
       }
-      */
 
       // Call the details API.
       const result = await utxo(req, res)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
-      assert.equal(result.length, 2, "2 outputs for 2 inputs")
+      assert.equal(result.length, 3, "3 outputs for 3 inputs")
     })
 
     /*

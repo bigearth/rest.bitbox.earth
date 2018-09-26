@@ -5,6 +5,13 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
+const util = require("util")
+util.inspect.defaultOptions = {
+  showHidden: true,
+  colors: true,
+  depth: 1
+}
+
 //const WormholeHTTP = axios.create({
 //  baseURL: process.env.WORMHOLE_RPC_BASEURL,
 //});
@@ -227,6 +234,8 @@ async function utxo2(req, res, next) {
       // Query the Insight server.
       const response = await axios.get(path)
 
+      //if (i > 0) console.log(`response: ${util.inspect(response.data)}`)
+
       // Parse the returned data.
       const parsed = response.data
       parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
@@ -234,14 +243,15 @@ async function utxo2(req, res, next) {
 
       retArray.push(parsed)
 
-      //await _sleep(1000); // Wait 1 second before the next query?
+      //await _sleep(1000) // Wait 1 second before the next query?
     }
 
     // Return the array of retrieved address information.
     res.status(200)
     return res.json(retArray)
   } catch (err) {
-    console.log(`Error in utxo2`)
+    //console.log(`Error in utxo2`)
+
     // Return an error message to the caller.
     res.status(500)
     return res.json(`Error in address.js/utxo(): ${err.message}`)
@@ -422,3 +432,7 @@ module.exports = {
     utxo2
   }
 }
+
+//function _sleep(ms) {
+//  return new Promise(resolve => setTimeout(resolve, ms))
+//}
