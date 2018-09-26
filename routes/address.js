@@ -93,7 +93,8 @@ async function details(req, res, next) {
         )
       }
 
-      let path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}`
+      let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`
+      //console.log(`path: ${path}`)
 
       // Not sure what this is doing?
       if (req.query.from && req.query.to)
@@ -164,7 +165,7 @@ async function utxo(req, res, next) {
         )
       }
 
-      const path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}/utxo`
+      const path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}/utxo`
 
       // Query the Insight server.
       const response = await axios.get(path)
@@ -229,7 +230,7 @@ async function unconfirmed(req, res, next) {
         )
       }
 
-      const path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}/utxo`
+      const path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}/utxo`
 
       // Query the Insight server.
       const response = await axios.get(path)

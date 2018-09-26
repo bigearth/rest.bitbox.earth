@@ -31,7 +31,7 @@ function beforeTests() {
   // Set default environment variables for unit tests.
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
-    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
 }
 beforeTests()
 
@@ -93,7 +93,7 @@ describe("#AddressRouter", () => {
         }
 
         // Switch the Insight URL to something that will error out.
-        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
 
         const result = await details(req, res)
 
@@ -122,6 +122,7 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that required fields exist in the returned object.
       assert.exists(result[0].addrStr)
