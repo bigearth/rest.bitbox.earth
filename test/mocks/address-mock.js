@@ -57,7 +57,21 @@ const mockUtxoDetails = [
   }
 ]
 
+const mockUnconfirmed = [
+  {
+    address: "1EzdL6TBbkNhnB2fYiBaKmcs5fxaoqwdAp",
+    txid: "000c00a90fb5031da6e02f7625df2f8b35a4c16e6feb9fc72293e67e5ff75786",
+    vout: 0,
+    scriptPubKey: "76a914997fabcd94a1e2aaa13a7664362e5e7b96c169a988ac",
+    amount: 0.00999626,
+    satoshis: 999626,
+    confirmations: 0,
+    ts: 1537989425
+  }
+]
+
 module.exports = {
   mockAddressDetails,
-  mockUtxoDetails
+  mockUtxoDetails,
+  mockUnconfirmed
 }

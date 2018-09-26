@@ -316,6 +316,79 @@ async function utxo(req, res, next) {
   }
 }
 
+async function unconfirmed(req, res, next) {
+  try {
+    let addresses = req.params.address
+
+    // Force the input to be an array if it isn't.
+    if (!Array.isArray(addresses)) addresses = [addresses]
+
+    // Parse the array.
+    try {
+      addresses = JSON.parse(addresses)
+      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
+    } catch (err) {
+      // Dev Note: This block triggered by non-array input, such as a curl
+      // statement. It should silently exit this catch statement.
+    }
+
+    // Enforce: no more than 20 addresses.
+    if (addresses.length > 20) {
+      res.status(400)
+      return res.json({
+        error: "Array too large. Max 20 addresses"
+      })
+    }
+
+    // Loop through each address.
+    const retArray = []
+    for (let i = 0; i < addresses.length; i++) {
+      const thisAddress = addresses[i] // Current address.
+
+      // Ensure the input is a valid BCH address.
+      try {
+        var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
+      } catch (err) {
+        res.status(400)
+        return res.send(
+          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        )
+      }
+
+      const path = `${process.env.BITCOINCOM_BASEURL}/addr/${legacyAddr}/utxo`
+      //console.log(`path: ${path}`)
+
+      // Query the Insight server.
+      const response = await axios.get(path)
+
+      // Parse the returned data.
+      const parsed = response.data
+      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+
+      //console.log(`parsed: ${JSON.stringify(parsed, null, 2)}`)
+
+      // Loop through each returned UTXO.
+      for (let j = 0; j < parsed.length; j++) {
+        const thisUtxo = parsed[j]
+
+        // Only interested in UTXOs with no confirmations.
+        if (thisUtxo.confirmations === 0) retArray.push(thisUtxo)
+      }
+    }
+
+    // Return the array of retrieved address information.
+    res.status(200)
+    return res.json(retArray)
+  } catch (err) {
+    console.log(`Error in address.js/unconfirmed().`)
+
+    // Return an error message to the caller.
+    res.status(500)
+    return res.json(`Error in address.js/utxo(): ${err.message}`)
+  }
+}
+
 router.get(
   "/unconfirmed/:address",
   config.addressRateLimit4,
@@ -429,7 +502,8 @@ module.exports = {
     root,
     details,
     details2,
-    utxo2
+    utxo2,
+    unconfirmed
   }
 }
 

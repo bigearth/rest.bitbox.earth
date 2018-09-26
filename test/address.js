@@ -8,6 +8,8 @@
   To-Do:
   -/details/:address
   --Verify to/from query options work correctly.
+  -/unconfirmed/:address
+  --Should initiate a transfer of BCH to verify unconfirmed TX.
 */
 
 "use strict"
@@ -361,38 +363,128 @@ describe("#AddressRouter", () => {
       assert.isArray(result)
       assert.equal(result.length, 3, "3 outputs for 3 inputs")
     })
+  })
 
-    /*
-    it("OLD should GET /utxo/:address array of addresses", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url:
-          '/utxo/["qql6r7khtjgwy3ufnjtsczvaf925hyw49cudht57tr", "qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c"%5D'
-      })
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter
-      })
-      addressRoute(mockRequest, mockResponse)
+  describe("#AddressUnconfirmed", () => {
+    // unconfirmed route handler.
+    const unconfirmed = addressRoute.testableComponents.unconfirmed
 
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(
-          JSON.parse(mockResponse._getData())[1][0]
-        )
-        assert.deepEqual(actualResponseBody, [
-          "txid",
-          "vout",
-          "scriptPubKey",
-          "amount",
-          "satoshis",
-          "height",
-          "confirmations",
-          "legacyAddress",
-          "cashAddress"
-        ])
-        done()
-      })
+    it("should throw an error for an invalid address", async () => {
+      req.params = {
+        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await unconfirmed(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result, "Invalid BCH address", "Proper error message")
     })
-    */
+
+    it("should throw 500 when network issues", async () => {
+      const savedUrl = process.env.BITCOINCOM_BASEURL
+
+      try {
+        req.params = {
+          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        }
+
+        // Switch the Insight URL to something that will error out.
+        process.env.BITCOINCOM_BASEURL = "http://fakeurl/api"
+
+        const result = await unconfirmed(req, res)
+
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+
+        assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+        assert.include(result, "Error", "Error message expected")
+      } catch (err) {
+        // Restore the saved URL.
+        process.env.BITCOINCOM_BASEURL = savedUrl
+      }
+    })
+
+    it("should GET /unconfirmed/:address single address", async () => {
+      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+      req.params = {
+        address: [testAddr]
+      }
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1EzdL6TBbkNhnB2fYiBaKmcs5fxaoqwdAp/utxo`)
+          .reply(200, mockData.mockUnconfirmed)
+      }
+
+      // Call the details API.
+      const result = await unconfirmed(req, res)
+
+      assert.isArray(result, "result should be an array")
+
+      // Dev note: Unconfirmed TXs are hard to test in an integration test because
+      // the nature of an unconfirmed transation is transient. It quickly becomes
+      // confirmed and thus should not show up.
+    })
+
+    it("should GET /unconfirmed/:address for non-array single address", async () => {
+      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+      req.params = {
+        address: testAddr
+      }
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1EzdL6TBbkNhnB2fYiBaKmcs5fxaoqwdAp/utxo`)
+          .reply(200, mockData.mockUnconfirmed)
+      }
+
+      // Call the details API.
+      const result = await unconfirmed(req, res)
+
+      assert.isArray(result, "result should be an array")
+
+      // Dev note: Unconfirmed TXs are hard to test in an integration test because
+      // the nature of an unconfirmed transation is transient. It quickly becomes
+      // confirmed and thus should not show up.
+    })
+
+    it("should GET /unconfirmed/:address array of addresses", async () => {
+      //await _sleep(1000); // Used for debugging
+
+      req.params = {
+        address: [
+          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
+          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
+          `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
+        ]
+      }
+
+      // Mock the Insight URL for unit tests.
+
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .reply(200, mockData.mockUnconfirmed)
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
+          .reply(200, mockData.mockUnconfirmed)
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/1NDLJswUhu1bGZ9FiFy98FekNDtFujbACP/utxo`)
+          .reply(200, mockData.mockUnconfirmed)
+      }
+
+      // Call the details API.
+      const result = await unconfirmed(req, res)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      //assert.equal(result.length, 3, "3 outputs for 3 inputs")
+      //assert.equal(true, true)
+    })
   })
 
   /*
