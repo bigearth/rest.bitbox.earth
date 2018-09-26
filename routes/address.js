@@ -301,7 +301,9 @@ async function transactions(req, res, next) {
         )
       }
 
-      const path = `${process.env.BITCOINCOM_BASEURL}txs/?address=${addresses}`
+      const path = `${
+        process.env.BITCOINCOM_BASEURL
+      }txs/?address=${thisAddress}`
 
       // Query the Insight server.
       const response = await axios.get(path)

@@ -518,5 +518,64 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].legacyAddress)
       assert.exists(result[0].cashAddress)
     })
+
+    it("should GET /transactions/:address for single non-array address", async () => {
+      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+      req.params = {
+        address: testAddr
+      }
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(
+            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+          )
+          .reply(200, mockData.mockTransactions)
+      }
+
+      // Call the details API.
+      const result = await transactions(req, res)
+
+      assert.isArray(result, "result should be an array")
+
+      assert.exists(result[0].pagesTotal)
+      assert.exists(result[0].txs)
+      assert.isArray(result[0].txs)
+      assert.exists(result[0].legacyAddress)
+      assert.exists(result[0].cashAddress)
+    })
+
+    it("should GET /transactions/:address for array of addresses", async () => {
+      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+      req.params = {
+        address: [
+          testAddr,
+          "bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw"
+        ]
+      }
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(
+            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+          )
+          .reply(200, mockData.mockTransactions)
+
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(
+            `/txs/?address=bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw`
+          )
+          .reply(200, mockData.mockTransactions)
+      }
+
+      // Call the details API.
+      const result = await transactions(req, res)
+
+      assert.isArray(result, "result should be an array")
+
+      assert.equal(result.length, 2, "Array should have 2 elements")
+    })
   })
 })
