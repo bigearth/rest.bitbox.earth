@@ -73,13 +73,13 @@ npm install
 
 Now you need to start REST and pass in the following environment variables
 
-* BITCOINCOM_BASEURL - On rest.bitcoin.com this env var is to our internal insight API. You can use insight's public API.
-* RPC_BASEURL - The IP address of your full BCH node
-* RPC_PASSWORD - The rpc password of your full BCH node
-* RPC_USERNAME - The rpc username of your full BCH node
-* ZEROMQ_PORT - The port on which you enabled ZeroMQ
-* ZEROMQ_URL - The IP address of your full BCH node
-* NETWORK - mainnet or testnet depending on which network you're using
+- BITCOINCOM_BASEURL - On rest.bitcoin.com this env var is to our internal insight API. You can use insight's public API.
+- RPC_BASEURL - The IP address of your full BCH node
+- RPC_PASSWORD - The rpc password of your full BCH node
+- RPC_USERNAME - The rpc username of your full BCH node
+- ZEROMQ_PORT - The port on which you enabled ZeroMQ
+- ZEROMQ_URL - The IP address of your full BCH node
+- NETWORK - mainnet or testnet depending on which network you're using
 
 Here's how the final command would look
 
@@ -90,7 +90,3 @@ BITCOINCOM_BASEURL=https://bch-insight.bitpay.com/api/ RPC_BASEURL=http://your.n
 #### View in browser
 
 Finally open `http://localhost:3000/` and confirm you see the GUI
-
-##### Test
-
-Deploy for test
