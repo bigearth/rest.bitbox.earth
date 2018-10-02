@@ -62,8 +62,8 @@ while (i < 12) {
 const requestConfig = {
   method: "post",
   auth: {
-    username: wh_username,
-    password: wh_password
+    username: username,
+    password: password
   },
   data: {
     jsonrpc: "1.0"
