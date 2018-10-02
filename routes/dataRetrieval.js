@@ -5,11 +5,11 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
-const WormholeHTTP = axios.create({
-  baseURL: process.env.WORMHOLE_RPC_BASEURL
+const BitboxHTTP = axios.create({
+  baseURL: process.env.RPC_BASEURL
 })
-const username = process.env.WORMHOLE_RPC_USERNAME
-const password = process.env.WORMHOLE_RPC_PASSWORD
+const username = process.env.RPC_USERNAME
+const password = process.env.RPC_PASSWORD
 
 const config = {
   dataRetrievalRateLimit1: undefined,
@@ -75,7 +75,7 @@ router.get(
     requestConfig.data.params = [req.params.address]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       console.log(error)
@@ -93,7 +93,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error)
@@ -115,7 +115,7 @@ router.get(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -132,7 +132,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -152,7 +152,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.propertyId), verbose]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error);
@@ -171,7 +171,7 @@ router.get(
     requestConfig.data.params = []
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -188,7 +188,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error);
@@ -204,7 +204,7 @@ router.get("/info", config.dataRetrievalRateLimit9, async (req, res, next) => {
   requestConfig.data.params = []
 
   try {
-    const response = await WormholeHTTP(requestConfig)
+    const response = await BitboxHTTP(requestConfig)
     res.json(response.data.result)
   } catch (error) {
     res.status(500).send(error.response.data.error)
@@ -220,7 +220,7 @@ router.get(
     requestConfig.data.params = [req.params.txid]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -237,7 +237,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -257,7 +257,7 @@ router.get(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -274,7 +274,7 @@ router.get(
     requestConfig.data.params = [req.params.txid, req.params.recipientFilter]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -291,7 +291,7 @@ router.get(
     requestConfig.data.params = [req.params.txid]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error);
@@ -310,7 +310,7 @@ router.get(
     requestConfig.data.params = [parseInt(req.params.index)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -330,7 +330,7 @@ router.get(
     requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500)
@@ -349,7 +349,7 @@ router.get(
     requestConfig.data.params = []
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)

@@ -5,11 +5,11 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
-const WormholeHTTP = axios.create({
-  baseURL: process.env.WORMHOLE_RPC_BASEURL
+const BitboxHTTP = axios.create({
+  baseURL: process.env.RPC_BASEURL
 })
-const username = process.env.WORMHOLE_RPC_USERNAME
-const password = process.env.WORMHOLE_RPC_PASSWORD
+const username = process.env.RPC_USERNAME
+const password = process.env.RPC_PASSWORD
 
 const config = {
   payloadCreationRateLimit1: undefined,
@@ -70,7 +70,7 @@ router.get(
     requestConfig.data.params = []
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -87,7 +87,7 @@ router.post(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -104,7 +104,7 @@ router.post(
     requestConfig.data.params = [parseInt(req.params.propertyId)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -124,7 +124,7 @@ router.post(
     requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       //res.status(500).send(error.response.data.error);
@@ -158,7 +158,7 @@ router.post(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -185,7 +185,7 @@ router.post(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -211,7 +211,7 @@ router.post(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -228,7 +228,7 @@ router.post(
     requestConfig.data.params = [req.params.amount]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -248,7 +248,7 @@ router.post(
     requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -265,7 +265,7 @@ router.post(
     requestConfig.data.params = [parseInt(req.params.ecosystem)]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -285,7 +285,7 @@ router.post(
     ]
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -306,7 +306,7 @@ router.post(
     requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(requestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
