@@ -1469,10 +1469,10 @@
         }
       }
     },
-    "/dataRetrieval/balancexForAddress/{address}": {
+    "/dataRetrieval/balancesForAddress/{address}": {
       "get": {
         "tags": ["dataRetrieval"],
-        "summary": "balanceForAddress",
+        "summary": "balancesForAddress",
         "description": "Returns a list of all token balances for a given address. API reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html",
         "operationId": "dataRetrievalBalancesForAddress",
         "parameters": [
