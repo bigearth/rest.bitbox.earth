@@ -14,12 +14,6 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const WormholeHTTP = axios.create({
-  baseURL: process.env.WORMHOLE_RPC_BASEURL
-})
-const wh_username = process.env.WORMHOLE_RPC_USERNAME
-const wh_password = process.env.WORMHOLE_RPC_PASSWORD
-
 const config = {
   rawTransactionsRateLimit1: undefined,
   rawTransactionsRateLimit2: undefined,
@@ -65,11 +59,11 @@ while (i < 12) {
 //  },
 //};
 
-const whRequestConfig = {
+const requestConfig = {
   method: "post",
   auth: {
-    username: wh_username,
-    password: wh_password
+    username: username,
+    password: password
   },
   data: {
     jsonrpc: "1.0"
@@ -393,12 +387,12 @@ router.post(
       ]
       if (req.query.position) params.push(parseInt(req.query.position))
 
-      whRequestConfig.data.id = "whc_createrawtx_change"
-      whRequestConfig.data.method = "whc_createrawtx_change"
-      whRequestConfig.data.params = params
+      requestConfig.data.id = "whc_createrawtx_change"
+      requestConfig.data.method = "whc_createrawtx_change"
+      requestConfig.data.params = params
 
       try {
-        const response = await WormholeHTTP(whRequestConfig)
+        const response = await BitboxHTTP(requestConfig)
         res.json(response.data.result)
       } catch (error) {
         res.status(500).send(error.response.data.error)
@@ -415,16 +409,16 @@ router.post(
   "/input/:rawTx/:txid/:n",
   config.rawTransactionsRateLimit7,
   async (req, res, next) => {
-    whRequestConfig.data.id = "whc_createrawtx_input"
-    whRequestConfig.data.method = "whc_createrawtx_input"
-    whRequestConfig.data.params = [
+    requestConfig.data.id = "whc_createrawtx_input"
+    requestConfig.data.method = "whc_createrawtx_input"
+    requestConfig.data.params = [
       req.params.rawTx,
       req.params.txid,
       parseInt(req.params.n)
     ]
 
     try {
-      const response = await WormholeHTTP(whRequestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -436,12 +430,12 @@ router.post(
   "/opReturn/:rawTx/:payload",
   config.rawTransactionsRateLimit8,
   async (req, res, next) => {
-    whRequestConfig.data.id = "whc_createrawtx_opreturn"
-    whRequestConfig.data.method = "whc_createrawtx_opreturn"
-    whRequestConfig.data.params = [req.params.rawTx, req.params.payload]
+    requestConfig.data.id = "whc_createrawtx_opreturn"
+    requestConfig.data.method = "whc_createrawtx_opreturn"
+    requestConfig.data.params = [req.params.rawTx, req.params.payload]
 
     try {
-      const response = await WormholeHTTP(whRequestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -456,12 +450,12 @@ router.post(
     const params = [req.params.rawTx, req.params.destination]
     if (req.query.amount) params.push(req.query.amount)
 
-    whRequestConfig.data.id = "whc_createrawtx_reference"
-    whRequestConfig.data.method = "whc_createrawtx_reference"
-    whRequestConfig.data.params = params
+    requestConfig.data.id = "whc_createrawtx_reference"
+    requestConfig.data.method = "whc_createrawtx_reference"
+    requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(whRequestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error)
@@ -478,12 +472,12 @@ router.post(
 
     if (req.query.height) params.push(req.query.height)
 
-    whRequestConfig.data.id = "whc_decodetransaction"
-    whRequestConfig.data.method = "whc_decodetransaction"
-    whRequestConfig.data.params = params
+    requestConfig.data.id = "whc_decodetransaction"
+    requestConfig.data.method = "whc_decodetransaction"
+    requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(whRequestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error.message)
@@ -501,12 +495,12 @@ router.post(
     ]
     if (req.query.locktime) params.push(req.query.locktime)
 
-    whRequestConfig.data.id = "createrawtransaction"
-    whRequestConfig.data.method = "createrawtransaction"
-    whRequestConfig.data.params = params
+    requestConfig.data.id = "createrawtransaction"
+    requestConfig.data.method = "createrawtransaction"
+    requestConfig.data.params = params
 
     try {
-      const response = await WormholeHTTP(whRequestConfig)
+      const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
       res.status(500).send(error.response.data.error.message)
