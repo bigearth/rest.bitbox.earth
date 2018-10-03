@@ -55,7 +55,7 @@
       "description": "Create transactions to be transmitted to the network.",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://www.bitbox.earth/bitboxcli/rawtransactions"
+        "url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions.html"
       }
     },
     {
@@ -89,22 +89,12 @@
         "description": "Find out more",
         "url": "https://developer.bitcoin.com/wormhole/docs/payloadCreation.html"
       }
-    },
-    {
-      "name": "rawTransactions",
-      "description": "rawTransactions",
-      "externalDocs": {
-        "description": "Find out more",
-        "url": "https://developer.bitcoin.com/wormhole/docs/rawTransactions.html"
-      }
     }
   ],
   "paths": {
     "/address/details/{address}": {
       "get": {
-        "tags": [
-          "address"
-        ],
+        "tags": ["address"],
         "summary": "Address details",
         "description": "Returns the details of an address including balance",
         "operationId": "details",
@@ -147,9 +137,7 @@
     },
     "/address/utxo/{address}": {
       "get": {
-        "tags": [
-          "address"
-        ],
+        "tags": ["address"],
         "summary": "Address utxos",
         "description": "Returns the list of utxo for an address",
         "operationId": "utxo",
@@ -192,9 +180,7 @@
     },
     "/address/unconfirmed/{address}": {
       "get": {
-        "tags": [
-          "address"
-        ],
+        "tags": ["address"],
         "summary": "Unconfirmed transactions for an address",
         "description": "Returns the list of unconfirmed transactions for an address",
         "operationId": "unconfirmed",
@@ -237,9 +223,7 @@
     },
     "/address/transactions/{address}": {
       "get": {
-        "tags": [
-          "address"
-        ],
+        "tags": ["address"],
         "summary": "Transactions for an address",
         "description": "Returns the list of transactions for an address",
         "operationId": "transactions",
@@ -267,9 +251,7 @@
     },
     "/block/details/{id}": {
       "get": {
-        "tags": [
-          "block"
-        ],
+        "tags": ["block"],
         "summary": "Block details",
         "description": "Details about a block",
         "operationId": "blockDetails",
@@ -312,9 +294,7 @@
     },
     "/blockchain/getBestBlockHash": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Hash of the best block in the longest blockchain.",
         "description": "Returns the hash of the best (tip) block in the longest blockchain.",
         "operationId": "getBestBlockHash",
@@ -334,9 +314,7 @@
     },
     "/blockchain/getBlock/{hash}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Information about block hash.",
         "description": "If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash. The list of transactions hashes can be omitted from the object by setting txs to false",
         "operationId": "getBlock",
@@ -399,9 +377,7 @@
     },
     "/blockchain/getBlockchainInfo": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Info regarding blockchain processing",
         "description": "Returns an object containing various state info regarding blockchain processing.",
         "operationId": "getBlockchainInfo",
@@ -421,9 +397,7 @@
     },
     "/blockchain/getBlockCount": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Number of blocks in the longest blockchain.",
         "description": "Returns the number of blocks in the longest blockchain.",
         "operationId": "getBlockCount",
@@ -443,9 +417,7 @@
     },
     "/blockchain/getBlockHash/{height}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Hash of block in best-block-chain at height provided.",
         "description": "Returns hash of block in best-block-chain at height provided.",
         "operationId": "getBlockHash",
@@ -488,9 +460,7 @@
     },
     "/blockchain/getBlockHeader/{hash}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Information about blockheader hash",
         "description": "If verbose is false, returns a string that is serialized, hex-encoded data for blockheader 'hash'. If verbose is true, returns an Object with information about blockheader hash.",
         "operationId": "getBlockHeader",
@@ -543,9 +513,7 @@
     },
     "/blockchain/getChainTips": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Information about all known tips in the block tree",
         "description": "Return information about all known tips in the block tree, including the main chain as well as orphaned branches.",
         "operationId": "getChainTips",
@@ -558,9 +526,7 @@
     },
     "/blockchain/getDifficulty": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Proof-of-work difficulty",
         "description": "Returns the proof-of-work difficulty as a multiple of the minimum difficulty.",
         "operationId": "getDifficulty",
@@ -580,9 +546,7 @@
     },
     "/blockchain/getMempoolAncestors/{txid}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Returns all in-mempool ancestors.",
         "description": "If txid is in the mempool, returns all in-mempool ancestors.",
         "operationId": "getMempoolAncestors",
@@ -627,9 +591,7 @@
     },
     "/blockchain/getMempoolDescendants/{txid}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Returns all in-mempool descendants.",
         "description": "If txid is in the mempool, returns all in-mempool descendants.",
         "operationId": "getMempoolDescendants",
@@ -674,9 +636,7 @@
     },
     "/blockchain/getMempoolEntry/{txid}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Mempool data for transaction",
         "description": "Returns mempool data for given transaction",
         "operationId": "getMempoolEntry",
@@ -704,9 +664,7 @@
     },
     "/blockchain/getMempoolInfo": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "The active state of the TX memory pool.",
         "description": "Returns details on the active state of the TX memory pool.",
         "operationId": "getMempoolInfo",
@@ -726,9 +684,7 @@
     },
     "/blockchain/getRawMempool": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "All transaction ids in memory pool.",
         "description": "Returns all transaction ids in memory pool as a json array of string transaction ids.",
         "operationId": "getRawMempool",
@@ -760,9 +716,7 @@
     },
     "/blockchain/getTxOut/{txid}/{n}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Details about unspent transaction output.",
         "description": "Returns details about an unspent transaction output.",
         "operationId": "getTxOut",
@@ -810,9 +764,7 @@
     },
     "/blockchain/getTxOutProof/{txids}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Hex-encoded proof that 'txid' was included.",
         "description": "Returns a hex-encoded proof that 'txid' was included in a block.",
         "operationId": "getTxOutProof",
@@ -857,9 +809,7 @@
     },
     "/blockchain/verifyTxOutProof/{proof}": {
       "get": {
-        "tags": [
-          "blockchain"
-        ],
+        "tags": ["blockchain"],
         "summary": "Verify that a proof points to a transaction in a block",
         "description": "Verifies that a proof points to a transaction in a block, returning the transaction it commits to and throwing an RPC error if the block is not in our best chain",
         "operationId": "verifyTxOutProof",
@@ -886,9 +836,7 @@
     },
     "/control/getInfo": {
       "get": {
-        "tags": [
-          "control"
-        ],
+        "tags": ["control"],
         "summary": "Various state info.",
         "description": "Returns an object containing various state info.",
         "operationId": "getInfo",
@@ -908,9 +856,7 @@
     },
     "/mining/getMiningInfo": {
       "get": {
-        "tags": [
-          "mining"
-        ],
+        "tags": ["mining"],
         "summary": "Returns a json object containing mining-related information.",
         "description": "",
         "operationId": "getMiningInfo",
@@ -930,9 +876,7 @@
     },
     "/mining/getNetworkHashps": {
       "get": {
-        "tags": [
-          "mining"
-        ],
+        "tags": ["mining"],
         "summary": "Estimated network hashes per second",
         "description": "Returns the estimated network hashes per second based on the last n blocks. Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change. Pass in [height] to estimate the network speed at the time when a certain block was found.",
         "operationId": "getNetworkHashps",
@@ -974,9 +918,7 @@
     },
     "/rawtransactions/decodeRawTransaction/{hex}": {
       "get": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "Return the hex encoded transaction.",
         "description": "Return a JSON object representing the serialized, hex-encoded transaction.",
         "operationId": "decodeRawTransaction",
@@ -1011,9 +953,7 @@
     },
     "/rawtransactions/decodeScript/{hex}": {
       "get": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "Decode a hex-encoded script.",
         "description": "Decode a hex-encoded script.",
         "operationId": "decodeScript",
@@ -1048,9 +988,7 @@
     },
     "/rawtransactions/getRawTransaction/{txid}": {
       "get": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "Return the raw transaction data.",
         "description": "return the raw transaction data. If verbose is 'true', returns an Object with information about 'txid'. If verbose is 'false' or omitted, returns a string that is serialized, hex-encoded data for 'txid'.",
         "operationId": "getRawTransaction",
@@ -1095,9 +1033,7 @@
     },
     "/rawtransactions/sendRawTransaction/{hex}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "Submits raw transaction to local node and network.",
         "description": "Submits raw transaction (serialized, hex-encoded) to local node and network. Also see createrawtransaction and signrawtransaction calls.",
         "operationId": "sendRawTransaction",
@@ -1125,9 +1061,7 @@
     },
     "/transaction/details/{txid}": {
       "get": {
-        "tags": [
-          "transaction"
-        ],
+        "tags": ["transaction"],
         "summary": "Transaction details",
         "description": "Details about a transaction",
         "operationId": "transactionDetails",
@@ -1162,9 +1096,7 @@
     },
     "/util/validateAddress/{address}": {
       "get": {
-        "tags": [
-          "util"
-        ],
+        "tags": ["util"],
         "summary": "Information about the given bitcoin address.",
         "description": "Return information about the given bitcoin address.",
         "operationId": "validateAddress",
@@ -1199,11 +1131,9 @@
     },
     "/rawtransactions/create/{inputs}/{outputs}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "createRawTxChange",
-        "description": "Create a transaction spending the given inputs and creating new outputs.",
+        "description": "Create a transaction spending the given inputs and creating new outputs. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsCreate",
         "parameters": [
           {
@@ -1257,11 +1187,9 @@
     },
     "/rawtransactions/change/{rawTx}/{prevTxs}/{destination}/{fee}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "createRawTxChange",
-        "description": "Adds a change output to the transaction.",
+        "description": "Adds a change output to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsChange",
         "parameters": [
           {
@@ -1299,7 +1227,7 @@
             "in": "path",
             "description": "The desired transaction fees",
             "required": true,
-            "example": 0.00003500,
+            "example": 0.000035,
             "schema": {
               "type": "number"
             }
@@ -1335,11 +1263,9 @@
     },
     "/rawtransactions/input/{rawTx}/{txid}/{n}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "createRawTxInput",
-        "description": "Adds a transaction input to the transaction.",
+        "description": "Adds a transaction input to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsInput",
         "parameters": [
           {
@@ -1382,11 +1308,9 @@
     },
     "/rawtransactions/opReturn/{rawTx}/{payload}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "createRawTxOpReturn",
-        "description": "Adds a payload with class C (op-return) encoding to the transaction.",
+        "description": "Adds a payload with class C (op-return) encoding to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsOpReturn",
         "parameters": [
           {
@@ -1419,11 +1343,9 @@
     },
     "/rawtransactions/reference/{rawTx}/{destination}": {
       "post": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "createRawTxReference",
-        "description": "Adds a reference output to the transaction.",
+        "description": "Adds a reference output to the transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsReference",
         "parameters": [
           {
@@ -1466,11 +1388,9 @@
     },
     "/rawtransactions/decodeTransaction/{rawTx}": {
       "get": {
-        "tags": [
-          "rawtransactions"
-        ],
+        "tags": ["rawtransactions"],
         "summary": "decodeTransaction",
-        "description": "Decodes an Omni transaction.",
+        "description": "Decodes an Omni transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
         "operationId": "rawTransactionsDecodeTransaction",
         "parameters": [
           {
@@ -1513,9 +1433,7 @@
     },
     "/dataRetrieval/balance/{address}/{propertyId}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "balance",
         "description": "Returns the token balance for a given address and property.",
         "operationId": "dataRetrievalBalance",
@@ -1551,11 +1469,65 @@
         }
       }
     },
+    "/dataRetrieval/balancesForAddress/{address}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "balancesForAddress",
+        "description": "Returns a list of all token balances for a given address. API reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html",
+        "operationId": "dataRetrievalBalancesForAddress",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "The address",
+            "required": true,
+            "example": "bchtest:qq2j9gp97gm9a6lwvhxc4zu28qvqm0x4j5e72v7ejg",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          },
+          "400": {
+            "description": "Invalid address. Note: use cashAddress"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/balancesForId/{propertyId}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "balanceForId",
+        "description": "Returns a list of token balances for a given currency or property identifier. API Reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html",
+        "operationId": "dataRetrievalBalancesForId",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The property identifier",
+            "required": true,
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          },
+          "400": {
+            "description": "Invalid address. Note: use cashAddress"
+          }
+        }
+      }
+    },
     "/dataRetrieval/balancesHash/{propertyId}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "balancesHash",
         "description": "Returns a hash of the balances for the property.",
         "operationId": "dataRetrievalBalancesHash",
@@ -1583,9 +1555,7 @@
     },
     "/dataRetrieval/crowdSale/{propertyId}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "crowdSale",
         "description": "Returns information about a crowdsale.",
         "operationId": "dataRetrievalCrowdSale",
@@ -1600,14 +1570,14 @@
               "type": "number"
             }
           },
-					{
-						"name": "verbose",
-						"in": "query",
-						"description": "List crowdsale participants (default: false)",
-						"required": false,
-						"type": "boolean",
-						"default": false
-					}
+          {
+            "name": "verbose",
+            "in": "query",
+            "description": "List crowdsale participants (default: false)",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
         ],
         "responses": {
           "200": {
@@ -1621,9 +1591,7 @@
     },
     "/dataRetrieval/currentConsensusHash": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "currentConsensusHash",
         "description": "Returns the consensus hash for all balances for the current block.",
         "operationId": "dataRetrievalCurrentConsensusHash",
@@ -1636,9 +1604,7 @@
     },
     "/dataRetrieval/grants/{propertyId}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "grants",
         "description": "Returns information about granted and revoked units of managed tokens.",
         "operationId": "dataRetrievalGrants",
@@ -1652,7 +1618,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1666,9 +1632,7 @@
     },
     "/dataRetrieval/info": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "info",
         "description": "Returns various state information of the client and protocol.",
         "operationId": "dataRetrievalInfo",
@@ -1681,9 +1645,7 @@
     },
     "/dataRetrieval/payload/{txid}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "payload",
         "description": "Get the payload for an Omni transaction.",
         "operationId": "dataRetrievalPayload",
@@ -1697,7 +1659,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1711,9 +1673,7 @@
     },
     "/dataRetrieval/property/{propertyId}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "property",
         "description": "Returns details for about the tokens or smart property to lookup.",
         "operationId": "dataRetrievalProperty",
@@ -1727,7 +1687,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1741,9 +1701,7 @@
     },
     "/dataRetrieval/seedBlocks/{startBlock}/{endBlock}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "seedBlocks",
         "description": "Returns a list of blocks containing Omni transactions for use in seed block filtering.",
         "operationId": "dataRetrievalSeedBlocks",
@@ -1757,7 +1715,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "endBlock",
             "in": "path",
@@ -1767,7 +1725,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1781,9 +1739,7 @@
     },
     "/dataRetrieval/STO/{txid}/{recipientFilter}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "STO",
         "description": "Get information and recipients of a send-to-owners transaction.",
         "operationId": "dataRetrievalSto",
@@ -1797,7 +1753,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "recipientFilter",
             "in": "path",
@@ -1807,7 +1763,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1821,9 +1777,7 @@
     },
     "/dataRetrieval/transaction/{txid}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "transaction",
         "description": "Get detailed information about an Omni transaction.",
         "operationId": "dataRetrievalTransaction",
@@ -1837,7 +1791,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1851,9 +1805,7 @@
     },
     "/dataRetrieval/blockTransactions/{index}": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "blockTransactions",
         "description": "Lists all Omni transactions in a block.",
         "operationId": "dataRetrievalBlockTransactions",
@@ -1867,7 +1819,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1881,9 +1833,7 @@
     },
     "/dataRetrieval/pendingTransactions": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "pendingTransactions",
         "description": "Returns a list of unconfirmed Omni transactions, pending in the memory pool.",
         "operationId": "dataRetrievalPendingTransactions",
@@ -1897,7 +1847,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1911,9 +1861,7 @@
     },
     "/dataRetrieval/properties": {
       "get": {
-        "tags": [
-          "dataRetrieval"
-        ],
+        "tags": ["dataRetrieval"],
         "summary": "properties",
         "description": "Lists all tokens or smart properties.",
         "operationId": "dataRetrievalProperties",
@@ -1927,7 +1875,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "count",
             "in": "query",
@@ -1937,7 +1885,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "skip",
             "in": "query",
@@ -1947,7 +1895,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "startBlock",
             "in": "query",
@@ -1957,7 +1905,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "endBlock",
             "in": "query",
@@ -1967,7 +1915,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -1978,9 +1926,7 @@
     },
     "/payloadCreation/burnBCH": {
       "get": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "burnBCH",
         "description": "Creates the payload to burn bch to get whc.",
         "operationId": "payloadCreationBurnBCH",
@@ -1993,9 +1939,7 @@
     },
     "/payloadCreation/changeIssuer/{propertyId}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "changeIssuer",
         "description": "Creates the payload to change the issuer on record of the given tokens.",
         "operationId": "payloadCreationChangeIssuer",
@@ -2009,7 +1953,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2031,9 +1975,7 @@
     },
     "/payloadCreation/closeCrowdSale/{propertyId}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "closeCrowdSale",
         "description": "Creates the payload to manually close a crowdsale.",
         "operationId": "payloadCreationCloseCrowdSale",
@@ -2047,7 +1989,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2069,9 +2011,7 @@
     },
     "/payloadCreation/grant/{propertyId}/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "grant",
         "description": "Creates the payload to issue or grant new units of managed tokens.",
         "operationId": "payloadCreationGrant",
@@ -2085,7 +2025,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "amount",
             "in": "path",
@@ -2095,7 +2035,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "memo",
             "in": "query",
@@ -2105,7 +2045,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2127,9 +2067,7 @@
     },
     "/payloadCreation/crowdsale/{ecosystem}/{propertyPrecision}/{previousId}/{category}/{subcategory}/{name}/{url}/{data}/{propertyIdDesired}/{tokensPerUnit}/{deadline}/{earlyBonus}/{undefine}/{totalNumber}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "crowdsale",
         "description": "Creates the payload for a new tokens issuance with crowdsale.",
         "operationId": "payloadCreationCrowdsale",
@@ -2143,7 +2081,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "propertyPrecision",
             "in": "path",
@@ -2153,7 +2091,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "previousId",
             "in": "path",
@@ -2163,7 +2101,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "category",
             "in": "path",
@@ -2173,7 +2111,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "subcategory",
             "in": "path",
@@ -2183,7 +2121,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "name",
             "in": "path",
@@ -2193,7 +2131,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "url",
             "in": "path",
@@ -2203,7 +2141,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "data",
             "in": "path",
@@ -2213,7 +2151,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "propertyIdDesired",
             "in": "path",
@@ -2223,7 +2161,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "tokensPerUnit",
             "in": "path",
@@ -2233,7 +2171,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "deadline",
             "in": "path",
@@ -2243,7 +2181,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "earlyBonus",
             "in": "path",
@@ -2253,7 +2191,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "undefine",
             "in": "path",
@@ -2263,7 +2201,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "totalNumber",
             "in": "path",
@@ -2273,7 +2211,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2284,9 +2222,7 @@
     },
     "/payloadCreation/fixed/{ecosystem}/{propertyPrecision}/{previousId}/{category}/{subcategory}/{name}/{url}/{data}/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "fixed",
         "description": "Creates the payload for a new tokens issuance with fixed supply.",
         "operationId": "payloadCreationFixed",
@@ -2300,7 +2236,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "propertyPrecision",
             "in": "path",
@@ -2310,7 +2246,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "previousId",
             "in": "path",
@@ -2320,7 +2256,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "category",
             "in": "path",
@@ -2330,7 +2266,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "subcategory",
             "in": "path",
@@ -2340,7 +2276,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "name",
             "in": "path",
@@ -2350,7 +2286,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "url",
             "in": "path",
@@ -2360,7 +2296,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "data",
             "in": "path",
@@ -2370,7 +2306,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "amount",
             "in": "path",
@@ -2380,7 +2316,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2391,9 +2327,7 @@
     },
     "/payloadCreation/managed/{ecosystem}/{propertyPrecision}/{previousId}/{category}/{subcategory}/{name}/{url}/{data}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "managed",
         "description": "Creates the payload for a new tokens issuance with manageable supply.",
         "operationId": "payloadCreationManaged",
@@ -2407,7 +2341,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "propertyPrecision",
             "in": "path",
@@ -2417,7 +2351,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "previousId",
             "in": "path",
@@ -2427,7 +2361,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "category",
             "in": "path",
@@ -2437,7 +2371,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "subcategory",
             "in": "path",
@@ -2447,7 +2381,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "name",
             "in": "path",
@@ -2457,7 +2391,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "url",
             "in": "path",
@@ -2467,7 +2401,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "data",
             "in": "path",
@@ -2477,7 +2411,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2491,9 +2425,7 @@
     },
     "/payloadCreation/participateCrowdSale/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "participateCrowdSale",
         "description": "Create the payload for a participate crowdsale transaction",
         "operationId": "payloadCreationParticipateCrowdSale",
@@ -2507,7 +2439,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2518,9 +2450,7 @@
     },
     "/payloadCreation/revoke/{propertyId}/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "revoke",
         "description": "Creates the payload to revoke units of managed tokens.",
         "operationId": "payloadCreationRevoke",
@@ -2534,7 +2464,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "amount",
             "in": "path",
@@ -2544,7 +2474,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "memo",
             "in": "query",
@@ -2554,7 +2484,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2565,9 +2495,7 @@
     },
     "/payloadCreation/sendAll/{ecosystem}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "sendAll",
         "description": "Create the payload for a send all transaction.",
         "operationId": "payloadCreationSendAll",
@@ -2581,7 +2509,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2592,9 +2520,7 @@
     },
     "/payloadCreation/simpleSend/{propertyId}/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "simpleSend",
         "description": "Create the payload for a simple send transaction.",
         "operationId": "payloadCreationSimpleSend",
@@ -2608,7 +2534,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "amount",
             "in": "path",
@@ -2618,7 +2544,7 @@
             "schema": {
               "type": "string"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
@@ -2629,9 +2555,7 @@
     },
     "/payloadCreation/STO/{propertyId}/{amount}": {
       "post": {
-        "tags": [
-          "payloadCreation"
-        ],
+        "tags": ["payloadCreation"],
         "summary": "STO",
         "description": "Creates the payload for a send-to-owners transaction",
         "operationId": "payloadCreationSTO",
@@ -2645,7 +2569,7 @@
             "schema": {
               "type": "number"
             }
-					},
+          },
           {
             "name": "amount",
             "in": "path",
@@ -2655,7 +2579,7 @@
             "schema": {
               "type": "string"
             }
-					},
+          },
           {
             "name": "distributionProperty",
             "in": "query",
@@ -2665,7 +2589,7 @@
             "schema": {
               "type": "number"
             }
-					}
+          }
         ],
         "responses": {
           "200": {
