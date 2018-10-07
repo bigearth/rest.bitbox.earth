@@ -223,8 +223,8 @@ router.post(
   "/participateCrowdSale/:amount",
   config.payloadCreationRateLimit9,
   async (req, res, next) => {
-    requestConfig.data.id = "whc_createpayload_particrwosale"
-    requestConfig.data.method = "whc_createpayload_particrwosale"
+    requestConfig.data.id = "whc_createpayload_particrowdsale"
+    requestConfig.data.method = "whc_createpayload_particrowdsale"
     requestConfig.data.params = [req.params.amount]
 
     try {
