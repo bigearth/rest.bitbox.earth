@@ -1,27 +1,27 @@
-"use strict";
+"use strict"
 
 //const chai = require("chai");
-const assert = require("assert");
+const assert = require("assert")
 //const expect = chai.expect;
-const httpMocks = require("node-mocks-http");
-const miningRoute = require("../routes/mining");
+const httpMocks = require("node-mocks-http")
+const miningRoute = require("../routes/mining")
 
 describe("#MiningRouter", () => {
   describe("#root", () => {
     it("should return 'mining' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/",
-      });
-      const mockResponse = httpMocks.createResponse();
-      miningRoute(mockRequest, mockResponse);
-      const actualResponseBody = mockResponse._getData();
+        url: "/"
+      })
+      const mockResponse = httpMocks.createResponse()
+      miningRoute(mockRequest, mockResponse)
+      const actualResponseBody = mockResponse._getData()
       const expectedResponseBody = {
-        status: "mining",
-      };
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody);
-    });
-  });
+        status: "mining"
+      }
+      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
+    })
+  })
 
   //
   // describe("#MiningGetBlockTemplate", () => {
@@ -47,15 +47,17 @@ describe("#MiningRouter", () => {
     it("should GET /getMiningInfo", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getMiningInfo",
-      });
+        url: "/getMiningInfo"
+      })
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
-      });
-      miningRoute(mockRequest, mockResponse);
+        eventEmitter: require("events").EventEmitter
+      })
+      miningRoute(mockRequest, mockResponse)
 
       mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(JSON.parse(mockResponse._getData()));
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        )
         assert.deepEqual(actualResponseBody, [
           "blocks",
           "currentblocksize",
@@ -65,31 +67,31 @@ describe("#MiningRouter", () => {
           "errors",
           "networkhashps",
           "pooledtx",
-          "chain",
-        ]);
-        done();
-      });
-    });
-  });
+          "chain"
+        ])
+        done()
+      })
+    })
+  })
 
   describe("#MiningGetNetworkHashps", () => {
     it("should GET /getNetworkHashps", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/getNetworkHashps",
-      });
+        url: "/getNetworkHashps"
+      })
       const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter,
-      });
-      miningRoute(mockRequest, mockResponse);
+        eventEmitter: require("events").EventEmitter
+      })
+      miningRoute(mockRequest, mockResponse)
 
       mockResponse.on("end", () => {
-        const actualResponseBody = parseInt(mockResponse._getData());
-        assert.equal(typeof actualResponseBody, "number");
-        done();
-      });
-    });
-  });
+        const actualResponseBody = parseInt(mockResponse._getData())
+        assert.equal(typeof actualResponseBody, "number")
+        done()
+      })
+    })
+  })
   //
   // describe("#MiningSubmitBlock", () => {
   //   it("should POST /SubmitBlock", (done) => {
@@ -109,4 +111,4 @@ describe("#MiningRouter", () => {
   //     });
   //   });
   // });
-});
+})

@@ -1,14 +1,14 @@
-"use strict";
+"use strict"
 
-const express = require("express");
-const router = express.Router();
-const RateLimit = require("express-rate-limit");
+const express = require("express")
+const router = express.Router()
+const RateLimit = require("express-rate-limit")
 
 const config = {
-  indexRateLimit1: undefined,
-};
+  indexRateLimit1: undefined
+}
 
-let i = 1;
+let i = 1
 while (i < 2) {
   config[`indexRateLimit${i}`] = new RateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour window
@@ -17,17 +17,19 @@ while (i < 2) {
     handler: function(req, res /*next*/) {
       res.format({
         json: function() {
-          res.status(500).json({ error: "Too many requests. Limits are 60 requests per minute." });
-        },
-      });
-    },
-  });
-  i++;
+          res.status(500).json({
+            error: "Too many requests. Limits are 60 requests per minute."
+          })
+        }
+      })
+    }
+  })
+  i++
 }
 
 /* GET home page. */
 router.get("/", config.indexRateLimit1, (req, res, next) => {
-  res.render("swagger");
-});
+  res.render("swagger")
+})
 
-module.exports = router;
+module.exports = router
