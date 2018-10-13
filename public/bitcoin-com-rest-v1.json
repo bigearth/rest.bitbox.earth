@@ -2597,6 +2597,96 @@
           }
         }
       }
+    },
+    "/payloadCreation/freeze/{toAddress}/{propertyId}/{amount}": {
+      "post": {
+        "tags": ["payloadCreation"],
+        "summary": "freeze",
+        "description": "Creates the payload for a freeze transaction",
+        "operationId": "payloadCreationFreeze",
+        "parameters": [
+          {
+            "name": "toAddress",
+            "in": "path",
+            "description": "The to address",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The identifier of the tokens to freeze",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "description": "The amount to freeze",
+            "required": true,
+            "example": "5000",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/payloadCreation/unfreeze/{toAddress}/{propertyId}/{amount}": {
+      "post": {
+        "tags": ["payloadCreation"],
+        "summary": "unfreeze",
+        "description": "Creates the payload for an unfreeze transaction",
+        "operationId": "payloadCreationUnfreeze",
+        "parameters": [
+          {
+            "name": "toAddress",
+            "in": "path",
+            "description": "The to address",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The identifier of the tokens to unfreeze",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "description": "The amount to unfreeze",
+            "required": true,
+            "example": "5000",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
     }
   },
   "servers": [
