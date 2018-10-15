@@ -1924,6 +1924,91 @@
         }
       }
     },
+    "/dataRetrieval/frozenBalance/{address}/{propertyId}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalance",
+        "description": "Returns the frozen token balance for a given address and property.",
+        "operationId": "dataRetrievalFrozenBalance",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "the address",
+            "required": true,
+            "example": "qqxyplcfuxnm9z4usma2wmnu4kw9mexeug580mc3lx",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "the property identifier",
+            "required": true,
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/frozenBalanceForAddress/{address}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalanceForAddress",
+        "description": "Returns the frozen token balance for a given address and property.",
+        "operationId": "dataRetrievalFrozenBalanceForAddress",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "the address",
+            "required": true,
+            "example": "qqxyplcfuxnm9z4usma2wmnu4kw9mexeug580mc3lx",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/frozenBalanceForId/{propertyId}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalanceForId",
+        "description": "Returns the frozen token balance for a given property.",
+        "operationId": "dataRetrievalFrozenBalanceForId",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "the Property ID",
+            "required": true,
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
     "/payloadCreation/burnBCH": {
       "get": {
         "tags": ["payloadCreation"],
