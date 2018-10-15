@@ -4,6 +4,8 @@ const express = require("express")
 const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
+const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
+const BITBOX = new BITBOXCli()
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -363,8 +365,10 @@ router.get(
   "/frozenBalance/:address/:propertyId",
   config.dataRetrievalRateLimit18,
   async (req, res, next) => {
-    const params = [req.query.address, req.query.propertyId]
-    if (req.query.address) params.push()
+    const params = [
+      BITBOX.Address.toCashAddress(req.params.address),
+      req.params.propertyId
+    ]
     requestConfig.data.id = "whc_getfrozenbalance"
     requestConfig.data.method = "whc_getfrozenbalance"
     requestConfig.data.params = params
@@ -382,8 +386,7 @@ router.get(
   "/frozenBalanceForAddress/:address",
   config.dataRetrievalRateLimit19,
   async (req, res, next) => {
-    const params = [req.query.address]
-    if (req.query.address) params.push()
+    const params = [BITBOX.Address.toCashAddress(req.params.address)]
     requestConfig.data.id = "whc_getfrozenbalanceforaddress"
     requestConfig.data.method = "whc_getfrozenbalanceforaddress"
     requestConfig.data.params = params
@@ -401,8 +404,7 @@ router.get(
   "/frozenBalanceForId/:propertyId",
   config.dataRetrievalRateLimit20,
   async (req, res, next) => {
-    const params = [req.query.propertyId]
-    if (req.query.address) params.push()
+    const params = [req.params.propertyId]
     requestConfig.data.id = "whc_getfrozenbalanceforid"
     requestConfig.data.method = "whc_getfrozenbalanceforid"
     requestConfig.data.params = params
