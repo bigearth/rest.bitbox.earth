@@ -367,7 +367,7 @@ router.get(
   async (req, res, next) => {
     const params = [
       BITBOX.Address.toCashAddress(req.params.address),
-      req.params.propertyId
+      parseInt(req.params.propertyId)
     ]
     requestConfig.data.id = "whc_getfrozenbalance"
     requestConfig.data.method = "whc_getfrozenbalance"
@@ -404,7 +404,7 @@ router.get(
   "/frozenBalanceForId/:propertyId",
   config.dataRetrievalRateLimit20,
   async (req, res, next) => {
-    const params = [req.params.propertyId]
+    const params = [parseInt(req.params.propertyId)]
     requestConfig.data.id = "whc_getfrozenbalanceforid"
     requestConfig.data.method = "whc_getfrozenbalanceforid"
     requestConfig.data.params = params
