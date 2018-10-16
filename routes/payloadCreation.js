@@ -320,13 +320,13 @@ router.post(
 )
 
 router.post(
-  "/freeze/:toAddress/:propertyId/:amount",
+  "/freeze/:toAddress/:propertyId",
   config.payloadCreationRateLimit14,
   async (req, res, next) => {
     const params = [
       BITBOX.Address.toCashAddress(req.params.toAddress),
       parseInt(req.params.propertyId),
-      req.params.amount
+      0
     ]
 
     requestConfig.data.id = "whc_createpayload_freeze"
@@ -343,13 +343,13 @@ router.post(
 )
 
 router.post(
-  "/unfreeze/:toAddress/:propertyId/:amount",
+  "/unfreeze/:toAddress/:propertyId",
   config.payloadCreationRateLimit15,
   async (req, res, next) => {
     const params = [
       BITBOX.Address.toCashAddress(req.params.toAddress),
       parseInt(req.params.propertyId),
-      req.params.amount
+      0
     ]
 
     requestConfig.data.id = "whc_createpayload_unfreeze"

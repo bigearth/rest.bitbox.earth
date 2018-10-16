@@ -2683,7 +2683,7 @@
         }
       }
     },
-    "/payloadCreation/freeze/{toAddress}/{propertyId}/{amount}": {
+    "/payloadCreation/freeze/{toAddress}/{propertyId}": {
       "post": {
         "tags": ["payloadCreation"],
         "summary": "freeze",
@@ -2709,16 +2709,6 @@
             "schema": {
               "type": "number"
             }
-          },
-          {
-            "name": "amount",
-            "in": "path",
-            "description": "The amount to freeze",
-            "required": true,
-            "example": "5000",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2728,7 +2718,7 @@
         }
       }
     },
-    "/payloadCreation/unfreeze/{toAddress}/{propertyId}/{amount}": {
+    "/payloadCreation/unfreeze/{toAddress}/{propertyId}": {
       "post": {
         "tags": ["payloadCreation"],
         "summary": "unfreeze",
@@ -2753,16 +2743,6 @@
             "example": 3,
             "schema": {
               "type": "number"
-            }
-          },
-          {
-            "name": "amount",
-            "in": "path",
-            "description": "The amount to unfreeze",
-            "required": true,
-            "example": "5000",
-            "schema": {
-              "type": "string"
             }
           }
         ],
