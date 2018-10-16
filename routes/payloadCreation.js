@@ -326,7 +326,7 @@ router.post(
     const params = [
       BITBOX.Address.toCashAddress(req.params.toAddress),
       parseInt(req.params.propertyId),
-      parseInt(0)
+      "0"
     ]
 
     requestConfig.data.id = "whc_createpayload_freeze"
@@ -349,7 +349,7 @@ router.post(
     const params = [
       BITBOX.Address.toCashAddress(req.params.toAddress),
       parseInt(req.params.propertyId),
-      parseInt(0)
+      "0"
     ]
 
     requestConfig.data.id = "whc_createpayload_unfreeze"
