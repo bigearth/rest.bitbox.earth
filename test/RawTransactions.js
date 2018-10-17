@@ -240,6 +240,7 @@ describe("#RawTransactionsRouter", () => {
   })
   */
 
+  /*
   describe("#decodeTransaction", () => {
     it("should POST /decodeTransaction/:rawTx", done => {
       const mockRequest = httpMocks.createRequest({
@@ -259,6 +260,7 @@ describe("#RawTransactionsRouter", () => {
       })
     })
   })
+*/
 
   describe("#create", () => {
     it("should POST /create/:inputs/:outputs", done => {
