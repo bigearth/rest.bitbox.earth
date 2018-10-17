@@ -1,9 +1,9 @@
-"use strict";
+"use strict"
 
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 //const axios = require("axios");
-const RateLimit = require("express-rate-limit");
+const RateLimit = require("express-rate-limit")
 
 //const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 //const BITBOX = new BITBOXCli();
@@ -15,10 +15,10 @@ const RateLimit = require("express-rate-limit");
 //const password = process.env.RPC_PASSWORD;
 
 const config = {
-  networkRateLimit1: undefined,
-};
+  networkRateLimit1: undefined
+}
 
-let i = 1;
+let i = 1
 while (i < 2) {
   config[`networkRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
@@ -27,17 +27,19 @@ while (i < 2) {
     handler: function(req, res /*next*/) {
       res.format({
         json: function() {
-          res.status(500).json({ error: "Too many requests. Limits are 60 requests per minute." });
-        },
-      });
-    },
-  });
-  i++;
+          res.status(500).json({
+            error: "Too many requests. Limits are 60 requests per minute."
+          })
+        }
+      })
+    }
+  })
+  i++
 }
 
 router.get("/", config.networkRateLimit1, (req, res, next) => {
-  res.json({ status: "network" });
-});
+  res.json({ status: "network" })
+})
 
 // router.post('/addNode/:node/:command', (req, res, next) => {
 //   BITBOX.Network.addNode(req.params.node, req.params.command)
@@ -197,4 +199,4 @@ router.get("/", config.networkRateLimit1, (req, res, next) => {
 //   });
 // });
 
-module.exports = router;
+module.exports = router
