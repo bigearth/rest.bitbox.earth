@@ -15,7 +15,7 @@
       "description": "Address details and utxo",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/address.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/address"
       }
     },
     {
@@ -23,7 +23,7 @@
       "description": "Block Details",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/block.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/block"
       }
     },
     {
@@ -31,7 +31,7 @@
       "description": "Interacting w/ the BCH Blockchain",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/blockchain.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/blockchain"
       }
     },
     {
@@ -39,7 +39,7 @@
       "description": "Control your blockchain",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/control.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/control"
       }
     },
     {
@@ -47,7 +47,7 @@
       "description": "Mining w/ the BCH Blockchain",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/mining.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/mining"
       }
     },
     {
@@ -55,7 +55,7 @@
       "description": "Create transactions to be transmitted to the network.",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions"
       }
     },
     {
@@ -63,7 +63,7 @@
       "description": "Transaction details.",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/rawtransactions"
       }
     },
     {
@@ -71,7 +71,7 @@
       "description": "Bitcoin Cash utilities.",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/bitbox/docs/util.html"
+        "url": "https://developer.bitcoin.com/bitbox/docs/util"
       }
     },
     {
@@ -79,7 +79,7 @@
       "description": "dataRetrieval",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html"
+        "url": "https://developer.bitcoin.com/wormhole/docs/dataRetrieval"
       }
     },
     {
@@ -87,7 +87,7 @@
       "description": "payloadCreation",
       "externalDocs": {
         "description": "Find out more",
-        "url": "https://developer.bitcoin.com/wormhole/docs/payloadCreation.html"
+        "url": "https://developer.bitcoin.com/wormhole/docs/payloadCreation"
       }
     }
   ],
@@ -1133,7 +1133,7 @@
       "post": {
         "tags": ["rawtransactions"],
         "summary": "createRawTxChange",
-        "description": "Create a transaction spending the given inputs and creating new outputs. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Create a transaction spending the given inputs and creating new outputs. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsCreate",
         "parameters": [
           {
@@ -1189,7 +1189,7 @@
       "post": {
         "tags": ["rawtransactions"],
         "summary": "createRawTxChange",
-        "description": "Adds a change output to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Adds a change output to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsChange",
         "parameters": [
           {
@@ -1265,7 +1265,7 @@
       "post": {
         "tags": ["rawtransactions"],
         "summary": "createRawTxInput",
-        "description": "Adds a transaction input to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Adds a transaction input to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsInput",
         "parameters": [
           {
@@ -1310,7 +1310,7 @@
       "post": {
         "tags": ["rawtransactions"],
         "summary": "createRawTxOpReturn",
-        "description": "Adds a payload with class C (op-return) encoding to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Adds a payload with class C (op-return) encoding to the transaction.API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsOpReturn",
         "parameters": [
           {
@@ -1345,7 +1345,7 @@
       "post": {
         "tags": ["rawtransactions"],
         "summary": "createRawTxReference",
-        "description": "Adds a reference output to the transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Adds a reference output to the transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsReference",
         "parameters": [
           {
@@ -1390,7 +1390,7 @@
       "get": {
         "tags": ["rawtransactions"],
         "summary": "decodeTransaction",
-        "description": "Decodes an Omni transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions.html",
+        "description": "Decodes an Omni transaction. API Reference: https://developer.bitcoin.com/wormhole/docs/rawTransactions",
         "operationId": "rawTransactionsDecodeTransaction",
         "parameters": [
           {
@@ -1473,7 +1473,7 @@
       "get": {
         "tags": ["dataRetrieval"],
         "summary": "balancesForAddress",
-        "description": "Returns a list of all token balances for a given address. API reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html",
+        "description": "Returns a list of all token balances for a given address. API reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval",
         "operationId": "dataRetrievalBalancesForAddress",
         "parameters": [
           {
@@ -1501,7 +1501,7 @@
       "get": {
         "tags": ["dataRetrieval"],
         "summary": "balanceForId",
-        "description": "Returns a list of token balances for a given currency or property identifier. API Reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval.html",
+        "description": "Returns a list of token balances for a given currency or property identifier. API Reference: https://developer.bitcoin.com/wormhole/docs/dataRetrieval",
         "operationId": "dataRetrievalBalancesForId",
         "parameters": [
           {
@@ -1912,6 +1912,91 @@
             "description": "last block to include in the search (default: 9999999)",
             "required": false,
             "example": 9999999,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/frozenBalance/{address}/{propertyId}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalance",
+        "description": "Returns the frozen token balance for a given address and property.",
+        "operationId": "dataRetrievalFrozenBalance",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "the address",
+            "required": true,
+            "example": "qqxyplcfuxnm9z4usma2wmnu4kw9mexeug580mc3lx",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "the property identifier",
+            "required": true,
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/frozenBalanceForAddress/{address}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalanceForAddress",
+        "description": "Returns the frozen token balance for a given address and property.",
+        "operationId": "dataRetrievalFrozenBalanceForAddress",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "description": "the address",
+            "required": true,
+            "example": "qqxyplcfuxnm9z4usma2wmnu4kw9mexeug580mc3lx",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/dataRetrieval/frozenBalanceForId/{propertyId}": {
+      "get": {
+        "tags": ["dataRetrieval"],
+        "summary": "frozenBalanceForId",
+        "description": "Returns the frozen token balance for a given property.",
+        "operationId": "dataRetrievalFrozenBalanceForId",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "the Property ID",
+            "required": true,
+            "example": 1,
             "schema": {
               "type": "number"
             }
@@ -2586,6 +2671,76 @@
             "description": "The identifier of the property holders to distribute to",
             "required": false,
             "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/payloadCreation/freeze/{toAddress}/{propertyId}": {
+      "post": {
+        "tags": ["payloadCreation"],
+        "summary": "freeze",
+        "description": "Creates the payload for a freeze transaction",
+        "operationId": "payloadCreationFreeze",
+        "parameters": [
+          {
+            "name": "toAddress",
+            "in": "path",
+            "description": "The to address",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The identifier of the tokens to freeze",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
+    },
+    "/payloadCreation/unfreeze/{toAddress}/{propertyId}": {
+      "post": {
+        "tags": ["payloadCreation"],
+        "summary": "unfreeze",
+        "description": "Creates the payload for an unfreeze transaction",
+        "operationId": "payloadCreationUnfreeze",
+        "parameters": [
+          {
+            "name": "toAddress",
+            "in": "path",
+            "description": "The to address",
+            "required": true,
+            "example": 3,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The identifier of the tokens to unfreeze",
+            "required": true,
+            "example": 3,
             "schema": {
               "type": "number"
             }

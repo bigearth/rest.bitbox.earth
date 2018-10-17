@@ -4,6 +4,8 @@ const express = require("express")
 const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
+const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
+const BITBOX = new BITBOXCli()
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -29,11 +31,13 @@ const config = {
   dataRetrievalRateLimit15: undefined,
   dataRetrievalRateLimit16: undefined,
   dataRetrievalRateLimit17: undefined,
-  dataRetrievalRateLimit18: undefined
+  dataRetrievalRateLimit18: undefined,
+  dataRetrievalRateLimit19: undefined,
+  dataRetrievalRateLimit20: undefined
 }
 
 let i = 1
-while (i < 19) {
+while (i < 21) {
   config[`dataRetrievalRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -347,6 +351,63 @@ router.get(
     requestConfig.data.id = "whc_listproperties"
     requestConfig.data.method = "whc_listproperties"
     requestConfig.data.params = []
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/frozenBalance/:address/:propertyId",
+  config.dataRetrievalRateLimit18,
+  async (req, res, next) => {
+    const params = [
+      BITBOX.Address.toCashAddress(req.params.address),
+      parseInt(req.params.propertyId)
+    ]
+    requestConfig.data.id = "whc_getfrozenbalance"
+    requestConfig.data.method = "whc_getfrozenbalance"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/frozenBalanceForAddress/:address",
+  config.dataRetrievalRateLimit19,
+  async (req, res, next) => {
+    const params = [BITBOX.Address.toCashAddress(req.params.address)]
+    requestConfig.data.id = "whc_getfrozenbalanceforaddress"
+    requestConfig.data.method = "whc_getfrozenbalanceforaddress"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/frozenBalanceForId/:propertyId",
+  config.dataRetrievalRateLimit20,
+  async (req, res, next) => {
+    const params = [parseInt(req.params.propertyId)]
+    requestConfig.data.id = "whc_getfrozenbalanceforid"
+    requestConfig.data.method = "whc_getfrozenbalanceforid"
+    requestConfig.data.params = params
 
     try {
       const response = await BitboxHTTP(requestConfig)
