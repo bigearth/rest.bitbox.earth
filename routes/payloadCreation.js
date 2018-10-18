@@ -11,6 +11,9 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
+const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
+const BITBOX = new BITBOXCli()
+
 const config = {
   payloadCreationRateLimit1: undefined,
   payloadCreationRateLimit2: undefined,
@@ -24,11 +27,13 @@ const config = {
   payloadCreationRateLimit10: undefined,
   payloadCreationRateLimit11: undefined,
   payloadCreationRateLimit12: undefined,
-  payloadCreationRateLimit13: undefined
+  payloadCreationRateLimit13: undefined,
+  payloadCreationRateLimit14: undefined,
+  payloadCreationRateLimit15: undefined
 }
 
 let i = 1
-while (i < 14) {
+while (i < 16) {
   config[`payloadCreationRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -223,8 +228,8 @@ router.post(
   "/participateCrowdSale/:amount",
   config.payloadCreationRateLimit9,
   async (req, res, next) => {
-    requestConfig.data.id = "whc_createpayload_particrwosale"
-    requestConfig.data.method = "whc_createpayload_particrwosale"
+    requestConfig.data.id = "whc_createpayload_particrowdsale"
+    requestConfig.data.method = "whc_createpayload_particrowdsale"
     requestConfig.data.params = [req.params.amount]
 
     try {
@@ -303,6 +308,52 @@ router.post(
 
     requestConfig.data.id = "whc_createpayload_sto"
     requestConfig.data.method = "whc_createpayload_sto"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/freeze/:toAddress/:propertyId",
+  config.payloadCreationRateLimit14,
+  async (req, res, next) => {
+    const params = [
+      BITBOX.Address.toCashAddress(req.params.toAddress),
+      parseInt(req.params.propertyId),
+      "100"
+    ]
+
+    requestConfig.data.id = "whc_createpayload_freeze"
+    requestConfig.data.method = "whc_createpayload_freeze"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/unfreeze/:toAddress/:propertyId",
+  config.payloadCreationRateLimit15,
+  async (req, res, next) => {
+    const params = [
+      BITBOX.Address.toCashAddress(req.params.toAddress),
+      parseInt(req.params.propertyId),
+      "100"
+    ]
+
+    requestConfig.data.id = "whc_createpayload_unfreeze"
+    requestConfig.data.method = "whc_createpayload_unfreeze"
     requestConfig.data.params = params
 
     try {
