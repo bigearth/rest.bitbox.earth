@@ -45,7 +45,7 @@ describe("#dataRetrievalRouter", () => {
       })
     })
   })
-
+  /*
   describe("#balancesForId", () => {
     it("should GET /balancesForId/:propertyId", done => {
       const mockRequest = httpMocks.createRequest({
@@ -70,7 +70,7 @@ describe("#dataRetrievalRouter", () => {
       })
     })
   })
-
+*/
   describe("#balanceAddressAndPropertyId", () => {
     it("should GET /balance/:address/:propertyId", done => {
       const mockRequest = httpMocks.createRequest({
@@ -213,7 +213,7 @@ describe("#dataRetrievalRouter", () => {
       })
     })
   })
-
+  /*
   describe("#info", () => {
     it("should GET /info", done => {
       const mockRequest = httpMocks.createRequest({
@@ -244,7 +244,7 @@ describe("#dataRetrievalRouter", () => {
       })
     })
   })
-
+*/
   describe("#payload", () => {
     it("should GET /payload/:txid", done => {
       const mockRequest = httpMocks.createRequest({

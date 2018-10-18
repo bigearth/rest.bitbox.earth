@@ -26,7 +26,7 @@ describe("#BlockRouter", () => {
     it("should GET /details/:id height", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
-        url: "/details/500000"
+        url: "/details/549608"
       })
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter
@@ -37,6 +37,10 @@ describe("#BlockRouter", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
         )
+        //console.log(
+        //  `actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`
+        //)
+
         assert.deepEqual(actualResponseBody, [
           "hash",
           "size",
