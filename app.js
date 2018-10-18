@@ -58,6 +58,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
+
 //
 // let username = process.env.USERNAME;
 // let password = process.env.PASSWORD;
@@ -77,7 +78,7 @@ app.use(function(req, res, next) {
 const prefix = "v1"
 app.use("/", index)
 app.use(`/${prefix}/` + `health-check`, healthCheck)
-app.use(`/${prefix}/` + `address`, address)
+app.use(`/${prefix}/` + `address`, address.router)
 app.use(`/${prefix}/` + `blockchain`, blockchain)
 app.use(`/${prefix}/` + `block`, block)
 app.use(`/${prefix}/` + `control`, control)
@@ -107,6 +108,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.json({
     status: 500,
+
     message: err.message
   })
 })
@@ -114,7 +116,6 @@ app.use(function(err, req, res, next) {
 /**
  * Get port from environment and store in Express.
  */
-
 const port = normalizePort(process.env.PORT || "3000")
 app.set("port", port)
 
