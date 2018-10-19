@@ -110,6 +110,7 @@ router.get(
   config.addressRateLimit3,
   async (req, res, next) => {
     try {
+      console.log("success message")
       let addresses = JSON.parse(req.params.address)
       if (addresses.length > 20) {
         res.json({
@@ -144,6 +145,7 @@ router.get(
           res.send(error.response.data.error.message)
         })
     } catch (error) {
+      console.log("error message")
       axios
         .get(
           `${
