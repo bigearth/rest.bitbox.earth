@@ -144,6 +144,7 @@ router.get(
           res.send(error.response.data.error.message)
         })
     } catch (error) {
+      console.log("winning")
       axios
         .get(
           `${
