@@ -78,7 +78,7 @@ app.use(function(req, res, next) {
 const prefix = "v1"
 app.use("/", index)
 app.use(`/${prefix}/` + `health-check`, healthCheck)
-app.use(`/${prefix}/` + `address`, address.router)
+app.use(`/${prefix}/` + `address`, address)
 app.use(`/${prefix}/` + `blockchain`, blockchain)
 app.use(`/${prefix}/` + `block`, block)
 app.use(`/${prefix}/` + `control`, control)
