@@ -65,11 +65,16 @@ router.get("/details/:id", config.blockRateLimit2, (req, res, next) => {
             res.json(parsed)
           })
           .catch(error => {
-            res.send(error.response.data.error.message)
+            //res.send(error.response.data.error.message)
+            console.log(`Error: `, error)
+            res.status(500)
+            return res.send(error)
           })
       })
       .catch(error => {
-        res.send(error.response.data.error.message)
+        //res.send(error.response.data.error.message)
+        res.status(500)
+        return res.send(error)
       })
   } else {
     axios
@@ -79,7 +84,9 @@ router.get("/details/:id", config.blockRateLimit2, (req, res, next) => {
         res.json(parsed)
       })
       .catch(error => {
-        res.send(error.response.data.error.message)
+        //res.send(error.response.data.error.message)
+        res.status(500)
+        return res.send(error)
       })
   }
 })
