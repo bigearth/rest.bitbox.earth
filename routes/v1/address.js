@@ -99,7 +99,6 @@ router.get(
           res.json(parsed)
         })
         .catch(error => {
-          console.log("errrrrr", error)
           res.send(error.response.data.error.message)
         })
     }
