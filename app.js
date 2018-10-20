@@ -1,19 +1,16 @@
 "use strict"
 const express = require("express")
 const path = require("path")
-const favicon = require("serve-favicon")
 const logger = require("morgan")
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
 const basicAuth = require("express-basic-auth")
 const helmet = require("helmet")
-const RateLimit = require("express-rate-limit")
-const axios = require("axios")
 const debug = require("debug")("rest-cloud:server")
 const http = require("http")
 const BitcoinCashZMQDecoder = require("bitcoincash-zmq-decoder")
 
-let zmq = require("zeromq"),
+const zmq = require("zeromq"),
   sock = zmq.socket("sub")
 
 const swStats = require("swagger-stats")
@@ -23,10 +20,10 @@ require("dotenv").config()
 
 const app = express()
 
+// v1
 const index = require("./routes/index")
 const healthCheck = require("./routes/health-check")
 const address = require("./routes/address")
-
 const block = require("./routes/block")
 const blockchain = require("./routes/blockchain")
 const control = require("./routes/control")
@@ -38,6 +35,12 @@ const transaction = require("./routes/transaction")
 const util = require("./routes/util")
 const dataRetrieval = require("./routes/dataRetrieval")
 const payloadCreation = require("./routes/payloadCreation")
+
+// v2
+const indexV2 = require("./routes/v2/index")
+const healthCheckV2 = require("./routes/v2/health-check")
+const blockV2 = require("./routes/v2/block")
+const utilV2 = require("./routes/v2/util")
 
 app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }))
 
@@ -51,8 +54,6 @@ app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "jade")
 
 app.use("/public", express.static(`${__dirname}/public`))
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger("dev"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -90,6 +91,22 @@ app.use(`/${prefix}/` + `transaction`, transaction)
 app.use(`/${prefix}/` + `util`, util)
 app.use(`/${prefix}/` + `dataRetrieval`, dataRetrieval)
 app.use(`/${prefix}/` + `payloadCreation`, payloadCreation)
+
+const v2prefix = "v2"
+app.use("/", indexV2)
+app.use(`/${v2prefix}/` + `health-check`, healthCheckV2)
+// app.use(`/${prefix}/` + `address`, address)
+// app.use(`/${prefix}/` + `blockchain`, blockchain)
+app.use(`/${v2prefix}/` + `block`, blockV2)
+// app.use(`/${prefix}/` + `control`, control)
+// app.use(`/${prefix}/` + `generating`, generating)
+// app.use(`/${prefix}/` + `mining`, mining)
+// app.use(`/${prefix}/` + `network`, network)
+// app.use(`/${prefix}/` + `rawtransactions`, rawtransactions)
+// app.use(`/${prefix}/` + `transaction`, transaction)
+app.use(`/${v2prefix}/` + `util`, utilV2)
+// app.use(`/${prefix}/` + `dataRetrieval`, dataRetrieval)
+// app.use(`/${prefix}/` + `payloadCreation`, payloadCreation)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -7,7 +7,7 @@ const healthCheckRoute = require("../routes/health-check")
 
 describe("#HealthCheckRouter", () => {
   describe("#root", () => {
-    it("should return 'winnging' for GET /", () => {
+    it("should return 'winning' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"
