@@ -2,7 +2,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const payloadCreation = require("../routes/payloadCreation")
+const payloadCreation = require("../routes/v1/payloadCreation")
 
 describe("#payloadCreationRouter", () => {
   describe("#root", () => {
