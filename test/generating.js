@@ -4,7 +4,7 @@
 const assert = require("assert")
 // const expect = chai.expect;
 const httpMocks = require("node-mocks-http")
-const generatingRoute = require("../routes/generating")
+const generatingRoute = require("../routes/v1/generating")
 
 describe("#GeneratingRouter", () => {
   describe("#root", () => {
