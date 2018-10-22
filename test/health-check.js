@@ -3,11 +3,11 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const healthCheckRoute = require("../routes/health-check")
+const healthCheckRoute = require("../routes/v1/health-check")
 
 describe("#HealthCheckRouter", () => {
   describe("#root", () => {
-    it("should return 'winnging' for GET /", () => {
+    it("should return 'winning' for GET /", () => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/"

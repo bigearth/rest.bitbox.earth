@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const addressRoute = require("../routes/address")
+const addressRoute = require("../routes/v1/address")
 
 const util = require("util")
 util.inspect.defaultOptions = {

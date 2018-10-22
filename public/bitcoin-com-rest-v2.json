@@ -249,17 +249,60 @@
         }
       }
     },
-    "/block/details/{id}": {
+    "/block/detailsByHash/{hash}": {
       "get": {
         "tags": ["block"],
         "summary": "Block details",
-        "description": "Details about a block",
-        "operationId": "blockDetails",
+        "description": "Details about a block by hash",
+        "operationId": "blockDetailsHash",
         "parameters": [
           {
-            "name": "id",
+            "name": "hash",
             "in": "path",
-            "description": "Block hash/height",
+            "description": "Block hash",
+            "required": true,
+            "example": "000000000000000005e14d3f9fdfb70745308706615cfa9edca4f4558332b201",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlockDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Received an invalid block hash.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "status": 500,
+                  "message": "Received an invalid block hash."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/block/detailsByHeight/{height}": {
+      "get": {
+        "tags": ["block"],
+        "summary": "Block details",
+        "description": "Details about a block by height",
+        "operationId": "blockDetailsHeight",
+        "parameters": [
+          {
+            "name": "height",
+            "in": "path",
+            "description": "Block height",
             "required": true,
             "example": "500000",
             "schema": {
@@ -2752,24 +2795,11 @@
           }
         }
       }
-    },
-    "/slp/list": {
-      "get": {
-        "tags": ["slp"],
-        "summary": "list",
-        "description": "List all SLP tokens",
-        "operationId": "slpList",
-        "responses": {
-          "200": {
-            "description": "successful response"
-          }
-        }
-      }
     }
   },
   "servers": [
     {
-      "url": "/v1"
+      "url": "/v2"
     }
   ],
   "components": {

@@ -5,12 +5,6 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
-//const WormholeHTTP = axios.create({
-//  baseURL: process.env.WORMHOLE_RPC_BASEURL,
-//});
-//const wh_username = process.env.WORMHOLE_RPC_USERNAME;
-//const wh_password = process.env.WORMHOLE_RPC_PASSWORD;
-
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
 
@@ -237,6 +231,50 @@ router.get(
   "/unconfirmed/:address",
   config.addressRateLimit4,
   async (req, res, next) => {
+    try {
+      let addresses = JSON.parse(req.params.address)
+      if (addresses.length > 20) {
+        res.json({
+          error: "Array too large. Max 20 addresses"
+        })
+      }
+      addresses = addresses.map(address =>
+        BITBOX.Address.toLegacyAddress(address)
+      )
+      const final = []
+      addresses.forEach(address => {
+        final.push([])
+      })
+      axios
+        .get(`${process.env.BITCOINCOM_BASEURL}txs/?address=${addresses}`)
+        .then(response => {
+          res.json(response.data)
+        })
+        .catch(error => {
+          res.send(error.response.data.error.message)
+        })
+    } catch (error) {
+      axios
+        .get(
+          `${
+            process.env.BITCOINCOM_BASEURL
+          }txs/?address=${BITBOX.Address.toLegacyAddress(req.params.address)}`
+        )
+        .then(response => {
+          console.log(response.data)
+          res.json(response.data)
+        })
+        .catch(error => {
+          res.send(error.response.data.error.message)
+        })
+    }
+  }
+)
+
+router.get(
+  "/transactions/:address",
+  config.addressRateLimit5,
+  (req, res, next) => {
     try {
       let addresses = JSON.parse(req.params.address)
       if (addresses.length > 20) {
