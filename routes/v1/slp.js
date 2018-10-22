@@ -4,6 +4,7 @@ const express = require("express")
 const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
+const bitdbToken = process.env.BITDB_TOKEN
 
 const config = {
   slpRateLimit1: undefined,
@@ -51,7 +52,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     const b64 = Buffer.from(s).toString("base64")
     const url = `https://bitdb.network/q/${b64}`
     const header = {
-      headers: { key: "" }
+      headers: { key: bitdbToken }
     }
 
     const tokenRes = await axios.get(url, header)
@@ -59,10 +60,9 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
     res.json(tokens)
 
-    console.log("tokens: ", tokens)
     return tokens
   } catch (err) {
-    console.log(err)
+    res.status(500).send(error.response.data.error)
   }
 })
 
