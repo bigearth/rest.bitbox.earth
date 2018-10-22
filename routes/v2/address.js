@@ -5,12 +5,6 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
-//const WormholeHTTP = axios.create({
-//  baseURL: process.env.WORMHOLE_RPC_BASEURL,
-//});
-//const wh_username = process.env.WORMHOLE_RPC_USERNAME;
-//const wh_password = process.env.WORMHOLE_RPC_PASSWORD;
-
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
 
