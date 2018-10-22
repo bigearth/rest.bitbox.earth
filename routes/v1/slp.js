@@ -39,7 +39,6 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     const query = {
       v: 3,
       q: {
-        db: ["c"],
         find: { "out.h1": "534c5000", "out.s3": "GENESIS" },
         limit: 1000
       },
