@@ -44,7 +44,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
       },
       r: {
         f:
-          '[ .[] | { timestamp: (.blk.t | strftime("%Y-%m-%d %H:%M")), symbol: .out[0].s4, name: .out[0].s5, document: .out[0].s6, URI: "https://tokengraph.network/token/\\(.tx.h)" } ]'
+          '[ .[] | { id: .tx.h, timestamp: (.blk.t | strftime("%Y-%m-%d %H:%M")), symbol: .out[0].s4, name: .out[0].s5, document: .out[0].s6 } ]'
       }
     }
 
@@ -58,7 +58,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     const tokenRes = await axios.get(url, header)
     const tokens = tokenRes.data.c
     if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
-    res.json(tokens)
+    res.json(tokens.reverse())
 
     return tokens
   } catch (err) {
