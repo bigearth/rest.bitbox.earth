@@ -58,7 +58,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     const tokenRes = await axios.get(url, header)
     const tokens = tokenRes.data.c
     if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
-    res.json(tokens)
+    res.json(tokens.reverse())
 
     return tokens
   } catch (err) {
