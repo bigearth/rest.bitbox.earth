@@ -35,6 +35,7 @@ const transactionV1 = require("./routes/v1/transaction")
 const utilV1 = require("./routes/v1/util")
 const dataRetrievalV1 = require("./routes/v1/dataRetrieval")
 const payloadCreationV1 = require("./routes/v1/payloadCreation")
+const slpV1 = require("./routes/v1/slp")
 
 // v2
 const indexV2 = require("./routes/v2/index")
@@ -101,6 +102,7 @@ app.use(`/${v1prefix}/` + `transaction`, transactionV1)
 app.use(`/${v1prefix}/` + `util`, utilV1)
 app.use(`/${v1prefix}/` + `dataRetrieval`, dataRetrievalV1)
 app.use(`/${v1prefix}/` + `payloadCreation`, payloadCreationV1)
+app.use(`/${v1prefix}/` + `slp`, slpV1)
 
 const v2prefix = "v2"
 app.use("/", indexV2)

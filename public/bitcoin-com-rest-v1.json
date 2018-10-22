@@ -2752,6 +2752,19 @@
           }
         }
       }
+    },
+    "/slp/list": {
+      "get": {
+        "tags": ["slp"],
+        "summary": "list",
+        "description": "List all SLP tokens",
+        "operationId": "slpList",
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
     }
   },
   "servers": [
