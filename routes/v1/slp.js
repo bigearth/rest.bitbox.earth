@@ -52,7 +52,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     const b64 = Buffer.from(s).toString("base64")
     const url = `https://bitdb.network/q/${b64}`
     const header = {
-      headers: { key: "qzw3kunnq6ws8973ztf6ywant3kwa88vpqlcmz8and" }
+      headers: { key: "" }
     }
 
     const tokenRes = await axios.get(url, header)
