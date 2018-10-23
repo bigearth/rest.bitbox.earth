@@ -144,4 +144,21 @@ router.get(
   }
 )
 
+router.get(
+  "/address/convert/:address",
+  config.slpRateLimit3,
+  async (req, res, next) => {
+    try {
+      const slpAddr = utils.toSlpAddress(req.params.address)
+      const obj = {}
+      obj.slpAddress = slpAddr
+      obj.cashAddress = utils.toCashAddress(slpAddr)
+      obj.legacyAddress = BITBOX.Address.toLegacyAddress(obj.cashAddress)
+      return res.json(obj)
+    } catch (err) {
+      res.status(500).send(err.response.data.error)
+    }
+  }
+)
+
 module.exports = router
