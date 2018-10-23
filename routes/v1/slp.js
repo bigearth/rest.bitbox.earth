@@ -8,7 +8,8 @@ const bitdbToken = process.env.BITDB_TOKEN
 
 const config = {
   slpRateLimit1: undefined,
-  slpRateLimit2: undefined
+  slpRateLimit2: undefined,
+  slpRateLimit3: undefined
 }
 
 let i = 1
@@ -61,6 +62,39 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
     res.json(tokens.reverse())
 
     return tokens
+  } catch (err) {
+    res.status(500).send(error.response.data.error)
+  }
+})
+
+router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
+  try {
+    const query = {
+      v: 3,
+      q: {
+        find: { "out.h1": "534c5000", "out.s3": "GENESIS" },
+        limit: 1000
+      },
+      r: {
+        f:
+          '[ .[] | { id: .tx.h, timestamp: (.blk.t | strftime("%Y-%m-%d %H:%M")), symbol: .out[0].s4, name: .out[0].s5, document: .out[0].s6 } ]'
+      }
+    }
+
+    const s = JSON.stringify(query)
+    const b64 = Buffer.from(s).toString("base64")
+    const url = `https://bitdb.network/q/${b64}`
+    const header = {
+      headers: { key: bitdbToken }
+    }
+
+    const tokenRes = await axios.get(url, header)
+    const tokens = tokenRes.data.c
+    if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
+
+    tokens.forEach(token => {
+      if (token.id === req.params.id) return res.json(token)
+    })
   } catch (err) {
     res.status(500).send(error.response.data.error)
   }

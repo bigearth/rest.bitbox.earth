@@ -2765,6 +2765,31 @@
           }
         }
       }
+    },
+    "/slp/list/{id}": {
+      "get": {
+        "tags": ["slp"],
+        "summary": "list token",
+        "description": "List single SLP token by id",
+        "operationId": "slpListToken",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The token id",
+            "required": true,
+            "example": "259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful response"
+          }
+        }
+      }
     }
   },
   "servers": [
