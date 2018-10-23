@@ -125,4 +125,23 @@ router.get(
   }
 )
 
+router.get(
+  "/balancesForAddress/:address/:id",
+  config.slpRateLimit3,
+  async (req, res, next) => {
+    try {
+      const slpAddr = utils.toSlpAddress(req.params.address)
+      const balances = await bitboxproxy.getAllTokenBalances(slpAddr)
+      const obj = {}
+      obj.balance = balances[req.params.id]
+      obj.slpAddress = slpAddr
+      obj.cashAddress = utils.toCashAddress(slpAddr)
+      obj.legacyAddress = BITBOX.Address.toLegacyAddress(obj.cashAddress)
+      return res.json(obj)
+    } catch (err) {
+      res.status(500).send(err.response.data.error)
+    }
+  }
+)
+
 module.exports = router
