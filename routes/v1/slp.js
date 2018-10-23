@@ -5,15 +5,21 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 const bitdbToken = process.env.BITDB_TOKEN
+const bitboxproxy = require("slpjs").bitbox
+const utils = require("slpjs").utils
+
+const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
+const BITBOX = new BITBOXCli()
 
 const config = {
   slpRateLimit1: undefined,
   slpRateLimit2: undefined,
-  slpRateLimit3: undefined
+  slpRateLimit3: undefined,
+  slpRateLimit4: undefined
 }
 
 let i = 1
-while (i < 3) {
+while (i < 4) {
   config[`slpRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -99,5 +105,24 @@ router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
     res.status(500).send(error.response.data.error)
   }
 })
+
+router.get(
+  "/balancesForAddress/:address",
+  config.slpRateLimit2,
+  async (req, res, next) => {
+    try {
+      const slpAddr = utils.toSlpAddress(req.params.address)
+      const balances = await bitboxproxy.getAllTokenBalances(slpAddr)
+      balances.slpAddress = slpAddr
+      balances.cashAddress = utils.toCashAddress(slpAddr)
+      balances.legacyAddress = BITBOX.Address.toLegacyAddress(
+        balances.cashAddress
+      )
+      return res.json(balances)
+    } catch (err) {
+      res.status(500).send(err.response.data.error)
+    }
+  }
+)
 
 module.exports = router
