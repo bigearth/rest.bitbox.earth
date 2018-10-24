@@ -32,14 +32,10 @@ describe("#BlockRouter", () => {
         eventEmitter: require("events").EventEmitter
       })
       blockRoute(mockRequest, mockResponse)
-
       mockResponse.on("end", () => {
         const actualResponseBody = Object.keys(
           JSON.parse(mockResponse._getData())
         )
-        //console.log(
-        //  `actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`
-        //)
 
         assert.deepEqual(actualResponseBody, [
           "hash",
