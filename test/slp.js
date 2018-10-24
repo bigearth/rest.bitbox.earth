@@ -108,12 +108,12 @@ describe("#SlpRouter", () => {
     })
   })
 
-  describe("#balancesForAddressById", () => {
-    it("should GET /balances/:address/:id", done => {
+  describe("#balanceForAddressById", () => {
+    it("should GET /balance/:address/:id", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url:
-          "/balancesForAddress/simpleledger:qz9tzs6d5097ejpg279rg0rnlhz546q4fsnck9wh5m/1cda254d0a995c713b7955298ed246822bee487458cd9747a91d9e81d9d28125"
+          "/balance/simpleledger:qz9tzs6d5097ejpg279rg0rnlhz546q4fsnck9wh5m/1cda254d0a995c713b7955298ed246822bee487458cd9747a91d9e81d9d28125"
       })
       const mockResponse = httpMocks.createResponse({
         eventEmitter: require("events").EventEmitter

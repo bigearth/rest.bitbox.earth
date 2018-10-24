@@ -126,7 +126,7 @@ router.get(
 )
 
 router.get(
-  "/balancesForAddress/:address/:id",
+  "/balance/:address/:id",
   config.slpRateLimit3,
   async (req, res, next) => {
     try {
