@@ -76,4 +76,35 @@ describe("#SlpRouter", () => {
       })
     })
   })
+
+  describe("#balancesForAddress", () => {
+    it("should GET /balancesForAddress/:address", done => {
+      const mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url:
+          "/balancesForAddress/simpleledger:qz9tzs6d5097ejpg279rg0rnlhz546q4fsnck9wh5m"
+      })
+      const mockResponse = httpMocks.createResponse({
+        eventEmitter: require("events").EventEmitter
+      })
+      slpRoute(mockRequest, mockResponse)
+
+      mockResponse.on("end", () => {
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        )
+        assert.deepEqual(actualResponseBody, [
+          "satoshis_available",
+          "satoshis_locked_in_minting_baton",
+          "satoshis_locked_in_token",
+          "1cda254d0a995c713b7955298ed246822bee487458cd9747a91d9e81d9d28125",
+          "047918c612e94cce03876f1ad2bd6c9da43b586026811d9b0d02c3c3e910f972",
+          "slpAddress",
+          "cashAddress",
+          "legacyAddress"
+        ])
+        done()
+      })
+    })
+  })
 })
