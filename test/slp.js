@@ -48,4 +48,32 @@ describe("#SlpRouter", () => {
       })
     })
   })
+
+  describe("#listTokenById", () => {
+    it("should GET /list/:id", done => {
+      const mockRequest = httpMocks.createRequest({
+        method: "GET",
+        url:
+          "/list/259908ae44f46ef585edef4bcc1e50dc06e4c391ac4be929fae27235b8158cf1"
+      })
+      const mockResponse = httpMocks.createResponse({
+        eventEmitter: require("events").EventEmitter
+      })
+      slpRoute(mockRequest, mockResponse)
+
+      mockResponse.on("end", () => {
+        const actualResponseBody = Object.keys(
+          JSON.parse(mockResponse._getData())
+        )
+        assert.deepEqual(actualResponseBody, [
+          "id",
+          "timestamp",
+          "symbol",
+          "name",
+          "document"
+        ])
+        done()
+      })
+    })
+  })
 })
