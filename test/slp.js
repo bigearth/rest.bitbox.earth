@@ -125,6 +125,11 @@ describe("#SlpRouter", () => {
           JSON.parse(mockResponse._getData())
         )
         assert.deepEqual(actualResponseBody, [
+          "id",
+          "timestamp",
+          "symbol",
+          "name",
+          "document",
           "balance",
           "slpAddress",
           "cashAddress",

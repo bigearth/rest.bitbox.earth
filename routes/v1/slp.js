@@ -132,7 +132,40 @@ router.get(
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
       const balances = await bitboxproxy.getAllTokenBalances(slpAddr)
+      const query = {
+        v: 3,
+        q: {
+          find: { "out.h1": "534c5000", "out.s3": "GENESIS" },
+          limit: 1000
+        },
+        r: {
+          f:
+            '[ .[] | { id: .tx.h, timestamp: (.blk.t | strftime("%Y-%m-%d %H:%M")), symbol: .out[0].s4, name: .out[0].s5, document: .out[0].s6 } ]'
+        }
+      }
+
+      const s = JSON.stringify(query)
+      const b64 = Buffer.from(s).toString("base64")
+      const url = `https://bitdb.network/q/${b64}`
+      const header = {
+        headers: { key: bitdbToken }
+      }
+
+      const tokenRes = await axios.get(url, header)
+      const tokens = tokenRes.data.c
+      if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
+
+      let t
+      tokens.forEach(token => {
+        if (token.id === req.params.id) t = token
+      })
+
       const obj = {}
+      obj.id = t.id
+      obj.timestamp = t.timestamp
+      obj.symbol = t.symbol
+      obj.name = t.name
+      obj.document = t.document
       obj.balance = balances[req.params.id]
       obj.slpAddress = slpAddr
       obj.cashAddress = utils.toCashAddress(slpAddr)
