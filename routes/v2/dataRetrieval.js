@@ -82,7 +82,6 @@ router.get(
       const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
-      console.log(error)
       res.status(500).send(error.response.data.error)
     }
   }

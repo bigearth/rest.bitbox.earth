@@ -66,7 +66,6 @@ router.get("/details/:id", config.blockRateLimit2, (req, res, next) => {
           })
           .catch(error => {
             //res.send(error.response.data.error.message)
-            console.log(`Error: `, error)
             res.status(500)
             return res.send(error)
           })
