@@ -5,6 +5,12 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
+//const WormholeHTTP = axios.create({
+//  baseURL: process.env.WORMHOLE_RPC_BASEURL,
+//});
+//const wh_username = process.env.WORMHOLE_RPC_USERNAME;
+//const wh_password = process.env.WORMHOLE_RPC_PASSWORD;
+
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
 
@@ -34,13 +40,18 @@ while (i < 6) {
   i++
 }
 
-router.get("/", config.addressRateLimit1, async (req, res, next) => {
-  res.json({ status: "address" })
-})
+// Connect the route endpoints to their handler functions.
+router.get("/", config.addressRateLimit1, root)
 router.get("/details/:address", config.addressRateLimit2, details)
 router.get("/utxo/:address", config.addressRateLimit3, utxo)
 router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
 router.get("/transactions/:address", config.addressRateLimit5, transactions)
+
+// Root API endpoint. Simply acknowledges that it exists.
+function root(req, res, next) {
+  console.log(`Entering root()`)
+  return res.json({ status: "address" })
+}
 
 // Retrieve details on an address.
 async function details(req, res, next) {
@@ -317,4 +328,13 @@ async function transactions(req, res, next) {
   }
 }
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root,
+    details,
+    utxo,
+    unconfirmed,
+    transactions
+  }
+}
