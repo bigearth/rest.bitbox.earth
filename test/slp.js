@@ -134,30 +134,30 @@ describe("#SlpRouter", () => {
       })
     })
   })
-
-  describe("#addressConvert", () => {
-    it("should GET /address/convert/:address", done => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url:
-          "/address/convert/simpleledger:qz9tzs6d5097ejpg279rg0rnlhz546q4fsnck9wh5m"
-      })
-      const mockResponse = httpMocks.createResponse({
-        eventEmitter: require("events").EventEmitter
-      })
-      slpRoute(mockRequest, mockResponse)
-
-      mockResponse.on("end", () => {
-        const actualResponseBody = Object.keys(
-          JSON.parse(mockResponse._getData())
-        )
-        assert.deepEqual(actualResponseBody, [
-          "slpAddress",
-          "cashAddress",
-          "legacyAddress"
-        ])
-        done()
-      })
-    })
-  })
+  //
+  // describe("#addressConvert", () => {
+  //   it("should GET /address/convert/:address", done => {
+  //     const mockRequest = httpMocks.createRequest({
+  //       method: "GET",
+  //       url:
+  //         "/address/convert/simpleledger:qz9tzs6d5097ejpg279rg0rnlhz546q4fsnck9wh5m"
+  //     })
+  //     const mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require("events").EventEmitter
+  //     })
+  //     slpRoute(mockRequest, mockResponse)
+  //
+  //     mockResponse.on("end", () => {
+  //       const actualResponseBody = Object.keys(
+  //         JSON.parse(mockResponse._getData())
+  //       )
+  //       assert.deepEqual(actualResponseBody, [
+  //         "slpAddress",
+  //         "cashAddress",
+  //         "legacyAddress"
+  //       ])
+  //       done()
+  //     })
+  //   })
+  // })
 })
