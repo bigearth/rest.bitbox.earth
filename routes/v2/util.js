@@ -54,7 +54,6 @@ router.get(
   "/validateAddress/:address",
   config.utilRateLimit2,
   async (req, res, next) => {
-    console.log(req.params)
     requestConfig.data.id = "validateaddress"
     requestConfig.data.method = "validateaddress"
     requestConfig.data.params = [req.params.address]

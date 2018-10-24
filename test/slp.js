@@ -134,7 +134,8 @@ describe("#SlpRouter", () => {
       })
     })
   })
-  //
+
+  // TODO: Why does this test time out?
   // describe("#addressConvert", () => {
   //   it("should GET /address/convert/:address", done => {
   //     const mockRequest = httpMocks.createRequest({
