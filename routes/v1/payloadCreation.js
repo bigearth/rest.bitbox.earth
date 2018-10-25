@@ -143,6 +143,21 @@ router.post(
   "/crowdsale/:ecosystem/:propertyPrecision/:previousId/:category/:subcategory/:name/:url/:data/:propertyIdDesired/:tokensPerUnit/:deadline/:earlyBonus/:undefine/:totalNumber",
   config.payloadCreationRateLimit6,
   async (req, res, next) => {
+    // Validate deadline
+    const now = new Date()
+    const OneHundredYears = 1000 * 60 * 60 * 24 * 365 * 100
+    const OneHundredYearsFromNow = now.getTime() + OneHundredYears
+    const OneHundredYearsFromNowUnixTimestamp = Math.floor(
+      OneHundredYearsFromNow / 1000
+    )
+    if (req.params.deadline > OneHundredYearsFromNowUnixTimestamp) {
+      res.status(422)
+      res.send(
+        "Invalid deadline. Unix timestamp should be less than 100 years from now. Unix timestamp === JavaScript getTime()/1000"
+      )
+      return
+    }
+
     requestConfig.data.id = "whc_createpayload_issuancecrowdsale"
     requestConfig.data.method = "whc_createpayload_issuancecrowdsale"
     requestConfig.data.params = [
