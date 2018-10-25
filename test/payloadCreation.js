@@ -99,6 +99,41 @@ describe("#payloadCreationRouter", () => {
   })
 
   describe("#crowdsale", () => {
+    // CT 10/25/18: This test is commented out because I can't figure out how to
+    // test a thrown error with node-mocks-http.
+    /*
+    it("should reject invalid date", done => {
+      try {
+        const mockRequest = httpMocks.createRequest({
+          method: "POST",
+          url:
+            "/crowdsale/1/1/0/Companies/Bitcoin-Mining/Quantum-Miner/www.example.com/Quantum -Miner-Tokens/1/100/7308955112/30/0/192978657"
+        })
+        const mockResponse = httpMocks.createResponse({
+          eventEmitter: require("events").EventEmitter
+        })
+        payloadCreation(mockRequest, mockResponse)
+
+        mockResponse.on("end", () => {
+          const actualResponseBody = JSON.parse(mockResponse._getData())
+          console.log(
+            `actualResponseBody: ${JSON.stringify(actualResponseBody, null, 2)}`
+          )
+          //assert.equal(
+          //  actualResponseBody,
+          //  "0000003301000100000000436f6d70616e69657300426974636f696e2d4d696e696e67005175616e74756d2d4d696e6572007777772e6578616d706c652e636f6d005175616e74756d202d4d696e65722d546f6b656e73000000000100000002540be40000000000586846801e0000000000730634ca"
+          //)
+          assert.equal(true, true)
+          done()
+        })
+      } catch (err) {
+        console.log(`Error: ${JSON.stringify(err, null, 2)}`)
+        assert.equal(true, true)
+        done()
+      }
+    })
+    */
+
     it("should POST /crowdsale/:ecosystem/:propertyPrecision/:previousId/:category/:subcategory/:name/:url/:data/:propertyIdDesired/:tokensPerUnit/:deadline/:earlyBonus/:undefine/:totalNumber", done => {
       const mockRequest = httpMocks.createRequest({
         method: "POST",
