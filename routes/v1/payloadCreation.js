@@ -150,13 +150,11 @@ router.post(
     const OneHundredYearsFromNowUnixTimestamp = Math.floor(
       OneHundredYearsFromNow / 1000
     )
-    console.log(
-      `OneHundredYearsFromNowUnixTimestamp: ${OneHundredYearsFromNowUnixTimestamp}`
-    )
-    console.log(`req.params.deadline: ${req.params.deadline}`)
     if (req.params.deadline > OneHundredYearsFromNowUnixTimestamp) {
       res.status(422)
-      res.send("Invalid deadline. Should be less than 100 years from now")
+      res.send(
+        "Invalid deadline. Unix timestamp should be less than 100 years from now. Unix timestamp === JavaScript getTime()/1000"
+      )
       return
     }
 
