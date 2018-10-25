@@ -100,7 +100,7 @@ describe("#payloadCreationRouter", () => {
 
   describe("#crowdsale", () => {
     // CT 10/25/18: This test is commented out because I can't figure out how to
-    // test a thrown error with node-mocks-http.
+    // test a thrown error with node-mocks-http. z
     /*
     it("should reject invalid date", done => {
       try {
