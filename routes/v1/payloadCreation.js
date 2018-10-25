@@ -147,9 +147,17 @@ router.post(
     const now = new Date()
     const OneHundredYears = 1000 * 60 * 60 * 24 * 365 * 100
     const OneHundredYearsFromNow = now.getTime() + OneHundredYears
-    if (req.params.deadline > OneHundredYearsFromNow) {
+    const OneHundredYearsFromNowUnixTimestamp = Math.floor(
+      OneHundredYearsFromNow / 1000
+    )
+    console.log(
+      `OneHundredYearsFromNowUnixTimestamp: ${OneHundredYearsFromNowUnixTimestamp}`
+    )
+    console.log(`req.params.deadline: ${req.params.deadline}`)
+    if (req.params.deadline > OneHundredYearsFromNowUnixTimestamp) {
       res.status(422)
       res.send("Invalid deadline. Should be less than 100 years from now")
+      return
     }
 
     requestConfig.data.id = "whc_createpayload_issuancecrowdsale"
