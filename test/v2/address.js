@@ -92,6 +92,21 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should error on non-array single address", async () => {
+      req.body = {
+        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
+      }
+
+      const result = await details(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
     it("should throw an error for an invalid address", async () => {
       req.body = {
         addresses: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
@@ -131,7 +146,7 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /details/:address single address", async () => {
+    it("should details for a single address", async () => {
       req.body = {
         addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
@@ -145,7 +160,6 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      console.log(`result: ${util.inspect(result)}`)
 
       // Assert that required fields exist in the returned object.
       assert.equal(result.length, 1, "Array with one entry")
@@ -164,44 +178,10 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].legacyAddress)
       assert.exists(result[0].cashAddress)
     })
-    /*
-    it("should GET non-array single address", async () => {
-      req.params = {
-        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
-      }
 
-      // Mock the Insight URL for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
-          .reply(200, mockData.mockAddressDetails)
-      }
-
-      // Call the details API.
-      const result = await details(req, res)
-
-      // Assert that required fields exist in the returned object.
-      assert.exists(result[0].addrStr)
-      assert.exists(result[0].balance)
-      assert.exists(result[0].balanceSat)
-      assert.exists(result[0].totalReceived)
-      assert.exists(result[0].totalReceivedSat)
-      assert.exists(result[0].totalSent)
-      assert.exists(result[0].totalSentSat)
-      assert.exists(result[0].unconfirmedBalance)
-      assert.exists(result[0].unconfirmedBalanceSat)
-      assert.exists(result[0].unconfirmedTxApperances)
-      assert.exists(result[0].txApperances)
-      assert.isArray(result[0].transactions)
-      assert.exists(result[0].legacyAddress)
-      assert.exists(result[0].cashAddress)
-    })
-
-    it("should GET /details/:address array of addresses", async () => {
-      //await _sleep(1000); // Used for debugging
-
-      req.params = {
-        address: [
+    it("should get details for multiple addresses", async () => {
+      req.body = {
+        addresses: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
           `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`
         ]
@@ -220,11 +200,11 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
 
       assert.isArray(result)
       assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
-    */
   })
   /*
   describe("#AddressUtxo", () => {
