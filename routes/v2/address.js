@@ -48,7 +48,6 @@ router.post("/transactions/:address", config.addressRateLimit5, transactions)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
-  console.log(`Entering root()`)
   return res.json({ status: "address" })
 }
 
@@ -62,7 +61,7 @@ async function details(req, res, next) {
     // Reject if address is not an array.
     if (!Array.isArray(addresses)) {
       res.status(400)
-      res.json({ error: "addresses needs to be an array" })
+      return res.json({ error: "addresses needs to be an array" })
     }
 
     logger.debug(`Executing address/details with these addresses: `, addresses)
@@ -77,9 +76,9 @@ async function details(req, res, next) {
         var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
-        return res.send(
-          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
-        )
+        return res.json({
+          error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
       }
 
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`
@@ -110,8 +109,8 @@ async function details(req, res, next) {
     // Return error message to the caller.
     res.status(500)
     if (error.response && error.response.data && error.response.data.error)
-      return res.send(error.response.data.error)
-    return res.send(util.inspect(error))
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
 }
 
