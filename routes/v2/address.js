@@ -42,7 +42,7 @@ while (i < 6) {
 
 // Connect the route endpoints to their handler functions.
 router.get("/", config.addressRateLimit1, root)
-router.get("/details/:address", config.addressRateLimit2, details)
+router.post("/details", config.addressRateLimit2, details)
 router.get("/utxo/:address", config.addressRateLimit3, utxo)
 router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
 router.get("/transactions/:address", config.addressRateLimit5, transactions)
@@ -54,12 +54,16 @@ function root(req, res, next) {
 }
 
 // Retrieve details on an address.
+// curl -d '{"addresses": [bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr, bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul]}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
 async function details(req, res, next) {
   try {
-    let addresses = req.params.address
+    let addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
+      res.status(403)
+      res.json({ error: "addresses needs to be an array" })
+    }
 
     // Parse the array.
     try {
