@@ -10,12 +10,6 @@ const logger = require("./logging.js")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
-//const WormholeHTTP = axios.create({
-//  baseURL: process.env.WORMHOLE_RPC_BASEURL,
-//});
-//const wh_username = process.env.WORMHOLE_RPC_USERNAME;
-//const wh_password = process.env.WORMHOLE_RPC_PASSWORD;
-
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
 
@@ -48,9 +42,9 @@ while (i < 6) {
 // Connect the route endpoints to their handler functions.
 router.get("/", config.addressRateLimit1, root)
 router.post("/details", config.addressRateLimit2, details)
-router.get("/utxo/:address", config.addressRateLimit3, utxo)
-router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
-router.get("/transactions/:address", config.addressRateLimit5, transactions)
+router.post("/utxo/:address", config.addressRateLimit3, utxo)
+router.post("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
+router.post("/transactions/:address", config.addressRateLimit5, transactions)
 
 // Root API endpoint. Simply acknowledges that it exists.
 function root(req, res, next) {
@@ -94,7 +88,6 @@ async function details(req, res, next) {
       // https://github.com/bitpay/insight-api/blob/master/README.md#notes-on-upgrading-from-v02
       if (req.body.from && req.body.to)
         path = `${path}?from=${req.body.from}&to=${req.body.to}`
-      //console.log(`path: ${path}`); // Used for debugging.
 
       // Query the Insight server.
       const response = await axios.get(path)
@@ -111,10 +104,10 @@ async function details(req, res, next) {
     res.status(200)
     return res.json(retArray)
   } catch (error) {
-    // Write out error to console or debug log.
+    // Write out error to error log.
     logger.error(`Error in address/details: `, error)
 
-    // Return an error message to the caller.
+    // Return error message to the caller.
     res.status(500)
     if (error.response && error.response.data && error.response.data.error)
       return res.send(error.response.data.error)
@@ -125,27 +118,15 @@ async function details(req, res, next) {
 // Retrieve UTXO information for an address.
 async function utxo(req, res, next) {
   try {
-    let addresses = req.params.address
+    const addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      res.json({ error: "addresses needs to be an array" })
     }
+
+    logger.debug(`Executing address/utxo with these addresses: `, addresses)
 
     // Loop through each address.
     const retArray = []
