@@ -206,28 +206,60 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
   })
-  /*
+
   describe("#AddressUtxo", () => {
     // utxo route handler.
     const utxo = addressRoute.testableComponents.utxo
 
-    it("should throw an error for an invalid address", async () => {
-      req.params = {
-        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+    it("should throw an error for an empty body", async () => {
+      req.body = {}
+
+      const result = await utxo(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should error on non-array single address", async () => {
+      req.body = {
+        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
       }
 
       const result = await utxo(req, res)
 
       assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
-      assert.include(result, "Invalid BCH address", "Proper error message")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should throw an error for an invalid address", async () => {
+      req.body = {
+        addresses: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await utxo(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "Invalid BCH address",
+        "Proper error message"
+      )
     })
 
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
       try {
-        req.params = {
-          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        req.body = {
+          addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
         }
 
         // Switch the Insight URL to something that will error out.
@@ -239,7 +271,7 @@ describe("#AddressRouter", () => {
         process.env.BITCOINCOM_BASEURL = savedUrl
 
         assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
-        assert.include(result, "Error", "Error message expected")
+        assert.include(result.error, "ENOTFOUND", "Error message expected")
       } catch (err) {
         // Restore the saved URL.
         process.env.BITCOINCOM_BASEURL = savedUrl
@@ -247,9 +279,8 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /utxo/:address single address", async () => {
-      const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
-      req.params = {
-        address: [testAddr]
+      req.body = {
+        addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
 
       // Mock the Insight URL for unit tests.
@@ -278,41 +309,9 @@ describe("#AddressRouter", () => {
       assert.exists(firstResult.confirmations)
     })
 
-    it("should GET /utxo/:address for non-array single address", async () => {
-      const testAddr = `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
-      req.params = {
-        address: testAddr
-      }
-
-      // Mock the Insight URL for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
-          .reply(200, mockData.mockUtxoDetails)
-      }
-
-      // Call the details API.
-      const result = await utxo(req, res)
-
-      // Assert that required fields exist in the returned object.
-      const firstResult = result[0][0]
-
-      assert.isArray(result[0], "result should be an array")
-
-      // Validate data structure.
-      assert.exists(firstResult.address)
-      assert.exists(firstResult.txid)
-      assert.exists(firstResult.vout)
-      assert.exists(firstResult.scriptPubKey)
-      assert.exists(firstResult.amount)
-      assert.exists(firstResult.satoshis)
-      assert.exists(firstResult.height)
-      assert.exists(firstResult.confirmations)
-    })
-
-    it("should GET /utxo/:address array of addresses", async () => {
-      req.params = {
-        address: [
+    it("should utxos for mulitple addresses", async () => {
+      req.body = {
+        addresses: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
           `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
           `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
@@ -341,7 +340,7 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 3, "3 outputs for 3 inputs")
     })
   })
-
+  /*
   describe("#AddressUnconfirmed", () => {
     // unconfirmed route handler.
     const unconfirmed = addressRoute.testableComponents.unconfirmed
