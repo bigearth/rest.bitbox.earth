@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const slpRoute = require("../routes/v1/slp")
+const slpRoute = require("../../routes/v1/slp")
 
 describe("#SlpRouter", () => {
   describe("#root", () => {
