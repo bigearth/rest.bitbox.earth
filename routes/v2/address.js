@@ -4,6 +4,7 @@ const express = require("express")
 const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
+const logger = require("./logging.js")
 
 // Used for processing error messages before sending them to the user.
 const util = require("util")
@@ -70,6 +71,8 @@ async function details(req, res, next) {
       res.json({ error: "addresses needs to be an array" })
     }
 
+    logger.debug(`Executing address/details with these addresses: `, addresses)
+
     // Loop through each address.
     const retArray = []
     for (let i = 0; i < addresses.length; i++) {
@@ -109,7 +112,7 @@ async function details(req, res, next) {
     return res.json(retArray)
   } catch (error) {
     // Write out error to console or debug log.
-    //console.log(`Error in address.js/details(): `, err);
+    logger.error(`Error in address/details: `, error)
 
     // Return an error message to the caller.
     res.status(500)
