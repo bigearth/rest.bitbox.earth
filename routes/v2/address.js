@@ -5,6 +5,10 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 
+// Used for processing error messages before sending them to the user.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
+
 //const WormholeHTTP = axios.create({
 //  baseURL: process.env.WORMHOLE_RPC_BASEURL,
 //});
@@ -54,32 +58,16 @@ function root(req, res, next) {
 }
 
 // Retrieve details on an address.
-// curl -d '{"addresses": [bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr, bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul]}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"]}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"], "from": 1, "to": 5}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
 async function details(req, res, next) {
   try {
-    let addresses = req.body.addresses
+    const addresses = req.body.addresses
 
     // Reject if address is not an array.
     if (!Array.isArray(addresses)) {
-      res.status(403)
-      res.json({ error: "addresses needs to be an array" })
-    }
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      res.json({ error: "addresses needs to be an array" })
     }
 
     // Loop through each address.
@@ -98,34 +86,36 @@ async function details(req, res, next) {
       }
 
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`
-      //console.log(`path: ${path}`)
 
-      // Not sure what this is doing?
-      if (req.query.from && req.query.to)
-        path = `${path}?from=${req.query.from}&to=${req.query.to}`
+      // Optional query strings limit the number of TXIDs.
+      // https://github.com/bitpay/insight-api/blob/master/README.md#notes-on-upgrading-from-v02
+      if (req.body.from && req.body.to)
+        path = `${path}?from=${req.body.from}&to=${req.body.to}`
       //console.log(`path: ${path}`); // Used for debugging.
 
       // Query the Insight server.
       const response = await axios.get(path)
 
-      // Parse the returned data.
-      const parsed = response.data
-      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
-      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+      // Append different address formats to the return data.
+      const retData = response.data
+      retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
 
-      retArray.push(parsed)
+      retArray.push(retData)
     }
 
     // Return the array of retrieved address information.
     res.status(200)
     return res.json(retArray)
-  } catch (err) {
+  } catch (error) {
     // Write out error to console or debug log.
     //console.log(`Error in address.js/details(): `, err);
 
     // Return an error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/details(): ${err.message}`)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.send(error.response.data.error)
+    return res.send(util.inspect(error))
   }
 }
 
