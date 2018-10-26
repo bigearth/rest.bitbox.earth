@@ -186,6 +186,10 @@ server.listen(port)
 server.on("error", onError)
 server.on("listening", onListening)
 
+// Set the time before a timeout error is generated. This impacts testing and
+// the handling of timeout errors.
+server.setTimeout(10000)
+
 /**
  * Normalize a port into a number, string, or false.
  */

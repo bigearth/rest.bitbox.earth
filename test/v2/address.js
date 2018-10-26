@@ -36,6 +36,8 @@ function beforeTests() {
   if (!process.env.TEST) process.env.TEST = "unit"
   if (process.env.TEST === "unit")
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
+
+  console.log(`Testing type is: ${process.env.TEST}`)
 }
 beforeTests()
 
@@ -90,25 +92,27 @@ describe("#AddressRouter", () => {
       )
     })
 
-    /*
     it("should throw an error for an invalid address", async () => {
       req.body = {
-        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        addresses: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
 
       const result = await details(req, res)
 
       assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
-      assert.include(result, "Invalid BCH address", "Proper error message")
+      assert.include(
+        result.error,
+        "Invalid BCH address",
+        "Proper error message"
+      )
     })
-
 
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
       try {
-        req.params = {
-          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        req.body = {
+          addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
         }
 
         // Switch the Insight URL to something that will error out.
@@ -120,7 +124,7 @@ describe("#AddressRouter", () => {
         process.env.BITCOINCOM_BASEURL = savedUrl
 
         assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
-        assert.include(result, "Error", "Error message expected")
+        assert.include(result.error, "ENOTFOUND", "Error message expected")
       } catch (err) {
         // Restore the saved URL.
         process.env.BITCOINCOM_BASEURL = savedUrl
@@ -128,8 +132,8 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /details/:address single address", async () => {
-      req.params = {
-        address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      req.body = {
+        addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
 
       // Mock the Insight URL for unit tests.
@@ -141,9 +145,10 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      console.log(`result: ${util.inspect(result)}`)
 
       // Assert that required fields exist in the returned object.
+      assert.equal(result.length, 1, "Array with one entry")
       assert.exists(result[0].addrStr)
       assert.exists(result[0].balance)
       assert.exists(result[0].balanceSat)
@@ -159,7 +164,7 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].legacyAddress)
       assert.exists(result[0].cashAddress)
     })
-
+    /*
     it("should GET non-array single address", async () => {
       req.params = {
         address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`

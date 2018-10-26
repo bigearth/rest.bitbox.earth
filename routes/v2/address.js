@@ -104,7 +104,7 @@ async function details(req, res, next) {
     return res.json(retArray)
   } catch (error) {
     // Write out error to error log.
-    logger.error(`Error in address/details: `, error)
+    //logger.error(`Error in address/details: `, error)
 
     // Return error message to the caller.
     res.status(500)
