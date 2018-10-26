@@ -465,28 +465,60 @@ describe("#AddressRouter", () => {
       assert.isArray(result)
     })
   })
-  /*
+
   describe("#AddressTransactions", () => {
     // unconfirmed route handler.
     const transactions = addressRoute.testableComponents.transactions
 
-    it("should throw an error for an invalid address", async () => {
-      req.params = {
-        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+    it("should throw an error for an empty body", async () => {
+      req.body = {}
+
+      const result = await transactions(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should error on non-array single address", async () => {
+      req.body = {
+        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
       }
 
       const result = await transactions(req, res)
 
       assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
-      assert.include(result, "Invalid BCH address", "Proper error message")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should throw an error for an invalid address", async () => {
+      req.body = {
+        addresses: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await transactions(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "Invalid BCH address",
+        "Proper error message"
+      )
     })
 
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
       try {
-        req.params = {
-          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        req.body = {
+          addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
         }
 
         // Switch the Insight URL to something that will error out.
@@ -498,7 +530,7 @@ describe("#AddressRouter", () => {
         process.env.BITCOINCOM_BASEURL = savedUrl
 
         assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
-        assert.include(result, "Error", "Error message expected")
+        assert.include(result.error, "ENOTFOUND", "Error message expected")
       } catch (err) {
         // Restore the saved URL.
         process.env.BITCOINCOM_BASEURL = savedUrl
@@ -507,35 +539,8 @@ describe("#AddressRouter", () => {
 
     it("should GET /transactions/:address single address", async () => {
       const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-      req.params = {
-        address: [testAddr]
-      }
-
-      // Mock the Insight URL for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(
-            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-          )
-          .reply(200, mockData.mockTransactions)
-      }
-
-      // Call the details API.
-      const result = await transactions(req, res)
-
-      assert.isArray(result, "result should be an array")
-
-      assert.exists(result[0].pagesTotal)
-      assert.exists(result[0].txs)
-      assert.isArray(result[0].txs)
-      assert.exists(result[0].legacyAddress)
-      assert.exists(result[0].cashAddress)
-    })
-
-    it("should GET /transactions/:address for single non-array address", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-      req.params = {
-        address: testAddr
+      req.body = {
+        addresses: [testAddr]
       }
 
       // Mock the Insight URL for unit tests.
@@ -560,10 +565,9 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /transactions/:address for array of addresses", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-      req.params = {
-        address: [
-          testAddr,
+      req.body = {
+        addresses: [
+          `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`,
           "bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw"
         ]
       }
@@ -591,5 +595,4 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 2, "Array should have 2 elements")
     })
   })
-*/
 })
