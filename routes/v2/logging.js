@@ -28,7 +28,7 @@ logger.on('error', function (error) {
 // This is just a placeholder function that will be replaced once we get the
 // greylog server working.
 function log(msg, obj) {
-  console.log(msg, obj)
+  //console.log(msg, obj)
 }
 
 // This is just a placeholder function that will be replaced once we get the
@@ -40,7 +40,7 @@ function error(msg, obj) {
 // This is just a placeholder function that will be replaced once we get the
 // greylog server working.
 function debug(msg, obj) {
-  console.log(msg, obj)
+  //console.log(msg, obj)
 }
 
 module.exports = {
