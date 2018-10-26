@@ -146,7 +146,7 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should details for a single address", async () => {
+    it("should get details for a single address", async () => {
       req.body = {
         addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
@@ -340,28 +340,60 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 3, "3 outputs for 3 inputs")
     })
   })
-  /*
+
   describe("#AddressUnconfirmed", () => {
     // unconfirmed route handler.
     const unconfirmed = addressRoute.testableComponents.unconfirmed
 
-    it("should throw an error for an invalid address", async () => {
-      req.params = {
-        address: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+    it("should throw an error for an empty body", async () => {
+      req.body = {}
+
+      const result = await unconfirmed(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should error on non-array single address", async () => {
+      req.body = {
+        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
       }
 
       const result = await unconfirmed(req, res)
 
       assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
-      assert.include(result, "Invalid BCH address", "Proper error message")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+    })
+
+    it("should throw an error for an invalid address", async () => {
+      req.body = {
+        addresses: [`02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+      }
+
+      const result = await unconfirmed(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "Invalid BCH address",
+        "Proper error message"
+      )
     })
 
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
       try {
-        req.params = {
-          address: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        req.body = {
+          addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
         }
 
         // Switch the Insight URL to something that will error out.
@@ -373,7 +405,7 @@ describe("#AddressRouter", () => {
         process.env.BITCOINCOM_BASEURL = savedUrl
 
         assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
-        assert.include(result, "Error", "Error message expected")
+        assert.include(result.error, "ENOTFOUND", "Error message expected")
       } catch (err) {
         // Restore the saved URL.
         process.env.BITCOINCOM_BASEURL = savedUrl
@@ -381,9 +413,8 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /unconfirmed/:address single address", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-      req.params = {
-        address: [testAddr]
+      req.body = {
+        addresses: [`bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`]
       }
 
       // Mock the Insight URL for unit tests.
@@ -395,29 +426,7 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await unconfirmed(req, res)
-
-      assert.isArray(result, "result should be an array")
-
-      // Dev note: Unconfirmed TXs are hard to test in an integration test because
-      // the nature of an unconfirmed transation is transient. It quickly becomes
-      // confirmed and thus should not show up.
-    })
-
-    it("should GET /unconfirmed/:address for non-array single address", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
-      req.params = {
-        address: testAddr
-      }
-
-      // Mock the Insight URL for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1EzdL6TBbkNhnB2fYiBaKmcs5fxaoqwdAp/utxo`)
-          .reply(200, mockData.mockUnconfirmed)
-      }
-
-      // Call the details API.
-      const result = await unconfirmed(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
 
       assert.isArray(result, "result should be an array")
 
@@ -427,8 +436,8 @@ describe("#AddressRouter", () => {
     })
 
     it("should GET /unconfirmed/:address array of addresses", async () => {
-      req.params = {
-        address: [
+      req.body = {
+        addresses: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
           `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
           `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
@@ -456,7 +465,7 @@ describe("#AddressRouter", () => {
       assert.isArray(result)
     })
   })
-
+  /*
   describe("#AddressTransactions", () => {
     // unconfirmed route handler.
     const transactions = addressRoute.testableComponents.transactions
