@@ -68,7 +68,7 @@ describe("#AddressRouter", () => {
     // root route handler.
     const root = addressRoute.testableComponents.root
 
-    it("should return 'address' for GET /", async () => {
+    it("should respond to GET for base route", async () => {
       const result = root(req, res)
 
       assert.equal(result.status, "address", "Returns static string")
@@ -300,7 +300,7 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /utxo/:address single address", async () => {
+    it("should get utxos for a single address", async () => {
       req.body = {
         addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
       }
@@ -445,7 +445,7 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /unconfirmed/:address single address", async () => {
+    it("should get unconfirmed data for a single address", async () => {
       req.body = {
         addresses: [`bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`]
       }
@@ -468,7 +468,7 @@ describe("#AddressRouter", () => {
       // confirmed and thus should not show up.
     })
 
-    it("should GET /unconfirmed/:address array of addresses", async () => {
+    it("should get unconfirmed data for an array of addresses", async () => {
       req.body = {
         addresses: [
           `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
@@ -581,7 +581,7 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /transactions/:address single address", async () => {
+    it("should get transactions for a single address", async () => {
       const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
       req.body = {
         addresses: [testAddr]
@@ -608,7 +608,7 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].cashAddress)
     })
 
-    it("should GET /transactions/:address for array of addresses", async () => {
+    it("should get transactions for an array of addresses", async () => {
       req.body = {
         addresses: [
           `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`,
