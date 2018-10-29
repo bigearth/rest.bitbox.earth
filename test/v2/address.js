@@ -265,6 +265,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
+      }
+
+      const result = await utxo(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -399,6 +410,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
+      }
+
+      const result = await unconfirmed(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -522,6 +544,17 @@ describe("#AddressRouter", () => {
         "Invalid BCH address",
         "Proper error message"
       )
+    })
+
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
+      }
+
+      const result = await transactions(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
     })
 
     it("should throw 500 when network issues", async () => {
