@@ -68,7 +68,7 @@ describe("#AddressRouter", () => {
     // root route handler.
     const root = addressRoute.testableComponents.root
 
-    it("should return 'address' for GET /", async () => {
+    it("should respond to GET for base route", async () => {
       const result = root(req, res)
 
       assert.equal(result.status, "address", "Returns static string")
@@ -122,6 +122,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
+      }
+
+      const result = await details(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -148,13 +159,13 @@ describe("#AddressRouter", () => {
 
     it("should get details for a single address", async () => {
       req.body = {
-        addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz`)
           .reply(200, mockData.mockAddressDetails)
       }
 
@@ -182,19 +193,19 @@ describe("#AddressRouter", () => {
     it("should get details for multiple addresses", async () => {
       req.body = {
         addresses: [
-          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
-          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz`)
           .reply(200, mockData.mockAddressDetails)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4`)
+          .get(`/addr/mwJnEzXzKkveF2q5Af9jxi9j1zrtWAnPU8`)
           .reply(200, mockData.mockAddressDetails)
       }
 
@@ -254,6 +265,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
+      }
+
+      const result = await utxo(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -278,15 +300,15 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /utxo/:address single address", async () => {
+    it("should get utxos for a single address", async () => {
       req.body = {
-        addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
           .reply(200, mockData.mockUtxoDetails)
       }
 
@@ -309,27 +331,22 @@ describe("#AddressRouter", () => {
       assert.exists(firstResult.confirmations)
     })
 
-    it("should utxos for mulitple addresses", async () => {
+    it("should get utxos for mulitple addresses", async () => {
       req.body = {
         addresses: [
-          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
-          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
-          `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
           .reply(200, mockData.mockUtxoDetails)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
-          .reply(200, mockData.mockUtxoDetails)
-
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1NDLJswUhu1bGZ9FiFy98FekNDtFujbACP/utxo`)
+          .get(`/addr/mwJnEzXzKkveF2q5Af9jxi9j1zrtWAnPU8/utxo`)
           .reply(200, mockData.mockUtxoDetails)
       }
 
@@ -337,7 +354,7 @@ describe("#AddressRouter", () => {
       const result = await utxo(req, res)
 
       assert.isArray(result)
-      assert.equal(result.length, 3, "3 outputs for 3 inputs")
+      assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
   })
 
@@ -360,7 +377,7 @@ describe("#AddressRouter", () => {
 
     it("should error on non-array single address", async () => {
       req.body = {
-        address: `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`
+        address: `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`
       }
 
       const result = await unconfirmed(req, res)
@@ -388,6 +405,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
+      }
+
+      const result = await unconfirmed(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -412,16 +440,16 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /unconfirmed/:address single address", async () => {
+    it("should get unconfirmed data for a single address", async () => {
       req.body = {
-        addresses: [`bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1EzdL6TBbkNhnB2fYiBaKmcs5fxaoqwdAp/utxo`)
-          .reply(200, mockData.mockUnconfirmed)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
       }
 
       // Call the details API.
@@ -435,28 +463,23 @@ describe("#AddressRouter", () => {
       // confirmed and thus should not show up.
     })
 
-    it("should GET /unconfirmed/:address array of addresses", async () => {
+    it("should get unconfirmed data for an array of addresses", async () => {
       req.body = {
         addresses: [
-          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
-          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
-          `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
-          .reply(200, mockData.mockUnconfirmed)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
-          .reply(200, mockData.mockUnconfirmed)
-
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1NDLJswUhu1bGZ9FiFy98FekNDtFujbACP/utxo`)
-          .reply(200, mockData.mockUnconfirmed)
+          .get(`/addr/mwJnEzXzKkveF2q5Af9jxi9j1zrtWAnPU8/utxo`)
+          .reply(200, mockData.mockUtxoDetails)
       }
 
       // Call the details API.
@@ -513,6 +536,17 @@ describe("#AddressRouter", () => {
       )
     })
 
+    it("should detect a network mismatch", async () => {
+      req.body = {
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
+      }
+
+      const result = await transactions(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(result.error, "Invalid network", "Proper error message")
+    })
+
     it("should throw 500 when network issues", async () => {
       const savedUrl = process.env.BITCOINCOM_BASEURL
 
@@ -537,17 +571,16 @@ describe("#AddressRouter", () => {
       }
     })
 
-    it("should GET /transactions/:address single address", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+    it("should get transactions for a single address", async () => {
       req.body = {
-        addresses: [testAddr]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+            `/txs/?address=bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`
           )
           .reply(200, mockData.mockTransactions)
       }
@@ -564,11 +597,11 @@ describe("#AddressRouter", () => {
       assert.exists(result[0].cashAddress)
     })
 
-    it("should GET /transactions/:address for array of addresses", async () => {
+    it("should get transactions for an array of addresses", async () => {
       req.body = {
         addresses: [
-          `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`,
-          "bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw"
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
@@ -576,13 +609,13 @@ describe("#AddressRouter", () => {
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+            `/txs/?address=bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`
           )
           .reply(200, mockData.mockTransactions)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw`
+            `/txs/?address=bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
           )
           .reply(200, mockData.mockTransactions)
       }

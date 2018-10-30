@@ -5,6 +5,7 @@ const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
 const logger = require("./logging.js")
+const routeUtils = require("./route-utils")
 
 // Used for processing error messages before sending them to the user.
 const util = require("util")
@@ -81,6 +82,15 @@ async function details(req, res, next) {
         })
       }
 
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
+      }
+
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`
 
       // Optional query strings limit the number of TXIDs.
@@ -142,6 +152,15 @@ async function utxo(req, res, next) {
         })
       }
 
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
+      }
+
       const path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}/utxo`
 
       // Query the Insight server.
@@ -195,6 +214,15 @@ async function unconfirmed(req, res, next) {
         res.status(400)
         return res.json({
           error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
         })
       }
 
@@ -257,6 +285,15 @@ async function transactions(req, res, next) {
         res.status(400)
         return res.json({
           error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
         })
       }
 
