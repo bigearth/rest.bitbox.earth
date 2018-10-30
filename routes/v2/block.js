@@ -36,9 +36,11 @@ while (i < 4) {
   i++
 }
 
-router.get("/", config.blockRateLimit1, (req, res, next) => {
+router.get("/", config.blockRateLimit1, root)
+
+function root(req, res, next) {
   res.json({ status: "block" })
-})
+}
 
 router.get(
   "/detailsByHash/:hash",
@@ -93,4 +95,9 @@ router.get(
   }
 )
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root
+  }
+}
