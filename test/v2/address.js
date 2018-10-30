@@ -124,7 +124,6 @@ describe("#AddressRouter", () => {
 
     it("should detect a network mismatch", async () => {
       req.body = {
-        //addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
         addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
       }
 
@@ -218,7 +217,7 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
   })
-  /*
+
   describe("#AddressUtxo", () => {
     // utxo route handler.
     const utxo = addressRoute.testableComponents.utxo
@@ -268,7 +267,7 @@ describe("#AddressRouter", () => {
 
     it("should detect a network mismatch", async () => {
       req.body = {
-        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
       }
 
       const result = await utxo(req, res)
@@ -303,13 +302,13 @@ describe("#AddressRouter", () => {
 
     it("should get utxos for a single address", async () => {
       req.body = {
-        addresses: [`qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
           .reply(200, mockData.mockUtxoDetails)
       }
 
@@ -335,24 +334,19 @@ describe("#AddressRouter", () => {
     it("should utxos for mulitple addresses", async () => {
       req.body = {
         addresses: [
-          `qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c`,
-          `qzmrfwd5wprnkssn5kf6xvpxa8fqrhch4vs8c64sq4`,
-          `bitcoincash:qr52lspwkmlk68m3evs0jusu6swhx5xhvy5ce0mne6`
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1Fg4r9iDrEkCcDmHTy2T79EusNfhyQpu7W/utxo`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz/utxo`)
           .reply(200, mockData.mockUtxoDetails)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1HcR9LemjZw5mw7bAeo39685LKjcKUyDL4/utxo`)
-          .reply(200, mockData.mockUtxoDetails)
-
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/addr/1NDLJswUhu1bGZ9FiFy98FekNDtFujbACP/utxo`)
+          .get(`/addr/mwJnEzXzKkveF2q5Af9jxi9j1zrtWAnPU8/utxo`)
           .reply(200, mockData.mockUtxoDetails)
       }
 
@@ -360,10 +354,10 @@ describe("#AddressRouter", () => {
       const result = await utxo(req, res)
 
       assert.isArray(result)
-      assert.equal(result.length, 3, "3 outputs for 3 inputs")
+      assert.equal(result.length, 2, "2 outputs for 2 inputs")
     })
   })
-
+  /*
   describe("#AddressUnconfirmed", () => {
     // unconfirmed route handler.
     const unconfirmed = addressRoute.testableComponents.unconfirmed
