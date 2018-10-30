@@ -4,7 +4,7 @@
 const assert = require("assert")
 //const expect = chai.expect;
 const httpMocks = require("node-mocks-http")
-const controlRoute = require("../routes/v1/control")
+const controlRoute = require("../dist/routes/v1/control")
 
 describe("#ControlRouter", () => {
   describe("#root", () => {

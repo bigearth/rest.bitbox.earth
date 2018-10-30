@@ -1,5 +1,8 @@
 "use strict"
-const express = require("express")
+import { Socket } from "net";
+
+import * as express from "express";
+
 const path = require("path")
 const logger = require("morgan")
 const cookieParser = require("cookie-parser")
@@ -8,17 +11,17 @@ const basicAuth = require("express-basic-auth")
 const helmet = require("helmet")
 const debug = require("debug")("rest-cloud:server")
 const http = require("http")
+const cors = require("cors")
+
 const BitcoinCashZMQDecoder = require("bitcoincash-zmq-decoder")
 
-const zmq = require("zeromq"),
-  sock = zmq.socket("sub")
+const zmq = require("zeromq");
+
+const sock: any = zmq.socket("sub");
+
 
 const swStats = require("swagger-stats")
 const apiSpec = require("./public/bitcoin-com-rest-v1.json")
-
-require("dotenv").config()
-
-const app = express()
 
 // v1
 const indexV1 = require("./routes/v1/index")
@@ -53,10 +56,20 @@ const utilV2 = require("./routes/v2/util")
 const dataRetrievalV2 = require("./routes/v2/dataRetrieval")
 const payloadCreationV2 = require("./routes/v2/payloadCreation")
 
+
+interface IError {
+  message: string;
+  status: number;
+}
+
+require("dotenv").config()
+
+const app: express.Application = express();
+
 app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }))
 
 app.use(helmet())
-const cors = require("cors")
+
 app.use(cors())
 app.enable("trust proxy")
 
@@ -81,14 +94,21 @@ app.use(express.static(path.join(__dirname, "public")))
 //   }
 // ));
 
+interface ICustomRequest extends express.Request {
+  io: any;
+}
+
 // Make io accessible to our router
-app.use(function(req, res, next) {
-  req.io = io
-  next()
+app.use((req: ICustomRequest, res: express.Response, next: express.NextFunction) => {
+  req.io = io;
+
+  next();
 })
 
-const v1prefix = "v1"
-app.use("/", indexV1)
+const v1prefix = "v1";
+const v2prefix = "v2"
+
+app.use("/", indexV1);
 app.use(`/${v1prefix}/` + `health-check`, healthCheckV1)
 app.use(`/${v1prefix}/` + `address`, addressV1)
 app.use(`/${v1prefix}/` + `blockchain`, blockchainV1)
@@ -104,7 +124,7 @@ app.use(`/${v1prefix}/` + `dataRetrieval`, dataRetrievalV1)
 app.use(`/${v1prefix}/` + `payloadCreation`, payloadCreationV1)
 app.use(`/${v1prefix}/` + `slp`, slpV1)
 
-const v2prefix = "v2"
+
 app.use("/", indexV2)
 app.use(`/${v2prefix}/` + `health-check`, healthCheckV2)
 app.use(`/${v2prefix}/` + `address`, addressV2)
@@ -121,14 +141,18 @@ app.use(`/${v2prefix}/` + `dataRetrieval`, dataRetrievalV2)
 app.use(`/${v2prefix}/` + `payloadCreation`, payloadCreationV2)
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error("Not Found")
-  err.status = 404
-  next(err)
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const err: IError = {
+    message: "Not Found",
+    status: 404
+  };
+
+  next(err);
 })
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err: IError, req: express.Request, res: express.Response) => {
+  const status = err.status || 500;
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get("env") === "development" ? err : {}
@@ -137,7 +161,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.json({
     status: 500,
-
     message: err.message
   })
 })
@@ -155,7 +178,7 @@ app.set("port", port)
 const server = http.createServer(app)
 const io = require("socket.io").listen(server)
 
-io.on("connection", socket => {
+io.on("connection", (socket: Socket) => {
   console.log("Socket Connected")
 
   socket.on("disconnect", () => {
@@ -168,7 +191,7 @@ const bitcoincashZmqDecoder = new BitcoinCashZMQDecoder(process.env.NETWORK)
 sock.connect(`tcp://${process.env.ZEROMQ_URL}:${process.env.ZEROMQ_PORT}`)
 sock.subscribe("raw")
 
-sock.on("message", (topic, message) => {
+sock.on("message", (topic: any, message: string) => {
   const decoded = topic.toString("ascii")
   if (decoded === "rawtx") {
     const txd = bitcoincashZmqDecoder.decodeTransaction(message)
@@ -190,7 +213,7 @@ server.on("listening", onListening)
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: string ) {
   const port = parseInt(val, 10)
 
   if (isNaN(port)) {
@@ -209,8 +232,7 @@ function normalizePort(val) {
 /**
  * Event listener for HTTP server "error" event.
  */
-
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== "listen") throw error
 
   const bind = typeof port === "string" ? `Pipe ${port}` : `Port ${port}`
