@@ -488,7 +488,7 @@ describe("#AddressRouter", () => {
       assert.isArray(result)
     })
   })
-  /*
+
   describe("#AddressTransactions", () => {
     // unconfirmed route handler.
     const transactions = addressRoute.testableComponents.transactions
@@ -538,7 +538,7 @@ describe("#AddressRouter", () => {
 
     it("should detect a network mismatch", async () => {
       req.body = {
-        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
+        addresses: [`bitcoincash:qqqvv56zepke5k0xeaehlmjtmkv9ly2uzgkxpajdx3`]
       }
 
       const result = await transactions(req, res)
@@ -572,16 +572,15 @@ describe("#AddressRouter", () => {
     })
 
     it("should get transactions for a single address", async () => {
-      const testAddr = `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
       req.body = {
-        addresses: [testAddr]
+        addresses: [`bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`]
       }
 
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+            `/txs/?address=bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`
           )
           .reply(200, mockData.mockTransactions)
       }
@@ -601,8 +600,8 @@ describe("#AddressRouter", () => {
     it("should get transactions for an array of addresses", async () => {
       req.body = {
         addresses: [
-          `bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`,
-          "bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw"
+          `bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`,
+          `bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
         ]
       }
 
@@ -610,13 +609,13 @@ describe("#AddressRouter", () => {
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qzvhl27djjs7924p8fmxgd3wteaedstf4yjaaxrapv`
+            `/txs/?address=bchtest:qq89kjkeqz9mngp8kl3dpmu43y2wztdjqu500gn4c4`
           )
           .reply(200, mockData.mockTransactions)
 
         nock(`${process.env.BITCOINCOM_BASEURL}`)
           .get(
-            `/txs/?address=bitcoincash:qplk73cgh6qzm66ym5gjznqatj294w7wrc5d7tgadw`
+            `/txs/?address=bchtest:qzknfggae0av6yvxk77gmyq7syc67yux6sk80haqyr`
           )
           .reply(200, mockData.mockTransactions)
       }
@@ -629,5 +628,4 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 2, "Array should have 2 elements")
     })
   })
-  */
 })
