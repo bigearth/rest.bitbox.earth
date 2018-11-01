@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const blockchainRoute = require("../routes/v1/blockchain")
+const blockchainRoute = require("../dist/routes/v1/blockchain")
 
 describe("#BlockchainRouter", () => {
   describe("#root", () => {
