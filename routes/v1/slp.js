@@ -15,11 +15,13 @@ const config = {
   slpRateLimit1: undefined,
   slpRateLimit2: undefined,
   slpRateLimit3: undefined,
-  slpRateLimit4: undefined
+  slpRateLimit4: undefined,
+  slpRateLimit5: undefined,
+  slpRateLimit6: undefined
 }
 
 let i = 1
-while (i < 4) {
+while (i < 7) {
   config[`slpRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -73,7 +75,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
   }
 })
 
-router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
+router.get("/list/:id", config.slpRateLimit3, async (req, res, next) => {
   try {
     const query = {
       v: 3,
@@ -108,7 +110,7 @@ router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
 
 router.get(
   "/balancesForAddress/:address",
-  config.slpRateLimit2,
+  config.slpRateLimit4,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
@@ -127,7 +129,7 @@ router.get(
 
 router.get(
   "/balance/:address/:id",
-  config.slpRateLimit3,
+  config.slpRateLimit5,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
@@ -179,7 +181,7 @@ router.get(
 
 router.get(
   "/address/convert/:address",
-  config.slpRateLimit3,
+  config.slpRateLimit6,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
