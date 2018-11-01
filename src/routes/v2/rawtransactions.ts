@@ -1,12 +1,10 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
+import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
-
-//const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
-//const BITBOX = new BITBOXCli();
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -14,7 +12,32 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const config = {
+const requestConfig: IRequestConfig = {
+  method: "post",
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+}
+
+interface IRLConfig {
+  [rawTransactionsRateLimit1: string]: any
+  rawTransactionsRateLimit2: any
+  rawTransactionsRateLimit3: any
+  rawTransactionsRateLimit4: any
+  rawTransactionsRateLimit5: any
+  rawTransactionsRateLimit6: any
+  rawTransactionsRateLimit7: any
+  rawTransactionsRateLimit8: any
+  rawTransactionsRateLimit9: any
+  rawTransactionsRateLimit10: any
+  rawTransactionsRateLimit11: any
+}
+
+const config: IRLConfig = {
   rawTransactionsRateLimit1: undefined,
   rawTransactionsRateLimit2: undefined,
   rawTransactionsRateLimit3: undefined,
@@ -35,9 +58,9 @@ while (i < 12) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req, res /*next*/) {
+    handler: (req: express.Request, res: express.Response /*next*/) => {
       res.format({
-        json: function() {
+        json: () => {
           res.status(500).json({
             error: "Too many requests. Limits are 60 requests per minute."
           })
@@ -48,36 +71,26 @@ while (i < 12) {
   i++
 }
 
-//const requestConfig = {
-//  method: "post",
-//  auth: {
-//    username: username,
-//    password: password,
-//  },
-//  data: {
-//    jsonrpc: "1.0",
-//  },
-//};
-
-const requestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
+router.get(
+  "/",
+  config.rawTransactionsRateLimit1,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    res.json({ status: "rawtransactions" })
   }
-}
-
-router.get("/", config.rawTransactionsRateLimit1, (req, res, next) => {
-  res.json({ status: "rawtransactions" })
-})
+)
 
 router.get(
   "/decodeRawTransaction/:hex",
   config.rawTransactionsRateLimit2,
-  (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       let transactions = JSON.parse(req.params.hex)
       if (transactions.length > 20) {
@@ -85,21 +98,12 @@ router.get(
           error: "Array too large. Max 20 transactions"
         })
       }
-      const result = []
-      transactions = transactions.map(transaction =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "decoderawtransaction",
-            method: "decoderawtransaction",
-            params: [transaction]
-          }
-        }).catch(error => {
+      const result = [] as any
+      transactions = transactions.map((transaction: any) => {
+        requestConfig.data.id = "decoderawtransaction"
+        requestConfig.data.method = "decoderawtransaction"
+        requestConfig.data.params = [transaction]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -114,30 +118,22 @@ router.get(
             }
           }
         })
-      )
+      })
       axios.all(transactions).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "decoderawtransaction",
-          method: "decoderawtransaction",
-          params: [req.params.hex]
-        }
-      })
+      requestConfig.data.id = "decoderawtransaction"
+      requestConfig.data.method = "decoderawtransaction"
+      requestConfig.data.params = [req.params.hex]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -151,7 +147,11 @@ router.get(
 router.get(
   "/decodeScript/:script",
   config.rawTransactionsRateLimit3,
-  (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       let scripts = JSON.parse(req.params.script)
       if (scripts.length > 20) {
@@ -159,21 +159,12 @@ router.get(
           error: "Array too large. Max 20 scripts"
         })
       }
-      const result = []
-      scripts = scripts.map(script =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "decodescript",
-            method: "decodescript",
-            params: [script]
-          }
-        }).catch(error => {
+      const result = [] as any
+      scripts = scripts.map((script: any) => {
+        requestConfig.data.id = "decodescript"
+        requestConfig.data.method = "decodescript"
+        requestConfig.data.params = [script]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -188,30 +179,22 @@ router.get(
             }
           }
         })
-      )
+      })
       axios.all(scripts).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "decodescript",
-          method: "decodescript",
-          params: [req.params.script]
-        }
-      })
+      requestConfig.data.id = "decodescript"
+      requestConfig.data.method = "decodescript"
+      requestConfig.data.params = [req.params.script]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -225,7 +208,11 @@ router.get(
 router.get(
   "/getRawTransaction/:txid",
   config.rawTransactionsRateLimit4,
-  (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = 0
     if (req.query.verbose && req.query.verbose === "true") verbose = 1
 
@@ -236,21 +223,12 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "getrawtransaction",
-            method: "getrawtransaction",
-            params: [txid, verbose]
-          }
-        }).catch(error => {
+      const result = [] as any
+      txids = txids.map((txid: any) => {
+        requestConfig.data.id = "getrawtransaction"
+        requestConfig.data.method = "getrawtransaction"
+        requestConfig.data.params = [txid, verbose]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -265,30 +243,22 @@ router.get(
             }
           }
         })
-      )
+      })
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "getrawtransaction",
-          method: "getrawtransaction",
-          params: [req.params.txid, verbose]
-        }
-      })
+      requestConfig.data.id = "getrawtransaction"
+      requestConfig.data.method = "getrawtransaction"
+      requestConfig.data.params = [req.params.txid, verbose]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -302,7 +272,11 @@ router.get(
 router.post(
   "/sendRawTransaction/:hex",
   config.rawTransactionsRateLimit5,
-  (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       let transactions = JSON.parse(req.params.hex)
       if (transactions.length > 20) {
@@ -311,21 +285,12 @@ router.post(
         })
       }
 
-      const result = []
-      transactions = transactions.map(transaction =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "sendrawtransaction",
-            method: "sendrawtransaction",
-            params: [transaction]
-          }
-        }).catch(error => {
+      const result = [] as any
+      transactions = transactions.map((transaction: any) => {
+        requestConfig.data.id = "sendrawtransaction"
+        requestConfig.data.method = "sendrawtransaction"
+        requestConfig.data.params = [transaction]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -340,30 +305,22 @@ router.post(
             }
           }
         })
-      )
+      })
       axios.all(transactions).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "sendrawtransaction",
-          method: "sendrawtransaction",
-          params: [req.params.hex]
-        }
-      })
+      requestConfig.data.id = "sendrawtransaction"
+      requestConfig.data.method = "sendrawtransaction"
+      requestConfig.data.params = [req.params.hex]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -377,7 +334,11 @@ router.post(
 router.post(
   "/change/:rawtx/:prevTxs/:destination/:fee",
   config.rawTransactionsRateLimit6,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       const params = [
         req.params.rawtx,
@@ -407,7 +368,11 @@ router.post(
 router.post(
   "/input/:rawTx/:txid/:n",
   config.rawTransactionsRateLimit7,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "whc_createrawtx_input"
     requestConfig.data.method = "whc_createrawtx_input"
     requestConfig.data.params = [
@@ -428,7 +393,11 @@ router.post(
 router.post(
   "/opReturn/:rawTx/:payload",
   config.rawTransactionsRateLimit8,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "whc_createrawtx_opreturn"
     requestConfig.data.method = "whc_createrawtx_opreturn"
     requestConfig.data.params = [req.params.rawTx, req.params.payload]
@@ -445,7 +414,11 @@ router.post(
 router.post(
   "/reference/:rawTx/:destination",
   config.rawTransactionsRateLimit9,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const params = [req.params.rawTx, req.params.destination]
     if (req.query.amount) params.push(req.query.amount)
 
@@ -465,7 +438,11 @@ router.post(
 router.post(
   "/decodeTransaction/:rawTx",
   config.rawTransactionsRateLimit10,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const params = [req.params.rawTx]
     if (req.query.prevTxs) params.push(JSON.parse(req.query.prevTxs))
 
@@ -487,7 +464,11 @@ router.post(
 router.post(
   "/create/:inputs/:outputs",
   config.rawTransactionsRateLimit11,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const params = [
       JSON.parse(req.params.inputs),
       JSON.parse(req.params.outputs)
