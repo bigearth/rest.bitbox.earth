@@ -73,7 +73,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
 
     return tokens
   } catch (err) {
-    res.status(500).send(error.response.data.error)
+    res.status(500).send(err.response.data.error)
   }
 })
 
@@ -106,7 +106,7 @@ router.get("/list/:tokenId", config.slpRateLimit3, async (req, res, next) => {
       if (token.id === req.params.tokenId) return res.json(token)
     })
   } catch (err) {
-    res.status(500).send(error.response.data.error)
+    res.status(500).send(err.response.data.error)
   }
 })
 
@@ -209,7 +209,7 @@ router.get(
       )
       return res.json(balances)
     } catch (err) {
-      res.status(500).send(error.response.data.error)
+      res.status(500).send(err.response.data.error)
     }
   }
 )
