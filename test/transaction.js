@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const transactionRoute = require("../routes/v1/transaction")
+const transactionRoute = require("../dist/routes/v1/transaction")
 
 describe("#TransactionRouter", () => {
   describe("#root", () => {
