@@ -50,7 +50,7 @@ describe("#SlpRouter", () => {
   })
 
   describe("#listTokenById", () => {
-    it("should GET /list/:id", done => {
+    it("should GET /list/:tokenId", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url:
@@ -139,6 +139,28 @@ describe("#SlpRouter", () => {
       })
     })
   })
+  //
+  // describe("#balancesForToken", () => {
+  //   it("should GET /balancesForToken/:tokenId", done => {
+  //     const mockRequest = httpMocks.createRequest({
+  //       method: "GET",
+  //       url:
+  //         "/balancesForToken/d7c32d972a21b664f60b5fc422900179d8883dec7bd61418434aa12b09b99c12"
+  //     })
+  //     const mockResponse = httpMocks.createResponse({
+  //       eventEmitter: require("events").EventEmitter
+  //     })
+  //     slpRoute(mockRequest, mockResponse)
+  //
+  //     mockResponse.on("end", () => {
+  //       const actualResponseBody = Object.keys(
+  //         JSON.parse(mockResponse._getData())[0]
+  //       )
+  //       assert.deepEqual(actualResponseBody, ["balance", "address"])
+  //       done()
+  //     })
+  //   })
+  // })
 
   // TODO: Why does this test time out?
   // describe("#addressConvert", () => {
