@@ -35,11 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios = require("axios");
+var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
-var BitboxHTTP = axios.create({
+var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
 var username = process.env.RPC_USERNAME;
@@ -60,10 +61,11 @@ var config = {
     blockchainRateLimit13: undefined,
     blockchainRateLimit14: undefined,
     blockchainRateLimit15: undefined,
-    blockchainRateLimit16: undefined
+    blockchainRateLimit16: undefined,
+    blockchainRateLimit17: undefined
 };
 var i = 1;
-while (i < 17) {
+while (i < 18) {
     config["blockchainRateLimit" + i] = new RateLimit({
         windowMs: 60000,
         delayMs: 0,
@@ -120,7 +122,7 @@ router.get("/getBestBlockHash", config.blockchainRateLimit2, function (req, res,
         }
     });
 }); });
-router.get("/getBlock/:hash", config.blockchainRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getBlock/:hash", config.blockchainRateLimit3, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var verbose, showTxs, response, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -152,7 +154,7 @@ router.get("/getBlock/:hash", config.blockchainRateLimit2, function (req, res, n
         }
     });
 }); });
-router.get("/getBlockchainInfo", config.blockchainRateLimit3, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getBlockchainInfo", config.blockchainRateLimit4, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -176,7 +178,7 @@ router.get("/getBlockchainInfo", config.blockchainRateLimit3, function (req, res
         }
     });
 }); });
-router.get("/getBlockCount", config.blockchainRateLimit4, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getBlockCount", config.blockchainRateLimit5, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -200,7 +202,7 @@ router.get("/getBlockCount", config.blockchainRateLimit4, function (req, res, ne
         }
     });
 }); });
-router.get("/getBlockHash/:height", config.blockchainRateLimit5, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getBlockHash/:height", config.blockchainRateLimit6, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var heights, result_1;
     return __generator(this, function (_a) {
         try {
@@ -241,13 +243,14 @@ router.get("/getBlockHash/:height", config.blockchainRateLimit5, function (req, 
                     }
                 });
             });
-            axios.all(heights).then(axios.spread(function () {
+            axios_1.default.all(heights).then(axios_1.default.spread(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
                 for (var i_1 = 0; i_1 < args.length; i_1++) {
-                    var parsed = args[i_1].data.result;
+                    var tmp = {};
+                    var parsed = tmp.data.result;
                     result_1.push(parsed);
                 }
                 res.json(result_1);
@@ -277,7 +280,7 @@ router.get("/getBlockHash/:height", config.blockchainRateLimit5, function (req, 
         return [2 /*return*/];
     });
 }); });
-router.get("/getBlockHeader/:hash", config.blockchainRateLimit6, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getBlockHeader/:hash", config.blockchainRateLimit7, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var verbose, hashes, result_2;
     return __generator(this, function (_a) {
         verbose = false;
@@ -321,13 +324,14 @@ router.get("/getBlockHeader/:hash", config.blockchainRateLimit6, function (req, 
                     }
                 });
             });
-            axios.all(hashes).then(axios.spread(function () {
+            axios_1.default.all(hashes).then(axios_1.default.spread(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
                 for (var i_2 = 0; i_2 < args.length; i_2++) {
-                    var parsed = args[i_2].data.result;
+                    var tmp = {};
+                    var parsed = tmp.data.result;
                     result_2.push(parsed);
                 }
                 res.json(result_2);
@@ -357,7 +361,7 @@ router.get("/getBlockHeader/:hash", config.blockchainRateLimit6, function (req, 
         return [2 /*return*/];
     });
 }); });
-router.get("/getChainTips", config.blockchainRateLimit7, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getChainTips", config.blockchainRateLimit8, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -381,7 +385,7 @@ router.get("/getChainTips", config.blockchainRateLimit7, function (req, res, nex
         }
     });
 }); });
-router.get("/getDifficulty", config.blockchainRateLimit8, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getDifficulty", config.blockchainRateLimit9, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -405,7 +409,7 @@ router.get("/getDifficulty", config.blockchainRateLimit8, function (req, res, ne
         }
     });
 }); });
-router.get("/getMempoolAncestors/:txid", config.blockchainRateLimit9, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getMempoolAncestors/:txid", config.blockchainRateLimit10, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var verbose, txids, result_3;
     return __generator(this, function (_a) {
         verbose = false;
@@ -449,13 +453,14 @@ router.get("/getMempoolAncestors/:txid", config.blockchainRateLimit9, function (
                     }
                 });
             });
-            axios.all(txids).then(axios.spread(function () {
+            axios_1.default.all(txids).then(axios_1.default.spread(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
                 for (var i_3 = 0; i_3 < args.length; i_3++) {
-                    var parsed = args[i_3].data.result;
+                    var tmp = {};
+                    var parsed = tmp.data.result;
                     result_3.push(parsed);
                 }
                 res.json(result_3);
@@ -485,7 +490,7 @@ router.get("/getMempoolAncestors/:txid", config.blockchainRateLimit9, function (
         return [2 /*return*/];
     });
 }); });
-router.get("/getMempoolDescendants/:txid", config.blockchainRateLimit10, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getMempoolDescendants/:txid", config.blockchainRateLimit11, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var verbose, txids, result_4;
     return __generator(this, function (_a) {
         verbose = false;
@@ -529,13 +534,14 @@ router.get("/getMempoolDescendants/:txid", config.blockchainRateLimit10, functio
                     }
                 });
             });
-            axios.all(txids).then(axios.spread(function () {
+            axios_1.default.all(txids).then(axios_1.default.spread(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
                 for (var i_4 = 0; i_4 < args.length; i_4++) {
-                    var parsed = args[i_4].data.result;
+                    var tmp = {};
+                    var parsed = tmp.data.result;
                     result_4.push(parsed);
                 }
                 res.json(result_4);
@@ -565,7 +571,7 @@ router.get("/getMempoolDescendants/:txid", config.blockchainRateLimit10, functio
         return [2 /*return*/];
     });
 }); });
-router.get("/getMempoolEntry/:txid", config.blockchainRateLimit11, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getMempoolEntry/:txid", config.blockchainRateLimit12, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var txids, result_5;
     return __generator(this, function (_a) {
         try {
@@ -606,13 +612,14 @@ router.get("/getMempoolEntry/:txid", config.blockchainRateLimit11, function (req
                     }
                 });
             });
-            axios.all(txids).then(axios.spread(function () {
+            axios_1.default.all(txids).then(axios_1.default.spread(function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
                 for (var i_5 = 0; i_5 < args.length; i_5++) {
-                    var parsed = args[i_5].data.result;
+                    var tmp = {};
+                    var parsed = tmp.data.result;
                     result_5.push(parsed);
                 }
                 res.json(result_5);
@@ -642,7 +649,7 @@ router.get("/getMempoolEntry/:txid", config.blockchainRateLimit11, function (req
         return [2 /*return*/];
     });
 }); });
-router.get("/getMempoolInfo", config.blockchainRateLimit12, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getMempoolInfo", config.blockchainRateLimit13, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -666,7 +673,7 @@ router.get("/getMempoolInfo", config.blockchainRateLimit12, function (req, res, 
         }
     });
 }); });
-router.get("/getRawMempool", config.blockchainRateLimit13, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getRawMempool", config.blockchainRateLimit14, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var verbose, response, error_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -693,7 +700,7 @@ router.get("/getRawMempool", config.blockchainRateLimit13, function (req, res, n
         }
     });
 }); });
-router.get("/getTxOut/:txid/:n", config.blockchainRateLimit14, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getTxOut/:txid/:n", config.blockchainRateLimit15, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var include_mempool, response, error_9;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -724,7 +731,7 @@ router.get("/getTxOut/:txid/:n", config.blockchainRateLimit14, function (req, re
         }
     });
 }); });
-router.get("/getTxOutProof/:txids", config.blockchainRateLimit15, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/getTxOutProof/:txids", config.blockchainRateLimit16, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_10;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -817,7 +824,7 @@ router.get("/getTxOutProof/:txids", config.blockchainRateLimit15, function (req,
 //     res.send(error.response.data.error.message);
 //   });
 // });
-router.get("/verifyTxOutProof/:proof", config.blockchainRateLimit16, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+router.get("/verifyTxOutProof/:proof", config.blockchainRateLimit17, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_11;
     return __generator(this, function (_a) {
         switch (_a.label) {

@@ -32,7 +32,7 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const config = {
+const config: IRLConfig = {
   blockchainRateLimit1: undefined,
   blockchainRateLimit2: undefined,
   blockchainRateLimit3: undefined,
@@ -200,8 +200,8 @@ router.get(
           error: "Array too large. Max 20 heights"
         })
       }
-      const result = []
-      heights = heights.map(height =>
+      const result: any[] = []
+      heights = heights.map((height: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -233,7 +233,8 @@ router.get(
       axios.all(heights).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -281,8 +282,8 @@ router.get(
           error: "Array too large. Max 20 hashes"
         })
       }
-      const result = []
-      hashes = hashes.map(hash =>
+      const result = [] as any
+      hashes = hashes.map((hash: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -314,7 +315,8 @@ router.get(
       axios.all(hashes).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -404,8 +406,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -437,7 +439,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -485,8 +488,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -518,7 +521,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -563,8 +567,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -596,7 +600,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
