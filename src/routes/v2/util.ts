@@ -2,7 +2,7 @@
 
 import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
+import axios from "axios"
 const RateLimit = require("express-rate-limit")
 
 interface IRLConfig {

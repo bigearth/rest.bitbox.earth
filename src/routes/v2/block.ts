@@ -1,9 +1,15 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
+import axios from "axios"
 const RateLimit = require("express-rate-limit")
+
+interface IRLConfig {
+  [blockRateLimit1: string]: any
+  blockRateLimit2: any
+  blockRateLimit3: any
+}
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -11,7 +17,7 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const config = {
+const config: IRLConfig = {
   blockRateLimit1: undefined,
   blockRateLimit2: undefined,
   blockRateLimit3: undefined
@@ -23,7 +29,7 @@ while (i < 4) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req, res /*next*/) {
+    handler: function(req: express.Request, res: express.Response /*next*/) {
       res.format({
         json: function() {
           res.status(500).json({
@@ -36,14 +42,26 @@ while (i < 4) {
   i++
 }
 
-router.get("/", config.blockRateLimit1, (req, res, next) => {
-  res.json({ status: "block" })
-})
+router.get(
+  "/",
+  config.blockRateLimit1,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    res.json({ status: "block" })
+  }
+)
 
 router.get(
   "/detailsByHash/:hash",
   config.blockRateLimit2,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       const response = await axios.get(
         `${process.env.BITCOINCOM_BASEURL}block/${req.params.hash}`
@@ -60,7 +78,11 @@ router.get(
 router.get(
   "/detailsByHeight/:height",
   config.blockRateLimit2,
-  (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     BitboxHTTP({
       method: "post",
       auth: {
@@ -76,10 +98,10 @@ router.get(
     })
       .then(async response => {
         try {
-          const response = await axios.get(
+          const rsp = await axios.get(
             `${process.env.BITCOINCOM_BASEURL}block/${response.data.result}`
           )
-          const parsed = response.data
+          const parsed = rsp.data
           res.json(parsed)
         } catch (error) {
           res.status(500)

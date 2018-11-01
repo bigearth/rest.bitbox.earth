@@ -35,11 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios = require("axios");
+var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
-var BitboxHTTP = axios.create({
+var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
 var username = process.env.RPC_USERNAME;
@@ -67,16 +68,19 @@ while (i < 4) {
     });
     i++;
 }
-router.get("/", config.blockRateLimit1, function (req, res, next) {
-    res.json({ status: "block" });
-});
+router.get("/", config.blockRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        res.json({ status: "block" });
+        return [2 /*return*/];
+    });
+}); });
 router.get("/detailsByHash/:hash", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, parsed, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios.get(process.env.BITCOINCOM_BASEURL + "block/" + req.params.hash)];
+                return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + req.params.hash)];
             case 1:
                 response = _a.sent();
                 parsed = response.data;
@@ -90,43 +94,47 @@ router.get("/detailsByHash/:hash", config.blockRateLimit2, function (req, res, n
         }
     });
 }); });
-router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, res, next) {
-    BitboxHTTP({
-        method: "post",
-        auth: {
-            username: username,
-            password: password
-        },
-        data: {
-            jsonrpc: "1.0",
-            id: "getblockhash",
-            method: "getblockhash",
-            params: [parseInt(req.params.height)]
-        }
-    })
-        .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
-        var response_1, parsed, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, axios.get(process.env.BITCOINCOM_BASEURL + "block/" + response_1.data.result)];
-                case 1:
-                    response_1 = _a.sent();
-                    parsed = response_1.data;
-                    res.json(parsed);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_2 = _a.sent();
-                    res.status(500);
-                    return [2 /*return*/, res.send(error_2)];
-                case 3: return [2 /*return*/];
+router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var _this = this;
+    return __generator(this, function (_a) {
+        BitboxHTTP({
+            method: "post",
+            auth: {
+                username: username,
+                password: password
+            },
+            data: {
+                jsonrpc: "1.0",
+                id: "getblockhash",
+                method: "getblockhash",
+                params: [parseInt(req.params.height)]
             }
+        })
+            .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
+            var rsp, parsed, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + response.data.result)];
+                    case 1:
+                        rsp = _a.sent();
+                        parsed = rsp.data;
+                        res.json(parsed);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_2 = _a.sent();
+                        res.status(500);
+                        return [2 /*return*/, res.send(error_2)];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); })
+            .catch(function (error) {
+            res.status(500);
+            return res.send(error);
         });
-    }); })
-        .catch(function (error) {
-        res.status(500);
-        return res.send(error);
+        return [2 /*return*/];
     });
-});
+}); });
 module.exports = router;
