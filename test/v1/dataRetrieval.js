@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const dataRetrieval = require("../dist/routes/v1/dataRetrieval")
+const dataRetrieval = require("../../dist/routes/v1/dataRetrieval")
 
 describe("#dataRetrievalRouter", () => {
   describe("#root", () => {

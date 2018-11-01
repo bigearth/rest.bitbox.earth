@@ -85,7 +85,7 @@ app.use("/" + v1prefix + "/" + "payloadCreation", payloadCreationV1);
 app.use("/" + v1prefix + "/" + "slp", slpV1);
 app.use("/", indexV2);
 app.use("/" + v2prefix + "/" + "health-check", healthCheckV2);
-app.use("/" + v2prefix + "/" + "address", addressV2);
+app.use("/" + v2prefix + "/" + "address", addressV2.router);
 app.use("/" + v2prefix + "/" + "blockchain", blockchainV2);
 app.use("/" + v2prefix + "/" + "block", blockV2);
 app.use("/" + v2prefix + "/" + "control", controlV2);
@@ -154,6 +154,9 @@ sock.on("message", function (topic, message) {
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+// Set the time before a timeout error is generated. This impacts testing and
+// the handling of timeout errors. Is 10 seconds too agressive?
+server.setTimeout(10000);
 /**
  * Normalize a port into a number, string, or false.
  */

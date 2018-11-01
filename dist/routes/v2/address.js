@@ -34,11 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 var express = require("express");
 var router = express.Router();
 var axios = require("axios");
 var RateLimit = require("express-rate-limit");
+var logger = require("./logging.js");
+var routeUtils = require("./route-utils");
+// Used for processing error messages before sending them to the user.
+var util = require("util");
+util.inspect.defaultOptions = { depth: 1 };
 var BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 var BITBOX = new BITBOXCli();
 var config = {
@@ -65,44 +69,33 @@ while (i < 6) {
     });
     i++;
 }
-router.get("/", config.addressRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ status: "address" });
-        return [2 /*return*/];
-    });
-}); });
-router.get("/details/:address", config.addressRateLimit2, details);
-router.get("/utxo/:address", config.addressRateLimit3, utxo);
-router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed);
-router.get("/transactions/:address", config.addressRateLimit5, transactions);
+// Connect the route endpoints to their handler functions.
+router.get("/", config.addressRateLimit1, root);
+router.post("/details", config.addressRateLimit2, details);
+router.post("/utxo/:address", config.addressRateLimit3, utxo);
+router.post("/unconfirmed/:address", config.addressRateLimit4, unconfirmed);
+router.post("/transactions/:address", config.addressRateLimit5, transactions);
+// Root API endpoint. Simply acknowledges that it exists.
+function root(req, res, next) {
+    return res.json({ status: "address" });
+}
 // Retrieve details on an address.
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"]}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"], "from": 1, "to": 5}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
 function details(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var addresses, retArray, i_1, thisAddress, legacyAddr, path, response, parsed, err_1;
+        var addresses, retArray, i_1, thisAddress, legacyAddr, networkIsValid, path, response, retData, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    addresses = req.params.address;
-                    // Force the input to be an array if it isn't.
-                    if (!Array.isArray(addresses))
-                        addresses = [addresses];
-                    // Parse the array.
-                    try {
-                        addresses = JSON.parse(addresses);
-                        // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-                    }
-                    catch (err) {
-                        // Dev Note: This block triggered by non-array input, such as a curl
-                        // statement. It should silently exit this catch statement.
-                    }
-                    // Enforce: no more than 20 addresses.
-                    if (addresses.length > 20) {
+                    addresses = req.body.addresses;
+                    // Reject if address is not an array.
+                    if (!Array.isArray(addresses)) {
                         res.status(400);
-                        return [2 /*return*/, res.json({
-                                error: "Array too large. Max 20 addresses"
-                            })];
+                        return [2 /*return*/, res.json({ error: "addresses needs to be an array" })];
                     }
+                    logger.debug("Executing address/details with these addresses: ", addresses);
                     retArray = [];
                     i_1 = 0;
                     _a.label = 1;
@@ -116,22 +109,31 @@ function details(req, res, next) {
                     }
                     catch (err) {
                         res.status(400);
-                        return [2 /*return*/, res.send("Invalid BCH address. Double check your address is valid: " + thisAddress)];
+                        return [2 /*return*/, res.json({
+                                error: "Invalid BCH address. Double check your address is valid: " + thisAddress
+                            })];
+                    }
+                    networkIsValid = routeUtils.validateNetwork(thisAddress);
+                    if (!networkIsValid) {
+                        res.status(400);
+                        return [2 /*return*/, res.json({
+                                error: "Invalid network. Trying to use a testnet address on mainnet, or vice versa."
+                            })];
                     }
                     path = process.env.BITCOINCOM_BASEURL + "addr/" + legacyAddr;
-                    //console.log(`path: ${path}`)
-                    // Not sure what this is doing?
-                    if (req.query.from && req.query.to)
-                        path = path + "?from=" + req.query.from + "&to=" + req.query.to;
+                    // Optional query strings limit the number of TXIDs.
+                    // https://github.com/bitpay/insight-api/blob/master/README.md#notes-on-upgrading-from-v02
+                    if (req.body.from && req.body.to)
+                        path = path + "?from=" + req.body.from + "&to=" + req.body.to;
                     return [4 /*yield*/, axios.get(path)
-                        // Parse the returned data.
+                        // Append different address formats to the return data.
                     ];
                 case 2:
                     response = _a.sent();
-                    parsed = response.data;
-                    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
-                    parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
-                    retArray.push(parsed);
+                    retData = response.data;
+                    retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+                    retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+                    retArray.push(retData);
                     _a.label = 3;
                 case 3:
                     i_1++;
@@ -141,12 +143,14 @@ function details(req, res, next) {
                     res.status(200);
                     return [2 /*return*/, res.json(retArray)];
                 case 5:
-                    err_1 = _a.sent();
-                    // Write out error to console or debug log.
-                    //console.log(`Error in address.js/details(): `, err);
-                    // Return an error message to the caller.
+                    error_1 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in address/details: `, error)
+                    // Return error message to the caller.
                     res.status(500);
-                    return [2 /*return*/, res.json("Error in address.js/details(): " + err_1.message)];
+                    if (error_1.response && error_1.response.data && error_1.response.data.error)
+                        return [2 /*return*/, res.json({ error: error_1.response.data.error })];
+                    return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
                 case 6: return [2 /*return*/];
             }
         });
@@ -155,31 +159,18 @@ function details(req, res, next) {
 // Retrieve UTXO information for an address.
 function utxo(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var addresses, retArray, i_2, thisAddress, legacyAddr, path, response, parsed, err_2;
+        var addresses, retArray, i_2, thisAddress, legacyAddr, networkIsValid, path, response, retData, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    addresses = req.params.address;
-                    // Force the input to be an array if it isn't.
-                    if (!Array.isArray(addresses))
-                        addresses = [addresses];
-                    // Parse the array.
-                    try {
-                        addresses = JSON.parse(addresses);
-                        // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-                    }
-                    catch (err) {
-                        // Dev Note: This block triggered by non-array input, such as a curl
-                        // statement. It should silently exit this catch statement.
-                    }
-                    // Enforce: no more than 20 addresses.
-                    if (addresses.length > 20) {
+                    addresses = req.body.addresses;
+                    // Reject if address is not an array.
+                    if (!Array.isArray(addresses)) {
                         res.status(400);
-                        return [2 /*return*/, res.json({
-                                error: "Array too large. Max 20 addresses"
-                            })];
+                        return [2 /*return*/, res.json({ error: "addresses needs to be an array" })];
                     }
+                    logger.debug("Executing address/utxo with these addresses: ", addresses);
                     retArray = [];
                     i_2 = 0;
                     _a.label = 1;
@@ -193,18 +184,27 @@ function utxo(req, res, next) {
                     }
                     catch (err) {
                         res.status(400);
-                        return [2 /*return*/, res.send("Invalid BCH address. Double check your address is valid: " + thisAddress)];
+                        return [2 /*return*/, res.json({
+                                error: "Invalid BCH address. Double check your address is valid: " + thisAddress
+                            })];
+                    }
+                    networkIsValid = routeUtils.validateNetwork(thisAddress);
+                    if (!networkIsValid) {
+                        res.status(400);
+                        return [2 /*return*/, res.json({
+                                error: "Invalid network. Trying to use a testnet address on mainnet, or vice versa."
+                            })];
                     }
                     path = process.env.BITCOINCOM_BASEURL + "addr/" + legacyAddr + "/utxo";
                     return [4 /*yield*/, axios.get(path)
-                        // Parse the returned data.
+                        // Append different address formats to the return data.
                     ];
                 case 2:
                     response = _a.sent();
-                    parsed = response.data;
-                    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
-                    parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
-                    retArray.push(parsed);
+                    retData = response.data;
+                    retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+                    retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+                    retArray.push(retData);
                     _a.label = 3;
                 case 3:
                     i_2++;
@@ -214,11 +214,14 @@ function utxo(req, res, next) {
                     res.status(200);
                     return [2 /*return*/, res.json(retArray)];
                 case 5:
-                    err_2 = _a.sent();
-                    //console.log(`Error in address.js/utxo()`)
-                    // Return an error message to the caller.
+                    err_1 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in address/details: `, error)
+                    // Return error message to the caller.
                     res.status(500);
-                    return [2 /*return*/, res.json("Error in address.js/utxo(): " + err_2.message)];
+                    if (error.response && error.response.data && error.response.data.error)
+                        return [2 /*return*/, res.json({ error: error.response.data.error })];
+                    return [2 /*return*/, res.json({ error: util.inspect(error) })];
                 case 6: return [2 /*return*/];
             }
         });
@@ -227,31 +230,18 @@ function utxo(req, res, next) {
 // Retrieve any unconfirmed TX information for a given address.
 function unconfirmed(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var addresses, retArray, i_3, thisAddress, legacyAddr, path, response, parsed, j, thisUtxo, err_3;
+        var addresses, retArray, i_3, thisAddress, legacyAddr, networkIsValid, path, response, retData, j, thisUtxo, err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    addresses = req.params.address;
-                    // Force the input to be an array if it isn't.
-                    if (!Array.isArray(addresses))
-                        addresses = [addresses];
-                    // Parse the array.
-                    try {
-                        addresses = JSON.parse(addresses);
-                        // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-                    }
-                    catch (err) {
-                        // Dev Note: This block triggered by non-array input, such as a curl
-                        // statement. It should silently exit this catch statement.
-                    }
-                    // Enforce: no more than 20 addresses.
-                    if (addresses.length > 20) {
+                    addresses = req.body.addresses;
+                    // Reject if address is not an array.
+                    if (!Array.isArray(addresses)) {
                         res.status(400);
-                        return [2 /*return*/, res.json({
-                                error: "Array too large. Max 20 addresses"
-                            })];
+                        return [2 /*return*/, res.json({ error: "addresses needs to be an array" })];
                     }
+                    logger.debug("Executing address/utxo with these addresses: ", addresses);
                     retArray = [];
                     i_3 = 0;
                     _a.label = 1;
@@ -265,20 +255,29 @@ function unconfirmed(req, res, next) {
                     }
                     catch (err) {
                         res.status(400);
-                        return [2 /*return*/, res.send("Invalid BCH address. Double check your address is valid: " + thisAddress)];
+                        return [2 /*return*/, res.json({
+                                error: "Invalid BCH address. Double check your address is valid: " + thisAddress
+                            })];
+                    }
+                    networkIsValid = routeUtils.validateNetwork(thisAddress);
+                    if (!networkIsValid) {
+                        res.status(400);
+                        return [2 /*return*/, res.json({
+                                error: "Invalid network. Trying to use a testnet address on mainnet, or vice versa."
+                            })];
                     }
                     path = process.env.BITCOINCOM_BASEURL + "addr/" + legacyAddr + "/utxo";
                     return [4 /*yield*/, axios.get(path)
-                        // Parse the returned data.
+                        // Append different address formats to the return data.
                     ];
                 case 2:
                     response = _a.sent();
-                    parsed = response.data;
-                    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
-                    parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+                    retData = response.data;
+                    retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+                    retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
                     // Loop through each returned UTXO.
-                    for (j = 0; j < parsed.length; j++) {
-                        thisUtxo = parsed[j];
+                    for (j = 0; j < retData.length; j++) {
+                        thisUtxo = retData[j];
                         // Only interested in UTXOs with no confirmations.
                         if (thisUtxo.confirmations === 0)
                             retArray.push(thisUtxo);
@@ -292,11 +291,14 @@ function unconfirmed(req, res, next) {
                     res.status(200);
                     return [2 /*return*/, res.json(retArray)];
                 case 5:
-                    err_3 = _a.sent();
-                    //console.log(`Error in address.js/unconfirmed().`)
-                    // Return an error message to the caller.
+                    err_2 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in address/details: `, error)
+                    // Return error message to the caller.
                     res.status(500);
-                    return [2 /*return*/, res.json("Error in address.js/utxo(): " + err_3.message)];
+                    if (error.response && error.response.data && error.response.data.error)
+                        return [2 /*return*/, res.json({ error: error.response.data.error })];
+                    return [2 /*return*/, res.json({ error: util.inspect(error) })];
                 case 6: return [2 /*return*/];
             }
         });
@@ -305,31 +307,18 @@ function unconfirmed(req, res, next) {
 // Get an array of TX information for a given address.
 function transactions(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var addresses, retArray, i_4, thisAddress, path, response, parsed, err_4;
+        var addresses, retArray, i_4, thisAddress, networkIsValid, path, response, retData, err_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    addresses = req.params.address;
-                    // Force the input to be an array if it isn't.
-                    if (!Array.isArray(addresses))
-                        addresses = [addresses];
-                    // Parse the array.
-                    try {
-                        addresses = JSON.parse(addresses);
-                        // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-                    }
-                    catch (err) {
-                        // Dev Note: This block triggered by non-array input, such as a curl
-                        // statement. It should silently exit this catch statement.
-                    }
-                    // Enforce: no more than 20 addresses.
-                    if (addresses.length > 20) {
+                    addresses = req.body.addresses;
+                    // Reject if address is not an array.
+                    if (!Array.isArray(addresses)) {
                         res.status(400);
-                        return [2 /*return*/, res.json({
-                                error: "Array too large. Max 20 addresses"
-                            })];
+                        return [2 /*return*/, res.json({ error: "addresses needs to be an array" })];
                     }
+                    logger.debug("Executing address/utxo with these addresses: ", addresses);
                     retArray = [];
                     i_4 = 0;
                     _a.label = 1;
@@ -343,18 +332,27 @@ function transactions(req, res, next) {
                     }
                     catch (err) {
                         res.status(400);
-                        return [2 /*return*/, res.send("Invalid BCH address. Double check your address is valid: " + thisAddress)];
+                        return [2 /*return*/, res.json({
+                                error: "Invalid BCH address. Double check your address is valid: " + thisAddress
+                            })];
+                    }
+                    networkIsValid = routeUtils.validateNetwork(thisAddress);
+                    if (!networkIsValid) {
+                        res.status(400);
+                        return [2 /*return*/, res.json({
+                                error: "Invalid network. Trying to use a testnet address on mainnet, or vice versa."
+                            })];
                     }
                     path = process.env.BITCOINCOM_BASEURL + "txs/?address=" + thisAddress;
                     return [4 /*yield*/, axios.get(path)
-                        // Parse the returned data.
+                        // Append different address formats to the return data.
                     ];
                 case 2:
                     response = _a.sent();
-                    parsed = response.data;
-                    parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
-                    parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
-                    retArray.push(parsed);
+                    retData = response.data;
+                    retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress);
+                    retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress);
+                    retArray.push(retData);
                     _a.label = 3;
                 case 3:
                     i_4++;
@@ -364,14 +362,26 @@ function transactions(req, res, next) {
                     res.status(200);
                     return [2 /*return*/, res.json(retArray)];
                 case 5:
-                    err_4 = _a.sent();
-                    //console.log(`Error in address.js/transactions().`)
-                    // Return an error message to the caller.
+                    err_3 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in address/details: `, error)
+                    // Return error message to the caller.
                     res.status(500);
-                    return [2 /*return*/, res.json("Error in address.js/transactions(): " + err_4.message)];
+                    if (error.response && error.response.data && error.response.data.error)
+                        return [2 /*return*/, res.json({ error: error.response.data.error })];
+                    return [2 /*return*/, res.json({ error: util.inspect(error) })];
                 case 6: return [2 /*return*/];
             }
         });
     });
 }
-module.exports = router;
+module.exports = {
+    router: router,
+    testableComponents: {
+        root: root,
+        details: details,
+        utxo: utxo,
+        unconfirmed: unconfirmed,
+        transactions: transactions
+    }
+};

@@ -4,6 +4,12 @@ const express = require("express")
 const router = express.Router()
 const axios = require("axios")
 const RateLimit = require("express-rate-limit")
+const logger = require("./logging.js")
+const routeUtils = require("./route-utils")
+
+// Used for processing error messages before sending them to the user.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
 
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
@@ -34,38 +40,32 @@ while (i < 6) {
   i++
 }
 
-router.get("/", config.addressRateLimit1, async (req, res, next) => {
-  res.json({ status: "address" })
-})
-router.get("/details/:address", config.addressRateLimit2, details)
-router.get("/utxo/:address", config.addressRateLimit3, utxo)
-router.get("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
-router.get("/transactions/:address", config.addressRateLimit5, transactions)
+// Connect the route endpoints to their handler functions.
+router.get("/", config.addressRateLimit1, root)
+router.post("/details", config.addressRateLimit2, details)
+router.post("/utxo/:address", config.addressRateLimit3, utxo)
+router.post("/unconfirmed/:address", config.addressRateLimit4, unconfirmed)
+router.post("/transactions/:address", config.addressRateLimit5, transactions)
+
+// Root API endpoint. Simply acknowledges that it exists.
+function root(req, res, next) {
+  return res.json({ status: "address" })
+}
 
 // Retrieve details on an address.
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"]}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
+// curl -d '{"addresses": ["bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr", "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"], "from": 1, "to": 5}' -H "Content-Type: application/json" http://localhost:3000/v2/address/details
 async function details(req, res, next) {
   try {
-    let addresses = req.params.address
+    const addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      return res.json({ error: "addresses needs to be an array" })
     }
+
+    logger.debug(`Executing address/details with these addresses: `, addresses)
 
     // Loop through each address.
     const retArray = []
@@ -77,67 +77,65 @@ async function details(req, res, next) {
         var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
-        return res.send(
-          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
-        )
+        return res.json({
+          error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
       }
 
       let path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}`
-      //console.log(`path: ${path}`)
 
-      // Not sure what this is doing?
-      if (req.query.from && req.query.to)
-        path = `${path}?from=${req.query.from}&to=${req.query.to}`
-      //console.log(`path: ${path}`); // Used for debugging.
+      // Optional query strings limit the number of TXIDs.
+      // https://github.com/bitpay/insight-api/blob/master/README.md#notes-on-upgrading-from-v02
+      if (req.body.from && req.body.to)
+        path = `${path}?from=${req.body.from}&to=${req.body.to}`
 
       // Query the Insight server.
       const response = await axios.get(path)
 
-      // Parse the returned data.
-      const parsed = response.data
-      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
-      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+      // Append different address formats to the return data.
+      const retData = response.data
+      retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
 
-      retArray.push(parsed)
+      retArray.push(retData)
     }
 
     // Return the array of retrieved address information.
     res.status(200)
     return res.json(retArray)
-  } catch (err) {
-    // Write out error to console or debug log.
-    //console.log(`Error in address.js/details(): `, err);
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in address/details: `, error)
 
-    // Return an error message to the caller.
+    // Return error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/details(): ${err.message}`)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
 }
 
 // Retrieve UTXO information for an address.
 async function utxo(req, res, next) {
   try {
-    let addresses = req.params.address
+    const addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      return res.json({ error: "addresses needs to be an array" })
     }
+
+    logger.debug(`Executing address/utxo with these addresses: `, addresses)
 
     // Loop through each address.
     const retArray = []
@@ -149,9 +147,18 @@ async function utxo(req, res, next) {
         var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
-        return res.send(
-          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
-        )
+        return res.json({
+          error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
       }
 
       const path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}/utxo`
@@ -159,50 +166,41 @@ async function utxo(req, res, next) {
       // Query the Insight server.
       const response = await axios.get(path)
 
-      // Parse the returned data.
-      const parsed = response.data
-      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
-      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+      // Append different address formats to the return data.
+      const retData = response.data
+      retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
 
-      retArray.push(parsed)
+      retArray.push(retData)
     }
 
     // Return the array of retrieved address information.
     res.status(200)
     return res.json(retArray)
   } catch (err) {
-    //console.log(`Error in address.js/utxo()`)
+    // Write out error to error log.
+    //logger.error(`Error in address/details: `, error)
 
-    // Return an error message to the caller.
+    // Return error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/utxo(): ${err.message}`)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
 }
 
 // Retrieve any unconfirmed TX information for a given address.
 async function unconfirmed(req, res, next) {
   try {
-    let addresses = req.params.address
+    const addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      return res.json({ error: "addresses needs to be an array" })
     }
+
+    logger.debug(`Executing address/utxo with these addresses: `, addresses)
 
     // Loop through each address.
     const retArray = []
@@ -214,9 +212,18 @@ async function unconfirmed(req, res, next) {
         var legacyAddr = BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
-        return res.send(
-          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
-        )
+        return res.json({
+          error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
       }
 
       const path = `${process.env.BITCOINCOM_BASEURL}addr/${legacyAddr}/utxo`
@@ -224,14 +231,14 @@ async function unconfirmed(req, res, next) {
       // Query the Insight server.
       const response = await axios.get(path)
 
-      // Parse the returned data.
-      const parsed = response.data
-      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
-      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+      // Append different address formats to the return data.
+      const retData = response.data
+      retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
 
       // Loop through each returned UTXO.
-      for (let j = 0; j < parsed.length; j++) {
-        const thisUtxo = parsed[j]
+      for (let j = 0; j < retData.length; j++) {
+        const thisUtxo = retData[j]
 
         // Only interested in UTXOs with no confirmations.
         if (thisUtxo.confirmations === 0) retArray.push(thisUtxo)
@@ -242,38 +249,29 @@ async function unconfirmed(req, res, next) {
     res.status(200)
     return res.json(retArray)
   } catch (err) {
-    //console.log(`Error in address.js/unconfirmed().`)
+    // Write out error to error log.
+    //logger.error(`Error in address/details: `, error)
 
-    // Return an error message to the caller.
+    // Return error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/utxo(): ${err.message}`)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
 }
 
 // Get an array of TX information for a given address.
 async function transactions(req, res, next) {
   try {
-    let addresses = req.params.address
+    const addresses = req.body.addresses
 
-    // Force the input to be an array if it isn't.
-    if (!Array.isArray(addresses)) addresses = [addresses]
-
-    // Parse the array.
-    try {
-      addresses = JSON.parse(addresses)
-      // console.log(`addreses: ${JSON.stringify(addresses, null, 2)}`); // Used for debugging.
-    } catch (err) {
-      // Dev Note: This block triggered by non-array input, such as a curl
-      // statement. It should silently exit this catch statement.
-    }
-
-    // Enforce: no more than 20 addresses.
-    if (addresses.length > 20) {
+    // Reject if address is not an array.
+    if (!Array.isArray(addresses)) {
       res.status(400)
-      return res.json({
-        error: "Array too large. Max 20 addresses"
-      })
+      return res.json({ error: "addresses needs to be an array" })
     }
+
+    logger.debug(`Executing address/utxo with these addresses: `, addresses)
 
     // Loop through each address.
     const retArray = []
@@ -285,9 +283,18 @@ async function transactions(req, res, next) {
         BITBOX.Address.toLegacyAddress(thisAddress)
       } catch (err) {
         res.status(400)
-        return res.send(
-          `Invalid BCH address. Double check your address is valid: ${thisAddress}`
-        )
+        return res.json({
+          error: `Invalid BCH address. Double check your address is valid: ${thisAddress}`
+        })
+      }
+
+      // Prevent a common user error. Ensure they are using the correct network address.
+      const networkIsValid = routeUtils.validateNetwork(thisAddress)
+      if (!networkIsValid) {
+        res.status(400)
+        return res.json({
+          error: `Invalid network. Trying to use a testnet address on mainnet, or vice versa.`
+        })
       }
 
       const path = `${
@@ -297,24 +304,36 @@ async function transactions(req, res, next) {
       // Query the Insight server.
       const response = await axios.get(path)
 
-      // Parse the returned data.
-      const parsed = response.data
-      parsed.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
-      parsed.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
+      // Append different address formats to the return data.
+      const retData = response.data
+      retData.legacyAddress = BITBOX.Address.toLegacyAddress(thisAddress)
+      retData.cashAddress = BITBOX.Address.toCashAddress(thisAddress)
 
-      retArray.push(parsed)
+      retArray.push(retData)
     }
 
     // Return the array of retrieved address information.
     res.status(200)
     return res.json(retArray)
   } catch (err) {
-    //console.log(`Error in address.js/transactions().`)
+    // Write out error to error log.
+    //logger.error(`Error in address/details: `, error)
 
-    // Return an error message to the caller.
+    // Return error message to the caller.
     res.status(500)
-    return res.json(`Error in address.js/transactions(): ${err.message}`)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
 }
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root,
+    details,
+    utxo,
+    unconfirmed,
+    transactions
+  }
+}
