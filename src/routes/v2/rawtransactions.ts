@@ -25,7 +25,6 @@ const requestConfig: IRequestConfig = {
 
 interface IRLConfig {
   [rawTransactionsRateLimit1: string]: any
-  rawTransactionsRateLimit1: any
   rawTransactionsRateLimit2: any
   rawTransactionsRateLimit3: any
   rawTransactionsRateLimit4: any

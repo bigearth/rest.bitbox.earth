@@ -28,7 +28,6 @@ const requestConfig: IRequestConfig = {
 
 interface IRLConfig {
   [payloadCreationRateLimit1: string]: any
-  payloadCreationRateLimit1: any
   payloadCreationRateLimit2: any
   payloadCreationRateLimit3: any
   payloadCreationRateLimit4: any
