@@ -2766,7 +2766,7 @@
         }
       }
     },
-    "/slp/list/{id}": {
+    "/slp/list/{tokenId}": {
       "get": {
         "tags": ["slp"],
         "summary": "list token",
@@ -2774,7 +2774,7 @@
         "operationId": "slpListToken",
         "parameters": [
           {
-            "name": "id",
+            "name": "tokenId",
             "in": "path",
             "description": "The token id",
             "required": true,
@@ -2816,7 +2816,7 @@
         }
       }
     },
-    "/slp/balance/{address}/{id}": {
+    "/slp/balance/{address}/{tokenId}": {
       "get": {
         "tags": ["slp"],
         "summary": "list single slp token balance for address",
@@ -2834,7 +2834,7 @@
             }
           },
           {
-            "name": "id",
+            "name": "tokenId",
             "in": "path",
             "description": "The token id",
             "required": true,

@@ -23,7 +23,7 @@ const config = {
 }
 
 let i = 1
-while (i < 7) {
+while (i < 8) {
   config[`slpRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -77,7 +77,7 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
   }
 })
 
-router.get("/list/:id", config.slpRateLimit3, async (req, res, next) => {
+router.get("/list/:tokenId", config.slpRateLimit3, async (req, res, next) => {
   try {
     const query = {
       v: 3,
@@ -103,7 +103,7 @@ router.get("/list/:id", config.slpRateLimit3, async (req, res, next) => {
     if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
 
     tokens.forEach(token => {
-      if (token.id === req.params.id) return res.json(token)
+      if (token.id === req.params.tokenId) return res.json(token)
     })
   } catch (err) {
     res.status(500).send(error.response.data.error)
@@ -130,7 +130,7 @@ router.get(
 )
 
 router.get(
-  "/balance/:address/:id",
+  "/balance/:address/:tokenId",
   config.slpRateLimit5,
   async (req, res, next) => {
     try {
@@ -161,7 +161,7 @@ router.get(
 
       let t
       tokens.forEach(token => {
-        if (token.id === req.params.id) t = token
+        if (token.id === req.params.tokenId) t = token
       })
 
       const obj = {}
@@ -170,7 +170,7 @@ router.get(
       obj.symbol = t.symbol
       obj.name = t.name
       obj.document = t.document
-      obj.balance = balances[req.params.id]
+      obj.balance = balances[req.params.tokenId]
       obj.slpAddress = slpAddr
       obj.cashAddress = utils.toCashAddress(slpAddr)
       obj.legacyAddress = BITBOX.Address.toLegacyAddress(obj.cashAddress)
