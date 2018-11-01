@@ -35,17 +35,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios = require("axios");
+var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
-//const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
-//const BITBOX = new BITBOXCli();
-var BitboxHTTP = axios.create({
+var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
 var username = process.env.RPC_USERNAME;
 var password = process.env.RPC_PASSWORD;
+var requestConfig = {
+    method: "post",
+    auth: {
+        username: username,
+        password: password
+    },
+    data: {
+        jsonrpc: "1.0"
+    }
+};
 var config = {
     rawTransactionsRateLimit1: undefined,
     rawTransactionsRateLimit2: undefined,
@@ -77,40 +86,59 @@ while (i < 12) {
     });
     i++;
 }
-//const requestConfig = {
-//  method: "post",
-//  auth: {
-//    username: username,
-//    password: password,
-//  },
-//  data: {
-//    jsonrpc: "1.0",
-//  },
-//};
-var requestConfig = {
-    method: "post",
-    auth: {
-        username: username,
-        password: password
-    },
-    data: {
-        jsonrpc: "1.0"
-    }
-};
-router.get("/", config.rawTransactionsRateLimit1, function (req, res, next) {
-    res.json({ status: "rawtransactions" });
-});
-router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, function (req, res, next) {
-    try {
-        var transactions = JSON.parse(req.params.hex);
-        if (transactions.length > 20) {
-            res.json({
-                error: "Array too large. Max 20 transactions"
+router.get("/", config.rawTransactionsRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        res.json({ status: "rawtransactions" });
+        return [2 /*return*/];
+    });
+}); });
+router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var transactions, result_1;
+    return __generator(this, function (_a) {
+        try {
+            transactions = JSON.parse(req.params.hex);
+            if (transactions.length > 20) {
+                res.json({
+                    error: "Array too large. Max 20 transactions"
+                });
+            }
+            result_1 = [];
+            transactions = transactions.map(function (transaction) {
+                requestConfig.data.id = "decoderawtransaction";
+                requestConfig.data.method = "decoderawtransaction";
+                requestConfig.data.params = [transaction];
+                BitboxHTTP(requestConfig).catch(function (error) {
+                    try {
+                        return {
+                            data: {
+                                result: error.response.data.error.message
+                            }
+                        };
+                    }
+                    catch (ex) {
+                        return {
+                            data: {
+                                result: "unknown error"
+                            }
+                        };
+                    }
+                });
             });
+            axios_1.default.all(transactions).then(axios_1.default.spread(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                for (var i_1 = 0; i_1 < args.length; i_1++) {
+                    var tmp = {};
+                    var parsed = tmp.data.result;
+                    result_1.push(parsed);
+                }
+                res.json(result_1);
+            }));
         }
-        var result_1 = [];
-        transactions = transactions.map(function (transaction) {
-            return BitboxHTTP({
+        catch (error) {
+            BitboxHTTP({
                 method: "post",
                 auth: {
                     username: username,
@@ -120,70 +148,75 @@ router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, funct
                     jsonrpc: "1.0",
                     id: "decoderawtransaction",
                     method: "decoderawtransaction",
-                    params: [transaction]
+                    params: [req.params.hex]
                 }
-            }).catch(function (error) {
-                try {
-                    return {
-                        data: {
-                            result: error.response.data.error.message
-                        }
-                    };
-                }
-                catch (ex) {
-                    return {
-                        data: {
-                            result: "unknown error"
-                        }
-                    };
-                }
-            });
-        });
-        axios.all(transactions).then(axios.spread(function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            for (var i_1 = 0; i_1 < args.length; i_1++) {
-                var parsed = args[i_1].data.result;
-                result_1.push(parsed);
-            }
-            res.json(result_1);
-        }));
-    }
-    catch (error) {
-        BitboxHTTP({
-            method: "post",
-            auth: {
-                username: username,
-                password: password
-            },
-            data: {
-                jsonrpc: "1.0",
-                id: "decoderawtransaction",
-                method: "decoderawtransaction",
-                params: [req.params.hex]
-            }
-        })
-            .then(function (response) {
-            res.json(response.data.result);
-        })
-            .catch(function (error) {
-            res.send(error.response.data.error.message);
-        });
-    }
-});
-router.get("/decodeScript/:script", config.rawTransactionsRateLimit3, function (req, res, next) {
-    try {
-        var scripts = JSON.parse(req.params.script);
-        if (scripts.length > 20) {
-            res.json({
-                error: "Array too large. Max 20 scripts"
+            })
+                .then(function (response) {
+                res.json(response.data.result);
+            })
+                .catch(function (error) {
+                res.send(error.response.data.error.message);
             });
         }
-        var result_2 = [];
-        scripts = scripts.map(function (script) {
-            return BitboxHTTP({
+        return [2 /*return*/];
+    });
+}); });
+router.get("/decodeScript/:script", config.rawTransactionsRateLimit3, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var scripts, result_2;
+    return __generator(this, function (_a) {
+        try {
+            scripts = JSON.parse(req.params.script);
+            if (scripts.length > 20) {
+                res.json({
+                    error: "Array too large. Max 20 scripts"
+                });
+            }
+            result_2 = [];
+            scripts = scripts.map(function (script) {
+                return BitboxHTTP({
+                    method: "post",
+                    auth: {
+                        username: username,
+                        password: password
+                    },
+                    data: {
+                        jsonrpc: "1.0",
+                        id: "decodescript",
+                        method: "decodescript",
+                        params: [script]
+                    }
+                }).catch(function (error) {
+                    try {
+                        return {
+                            data: {
+                                result: error.response.data.error.message
+                            }
+                        };
+                    }
+                    catch (ex) {
+                        return {
+                            data: {
+                                result: "unknown error"
+                            }
+                        };
+                    }
+                });
+            });
+            axios_1.default.all(scripts).then(axios_1.default.spread(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                for (var i_2 = 0; i_2 < args.length; i_2++) {
+                    var tmp = {};
+                    var parsed = tmp.data.result;
+                    result_2.push(parsed);
+                }
+                res.json(result_2);
+            }));
+        }
+        catch (error) {
+            BitboxHTTP({
                 method: "post",
                 auth: {
                     username: username,
@@ -193,73 +226,78 @@ router.get("/decodeScript/:script", config.rawTransactionsRateLimit3, function (
                     jsonrpc: "1.0",
                     id: "decodescript",
                     method: "decodescript",
-                    params: [script]
+                    params: [req.params.script]
                 }
-            }).catch(function (error) {
-                try {
-                    return {
-                        data: {
-                            result: error.response.data.error.message
-                        }
-                    };
-                }
-                catch (ex) {
-                    return {
-                        data: {
-                            result: "unknown error"
-                        }
-                    };
-                }
-            });
-        });
-        axios.all(scripts).then(axios.spread(function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            for (var i_2 = 0; i_2 < args.length; i_2++) {
-                var parsed = args[i_2].data.result;
-                result_2.push(parsed);
-            }
-            res.json(result_2);
-        }));
-    }
-    catch (error) {
-        BitboxHTTP({
-            method: "post",
-            auth: {
-                username: username,
-                password: password
-            },
-            data: {
-                jsonrpc: "1.0",
-                id: "decodescript",
-                method: "decodescript",
-                params: [req.params.script]
-            }
-        })
-            .then(function (response) {
-            res.json(response.data.result);
-        })
-            .catch(function (error) {
-            res.send(error.response.data.error.message);
-        });
-    }
-});
-router.get("/getRawTransaction/:txid", config.rawTransactionsRateLimit4, function (req, res, next) {
-    var verbose = 0;
-    if (req.query.verbose && req.query.verbose === "true")
-        verbose = 1;
-    try {
-        var txids = JSON.parse(req.params.txid);
-        if (txids.length > 20) {
-            res.json({
-                error: "Array too large. Max 20 txids"
+            })
+                .then(function (response) {
+                res.json(response.data.result);
+            })
+                .catch(function (error) {
+                res.send(error.response.data.error.message);
             });
         }
-        var result_3 = [];
-        txids = txids.map(function (txid) {
-            return BitboxHTTP({
+        return [2 /*return*/];
+    });
+}); });
+router.get("/getRawTransaction/:txid", config.rawTransactionsRateLimit4, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var verbose, txids, result_3;
+    return __generator(this, function (_a) {
+        verbose = 0;
+        if (req.query.verbose && req.query.verbose === "true")
+            verbose = 1;
+        try {
+            txids = JSON.parse(req.params.txid);
+            if (txids.length > 20) {
+                res.json({
+                    error: "Array too large. Max 20 txids"
+                });
+            }
+            result_3 = [];
+            txids = txids.map(function (txid) {
+                return BitboxHTTP({
+                    method: "post",
+                    auth: {
+                        username: username,
+                        password: password
+                    },
+                    data: {
+                        jsonrpc: "1.0",
+                        id: "getrawtransaction",
+                        method: "getrawtransaction",
+                        params: [txid, verbose]
+                    }
+                }).catch(function (error) {
+                    try {
+                        return {
+                            data: {
+                                result: error.response.data.error.message
+                            }
+                        };
+                    }
+                    catch (ex) {
+                        return {
+                            data: {
+                                result: "unknown error"
+                            }
+                        };
+                    }
+                });
+            });
+            axios_1.default.all(txids).then(axios_1.default.spread(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                for (var i_3 = 0; i_3 < args.length; i_3++) {
+                    var tmp = {};
+                    var parsed = tmp.data.result;
+                    result_3.push(parsed);
+                }
+                res.json(result_3);
+            }));
+        }
+        catch (error) {
+            BitboxHTTP({
                 method: "post",
                 auth: {
                     username: username,
@@ -269,70 +307,75 @@ router.get("/getRawTransaction/:txid", config.rawTransactionsRateLimit4, functio
                     jsonrpc: "1.0",
                     id: "getrawtransaction",
                     method: "getrawtransaction",
-                    params: [txid, verbose]
+                    params: [req.params.txid, verbose]
                 }
-            }).catch(function (error) {
-                try {
-                    return {
-                        data: {
-                            result: error.response.data.error.message
-                        }
-                    };
-                }
-                catch (ex) {
-                    return {
-                        data: {
-                            result: "unknown error"
-                        }
-                    };
-                }
-            });
-        });
-        axios.all(txids).then(axios.spread(function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            for (var i_3 = 0; i_3 < args.length; i_3++) {
-                var parsed = args[i_3].data.result;
-                result_3.push(parsed);
-            }
-            res.json(result_3);
-        }));
-    }
-    catch (error) {
-        BitboxHTTP({
-            method: "post",
-            auth: {
-                username: username,
-                password: password
-            },
-            data: {
-                jsonrpc: "1.0",
-                id: "getrawtransaction",
-                method: "getrawtransaction",
-                params: [req.params.txid, verbose]
-            }
-        })
-            .then(function (response) {
-            res.json(response.data.result);
-        })
-            .catch(function (error) {
-            res.send(error.response.data.error.message);
-        });
-    }
-});
-router.post("/sendRawTransaction/:hex", config.rawTransactionsRateLimit5, function (req, res, next) {
-    try {
-        var transactions = JSON.parse(req.params.hex);
-        if (transactions.length > 20) {
-            res.json({
-                error: "Array too large. Max 20 transactions"
+            })
+                .then(function (response) {
+                res.json(response.data.result);
+            })
+                .catch(function (error) {
+                res.send(error.response.data.error.message);
             });
         }
-        var result_4 = [];
-        transactions = transactions.map(function (transaction) {
-            return BitboxHTTP({
+        return [2 /*return*/];
+    });
+}); });
+router.post("/sendRawTransaction/:hex", config.rawTransactionsRateLimit5, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var transactions, result_4;
+    return __generator(this, function (_a) {
+        try {
+            transactions = JSON.parse(req.params.hex);
+            if (transactions.length > 20) {
+                res.json({
+                    error: "Array too large. Max 20 transactions"
+                });
+            }
+            result_4 = [];
+            transactions = transactions.map(function (transaction) {
+                return BitboxHTTP({
+                    method: "post",
+                    auth: {
+                        username: username,
+                        password: password
+                    },
+                    data: {
+                        jsonrpc: "1.0",
+                        id: "sendrawtransaction",
+                        method: "sendrawtransaction",
+                        params: [transaction]
+                    }
+                }).catch(function (error) {
+                    try {
+                        return {
+                            data: {
+                                result: error.response.data.error.message
+                            }
+                        };
+                    }
+                    catch (ex) {
+                        return {
+                            data: {
+                                result: "unknown error"
+                            }
+                        };
+                    }
+                });
+            });
+            axios_1.default.all(transactions).then(axios_1.default.spread(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                for (var i_4 = 0; i_4 < args.length; i_4++) {
+                    var tmp = {};
+                    var parsed = tmp.data.result;
+                    result_4.push(parsed);
+                }
+                res.json(result_4);
+            }));
+        }
+        catch (error) {
+            BitboxHTTP({
                 method: "post",
                 auth: {
                     username: username,
@@ -342,59 +385,19 @@ router.post("/sendRawTransaction/:hex", config.rawTransactionsRateLimit5, functi
                     jsonrpc: "1.0",
                     id: "sendrawtransaction",
                     method: "sendrawtransaction",
-                    params: [transaction]
+                    params: [req.params.hex]
                 }
-            }).catch(function (error) {
-                try {
-                    return {
-                        data: {
-                            result: error.response.data.error.message
-                        }
-                    };
-                }
-                catch (ex) {
-                    return {
-                        data: {
-                            result: "unknown error"
-                        }
-                    };
-                }
+            })
+                .then(function (response) {
+                res.json(response.data.result);
+            })
+                .catch(function (error) {
+                res.send(error.response.data.error.message);
             });
-        });
-        axios.all(transactions).then(axios.spread(function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            for (var i_4 = 0; i_4 < args.length; i_4++) {
-                var parsed = args[i_4].data.result;
-                result_4.push(parsed);
-            }
-            res.json(result_4);
-        }));
-    }
-    catch (error) {
-        BitboxHTTP({
-            method: "post",
-            auth: {
-                username: username,
-                password: password
-            },
-            data: {
-                jsonrpc: "1.0",
-                id: "sendrawtransaction",
-                method: "sendrawtransaction",
-                params: [req.params.hex]
-            }
-        })
-            .then(function (response) {
-            res.json(response.data.result);
-        })
-            .catch(function (error) {
-            res.send(error.response.data.error.message);
-        });
-    }
-});
+        }
+        return [2 /*return*/];
+    });
+}); });
 router.post("/change/:rawtx/:prevTxs/:destination/:fee", config.rawTransactionsRateLimit6, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var params, response, error_1, err_1;
     return __generator(this, function (_a) {
