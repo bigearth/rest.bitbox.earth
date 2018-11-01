@@ -1,12 +1,10 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
+import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
-
-//const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
-//const BITBOX = new BITBOXCli();
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -25,9 +23,9 @@ while (i < 3) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req, res /*next*/) {
+    handler: (req: express.Request, res: express.Response /*next*/) => {
       res.format({
-        json: function() {
+        json: () => {
           res.status(500).json({
             error: "Too many requests. Limits are 60 requests per minute."
           })
@@ -38,7 +36,7 @@ while (i < 3) {
   i++
 }
 
-const requestConfig = {
+const requestConfig: IRequestConfig = {
   method: "post",
   auth: {
     username: username,
@@ -49,22 +47,38 @@ const requestConfig = {
   }
 }
 
-router.get("/", config.controlRateLimit1, async (req, res, next) => {
-  res.json({ status: "control" })
-})
-
-router.get("/getInfo", config.controlRateLimit2, async (req, res, next) => {
-  requestConfig.data.id = "getinfo"
-  requestConfig.data.method = "getinfo"
-  requestConfig.data.params = []
-
-  try {
-    const response = await BitboxHTTP(requestConfig)
-    res.json(response.data.result)
-  } catch (error) {
-    res.status(500).send(error.response.data.error)
+router.get(
+  "/",
+  config.controlRateLimit1,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    res.json({ status: "control" })
   }
-})
+)
+
+router.get(
+  "/getInfo",
+  config.controlRateLimit2,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    requestConfig.data.id = "getinfo"
+    requestConfig.data.method = "getinfo"
+    requestConfig.data.params = []
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
 
 // router.get('/getMemoryInfo', (req, res, next) => {
 //   BitboxHTTP({
