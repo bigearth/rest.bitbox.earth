@@ -1,6 +1,6 @@
 {
   "name": "rest.bitcoin.com",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "description": "REST API for Bitcoin.com's Cloud",
   "author": "Gabriel Cardona @ Bitcoin.com",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "pg-hstore": "^2.3.2",
     "request": "^2.87.0",
     "sequelize": "^3.30.4",
+    "slp-balances": "Bitcoin-com/slp-balances#0.2.5",
     "slpjs": "^0.1.7",
     "socket.io": "^2.1.1",
     "swagger-stats": "^0.95.6",

@@ -7,6 +7,7 @@ const RateLimit = require("express-rate-limit")
 const bitdbToken = process.env.BITDB_TOKEN
 const bitboxproxy = require("slpjs").bitbox
 const utils = require("slpjs").utils
+const slpBalances = require("slp-balances")
 
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
@@ -15,11 +16,14 @@ const config = {
   slpRateLimit1: undefined,
   slpRateLimit2: undefined,
   slpRateLimit3: undefined,
-  slpRateLimit4: undefined
+  slpRateLimit4: undefined,
+  slpRateLimit5: undefined,
+  slpRateLimit6: undefined,
+  slpRateLimit7: undefined
 }
 
 let i = 1
-while (i < 4) {
+while (i < 8) {
   config[`slpRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -69,11 +73,11 @@ router.get("/list", config.slpRateLimit2, async (req, res, next) => {
 
     return tokens
   } catch (err) {
-    res.status(500).send(error.response.data.error)
+    res.status(500).send(err.response.data.error)
   }
 })
 
-router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
+router.get("/list/:tokenId", config.slpRateLimit3, async (req, res, next) => {
   try {
     const query = {
       v: 3,
@@ -99,16 +103,16 @@ router.get("/list/:id", config.slpRateLimit1, async (req, res, next) => {
     if (tokenRes.data.u && tokenRes.data.u.length) tokens.concat(tokenRes.u)
 
     tokens.forEach(token => {
-      if (token.id === req.params.id) return res.json(token)
+      if (token.id === req.params.tokenId) return res.json(token)
     })
   } catch (err) {
-    res.status(500).send(error.response.data.error)
+    res.status(500).send(err.response.data.error)
   }
 })
 
 router.get(
   "/balancesForAddress/:address",
-  config.slpRateLimit2,
+  config.slpRateLimit4,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
@@ -126,8 +130,8 @@ router.get(
 )
 
 router.get(
-  "/balance/:address/:id",
-  config.slpRateLimit3,
+  "/balance/:address/:tokenId",
+  config.slpRateLimit5,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
@@ -157,7 +161,7 @@ router.get(
 
       let t
       tokens.forEach(token => {
-        if (token.id === req.params.id) t = token
+        if (token.id === req.params.tokenId) t = token
       })
 
       const obj = {}
@@ -166,7 +170,7 @@ router.get(
       obj.symbol = t.symbol
       obj.name = t.name
       obj.document = t.document
-      obj.balance = balances[req.params.id]
+      obj.balance = balances[req.params.tokenId]
       obj.slpAddress = slpAddr
       obj.cashAddress = utils.toCashAddress(slpAddr)
       obj.legacyAddress = BITBOX.Address.toLegacyAddress(obj.cashAddress)
@@ -179,7 +183,7 @@ router.get(
 
 router.get(
   "/address/convert/:address",
-  config.slpRateLimit3,
+  config.slpRateLimit6,
   async (req, res, next) => {
     try {
       const slpAddr = utils.toSlpAddress(req.params.address)
@@ -188,6 +192,22 @@ router.get(
       obj.cashAddress = utils.toCashAddress(slpAddr)
       obj.legacyAddress = BITBOX.Address.toLegacyAddress(obj.cashAddress)
       return res.json(obj)
+    } catch (err) {
+      res.status(500).send(err.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/balancesForToken/:tokenId",
+  config.slpRateLimit7,
+  async (req, res, next) => {
+    try {
+      const balances = await slpBalances.getBalances(
+        bitdbToken,
+        req.params.tokenId
+      )
+      return res.json(balances)
     } catch (err) {
       res.status(500).send(err.response.data.error)
     }
