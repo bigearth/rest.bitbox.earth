@@ -138,19 +138,10 @@ router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, funct
             }));
         }
         catch (error) {
-            BitboxHTTP({
-                method: "post",
-                auth: {
-                    username: username,
-                    password: password
-                },
-                data: {
-                    jsonrpc: "1.0",
-                    id: "decoderawtransaction",
-                    method: "decoderawtransaction",
-                    params: [req.params.hex]
-                }
-            })
+            requestConfig.data.id = "decoderawtransaction";
+            requestConfig.data.method = "decoderawtransaction";
+            requestConfig.data.params = [req.params.hex];
+            BitboxHTTP(requestConfig)
                 .then(function (response) {
                 res.json(response.data.result);
             })
@@ -173,19 +164,10 @@ router.get("/decodeScript/:script", config.rawTransactionsRateLimit3, function (
             }
             result_2 = [];
             scripts = scripts.map(function (script) {
-                return BitboxHTTP({
-                    method: "post",
-                    auth: {
-                        username: username,
-                        password: password
-                    },
-                    data: {
-                        jsonrpc: "1.0",
-                        id: "decodescript",
-                        method: "decodescript",
-                        params: [script]
-                    }
-                }).catch(function (error) {
+                requestConfig.data.id = "decodescript";
+                requestConfig.data.method = "decodescript";
+                requestConfig.data.params = [script];
+                BitboxHTTP(requestConfig).catch(function (error) {
                     try {
                         return {
                             data: {
@@ -216,19 +198,10 @@ router.get("/decodeScript/:script", config.rawTransactionsRateLimit3, function (
             }));
         }
         catch (error) {
-            BitboxHTTP({
-                method: "post",
-                auth: {
-                    username: username,
-                    password: password
-                },
-                data: {
-                    jsonrpc: "1.0",
-                    id: "decodescript",
-                    method: "decodescript",
-                    params: [req.params.script]
-                }
-            })
+            requestConfig.data.id = "decodescript";
+            requestConfig.data.method = "decodescript";
+            requestConfig.data.params = [req.params.script];
+            BitboxHTTP(requestConfig)
                 .then(function (response) {
                 res.json(response.data.result);
             })
@@ -254,19 +227,10 @@ router.get("/getRawTransaction/:txid", config.rawTransactionsRateLimit4, functio
             }
             result_3 = [];
             txids = txids.map(function (txid) {
-                return BitboxHTTP({
-                    method: "post",
-                    auth: {
-                        username: username,
-                        password: password
-                    },
-                    data: {
-                        jsonrpc: "1.0",
-                        id: "getrawtransaction",
-                        method: "getrawtransaction",
-                        params: [txid, verbose]
-                    }
-                }).catch(function (error) {
+                requestConfig.data.id = "getrawtransaction";
+                requestConfig.data.method = "getrawtransaction";
+                requestConfig.data.params = [txid, verbose];
+                BitboxHTTP(requestConfig).catch(function (error) {
                     try {
                         return {
                             data: {
@@ -297,19 +261,10 @@ router.get("/getRawTransaction/:txid", config.rawTransactionsRateLimit4, functio
             }));
         }
         catch (error) {
-            BitboxHTTP({
-                method: "post",
-                auth: {
-                    username: username,
-                    password: password
-                },
-                data: {
-                    jsonrpc: "1.0",
-                    id: "getrawtransaction",
-                    method: "getrawtransaction",
-                    params: [req.params.txid, verbose]
-                }
-            })
+            requestConfig.data.id = "getrawtransaction";
+            requestConfig.data.method = "getrawtransaction";
+            requestConfig.data.params = [req.params.txid, verbose];
+            BitboxHTTP(requestConfig)
                 .then(function (response) {
                 res.json(response.data.result);
             })
@@ -332,19 +287,10 @@ router.post("/sendRawTransaction/:hex", config.rawTransactionsRateLimit5, functi
             }
             result_4 = [];
             transactions = transactions.map(function (transaction) {
-                return BitboxHTTP({
-                    method: "post",
-                    auth: {
-                        username: username,
-                        password: password
-                    },
-                    data: {
-                        jsonrpc: "1.0",
-                        id: "sendrawtransaction",
-                        method: "sendrawtransaction",
-                        params: [transaction]
-                    }
-                }).catch(function (error) {
+                requestConfig.data.id = "sendrawtransaction";
+                requestConfig.data.method = "sendrawtransaction";
+                requestConfig.data.params = [transaction];
+                BitboxHTTP(requestConfig).catch(function (error) {
                     try {
                         return {
                             data: {
@@ -375,19 +321,10 @@ router.post("/sendRawTransaction/:hex", config.rawTransactionsRateLimit5, functi
             }));
         }
         catch (error) {
-            BitboxHTTP({
-                method: "post",
-                auth: {
-                    username: username,
-                    password: password
-                },
-                data: {
-                    jsonrpc: "1.0",
-                    id: "sendrawtransaction",
-                    method: "sendrawtransaction",
-                    params: [req.params.hex]
-                }
-            })
+            requestConfig.data.id = "sendrawtransaction";
+            requestConfig.data.method = "sendrawtransaction";
+            requestConfig.data.params = [req.params.hex];
+            BitboxHTTP(requestConfig)
                 .then(function (response) {
                 res.json(response.data.result);
             })

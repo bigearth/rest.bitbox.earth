@@ -131,19 +131,10 @@ router.get(
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "decoderawtransaction",
-          method: "decoderawtransaction",
-          params: [req.params.hex]
-        }
-      })
+      requestConfig.data.id = "decoderawtransaction"
+      requestConfig.data.method = "decoderawtransaction"
+      requestConfig.data.params = [req.params.hex]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -170,20 +161,11 @@ router.get(
         })
       }
       const result = [] as any
-      scripts = scripts.map((script: any) =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "decodescript",
-            method: "decodescript",
-            params: [script]
-          }
-        }).catch(error => {
+      scripts = scripts.map((script: any) => {
+        requestConfig.data.id = "decodescript"
+        requestConfig.data.method = "decodescript"
+        requestConfig.data.params = [script]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -198,7 +180,7 @@ router.get(
             }
           }
         })
-      )
+      })
       axios.all(scripts).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
@@ -210,19 +192,10 @@ router.get(
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "decodescript",
-          method: "decodescript",
-          params: [req.params.script]
-        }
-      })
+      requestConfig.data.id = "decodescript"
+      requestConfig.data.method = "decodescript"
+      requestConfig.data.params = [req.params.script]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -252,20 +225,11 @@ router.get(
         })
       }
       const result = [] as any
-      txids = txids.map((txid: any) =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "getrawtransaction",
-            method: "getrawtransaction",
-            params: [txid, verbose]
-          }
-        }).catch(error => {
+      txids = txids.map((txid: any) => {
+        requestConfig.data.id = "getrawtransaction"
+        requestConfig.data.method = "getrawtransaction"
+        requestConfig.data.params = [txid, verbose]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -280,7 +244,7 @@ router.get(
             }
           }
         })
-      )
+      })
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
@@ -292,19 +256,10 @@ router.get(
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "getrawtransaction",
-          method: "getrawtransaction",
-          params: [req.params.txid, verbose]
-        }
-      })
+      requestConfig.data.id = "getrawtransaction"
+      requestConfig.data.method = "getrawtransaction"
+      requestConfig.data.params = [req.params.txid, verbose]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
@@ -332,20 +287,11 @@ router.post(
       }
 
       const result = [] as any
-      transactions = transactions.map((transaction: any) =>
-        BitboxHTTP({
-          method: "post",
-          auth: {
-            username: username,
-            password: password
-          },
-          data: {
-            jsonrpc: "1.0",
-            id: "sendrawtransaction",
-            method: "sendrawtransaction",
-            params: [transaction]
-          }
-        }).catch(error => {
+      transactions = transactions.map((transaction: any) => {
+        requestConfig.data.id = "sendrawtransaction"
+        requestConfig.data.method = "sendrawtransaction"
+        requestConfig.data.params = [transaction]
+        BitboxHTTP(requestConfig).catch(error => {
           try {
             return {
               data: {
@@ -360,7 +306,7 @@ router.post(
             }
           }
         })
-      )
+      })
       axios.all(transactions).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
@@ -372,19 +318,10 @@ router.post(
         })
       )
     } catch (error) {
-      BitboxHTTP({
-        method: "post",
-        auth: {
-          username: username,
-          password: password
-        },
-        data: {
-          jsonrpc: "1.0",
-          id: "sendrawtransaction",
-          method: "sendrawtransaction",
-          params: [req.params.hex]
-        }
-      })
+      requestConfig.data.id = "sendrawtransaction"
+      requestConfig.data.method = "sendrawtransaction"
+      requestConfig.data.params = [req.params.hex]
+      BitboxHTTP(requestConfig)
         .then(response => {
           res.json(response.data.result)
         })
