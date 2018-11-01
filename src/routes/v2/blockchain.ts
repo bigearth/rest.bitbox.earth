@@ -69,9 +69,9 @@ while (i < 18) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req: express.Request, res: express.Response /*next*/) {
+    handler: (req: express.Request, res: express.Response /*next*/) => {
       res.format({
-        json: function() {
+        json: () => {
           res.status(500).json({
             error: "Too many requests. Limits are 60 requests per minute."
           })

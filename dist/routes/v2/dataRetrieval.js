@@ -35,17 +35,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios = require("axios");
+var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
 var BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 var BITBOX = new BITBOXCli();
-var BitboxHTTP = axios.create({
+var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
 var username = process.env.RPC_USERNAME;
 var password = process.env.RPC_PASSWORD;
+var requestConfig = {
+    method: "post",
+    auth: {
+        username: username,
+        password: password
+    },
+    data: {
+        jsonrpc: "1.0"
+    }
+};
 var config = {
     dataRetrievalRateLimit1: undefined,
     dataRetrievalRateLimit2: undefined,
@@ -86,16 +97,6 @@ while (i < 21) {
     });
     i++;
 }
-var requestConfig = {
-    method: "post",
-    auth: {
-        username: username,
-        password: password
-    },
-    data: {
-        jsonrpc: "1.0"
-    }
-};
 router.get("/", config.dataRetrievalRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         res.json({ status: "dataRetrieval" });
