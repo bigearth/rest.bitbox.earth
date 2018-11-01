@@ -1,20 +1,14 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-//const axios = require("axios");
 const RateLimit = require("express-rate-limit")
 
-//const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
-//const BITBOX = new BITBOXCli();
+interface IRLConfig {
+  [networkRateLimit1: string]: any
+}
 
-//const BitboxHTTP = axios.create({
-//  baseURL: process.env.RPC_BASEURL,
-//});
-//const username = process.env.RPC_USERNAME;
-//const password = process.env.RPC_PASSWORD;
-
-const config = {
+const config: IRLConfig = {
   networkRateLimit1: undefined
 }
 
@@ -24,9 +18,9 @@ while (i < 2) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req, res /*next*/) {
+    handler: (req: express.Request, res: express.Response /*next*/) => {
       res.format({
-        json: function() {
+        json: () => {
           res.status(500).json({
             error: "Too many requests. Limits are 60 requests per minute."
           })
@@ -37,9 +31,17 @@ while (i < 2) {
   i++
 }
 
-router.get("/", config.networkRateLimit1, (req, res, next) => {
-  res.json({ status: "network" })
-})
+router.get(
+  "/",
+  config.networkRateLimit1,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    res.json({ status: "network" })
+  }
+)
 
 // router.post('/addNode/:node/:command', (req, res, next) => {
 //   BITBOX.Network.addNode(req.params.node, req.params.command)
