@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const healthCheckRoute = require("../dist/routes/v1/health-check")
+const healthCheckRoute = require("../../dist/routes/v1/health-check")
 
 describe("#HealthCheckRouter", () => {
   describe("#root", () => {
