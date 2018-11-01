@@ -3,12 +3,8 @@
 import * as express from "express"
 const router = express.Router()
 import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
-
-interface IRLConfig {
-  [utilRateLimit1: string]: any
-  utilRateLimit2: any
-}
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -16,6 +12,22 @@ const BitboxHTTP = axios.create({
 
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
+
+const requestConfig: IRequestConfig = {
+  method: "post",
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+}
+
+interface IRLConfig {
+  [utilRateLimit1: string]: any
+  utilRateLimit2: any
+}
 
 const config: IRLConfig = {
   utilRateLimit1: undefined,
@@ -39,31 +51,6 @@ while (i < 3) {
     }
   })
   i++
-}
-
-interface IConfig {
-  method: string
-  auth: {
-    username: string
-    password: string
-  }
-  data: {
-    jsonrpc: string
-    id?: any
-    method?: any
-    params?: any
-  }
-}
-
-const requestConfig: IConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
 }
 
 router.get(

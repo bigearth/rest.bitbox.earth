@@ -1,8 +1,9 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
+import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 
 const BitboxHTTP = axios.create({
@@ -11,7 +12,38 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const config = {
+const requestConfig: IRequestConfig = {
+  method: "post",
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+}
+
+interface IRLConfig {
+  [blockchainRateLimit1: string]: any
+  blockchainRateLimit2: any
+  blockchainRateLimit3: any
+  blockchainRateLimit4: any
+  blockchainRateLimit5: any
+  blockchainRateLimit6: any
+  blockchainRateLimit7: any
+  blockchainRateLimit8: any
+  blockchainRateLimit9: any
+  blockchainRateLimit10: any
+  blockchainRateLimit11: any
+  blockchainRateLimit12: any
+  blockchainRateLimit13: any
+  blockchainRateLimit14: any
+  blockchainRateLimit15: any
+  blockchainRateLimit16: any
+  blockchainRateLimit17: any
+}
+
+const config: IRLConfig = {
   blockchainRateLimit1: undefined,
   blockchainRateLimit2: undefined,
   blockchainRateLimit3: undefined,
@@ -27,16 +59,17 @@ const config = {
   blockchainRateLimit13: undefined,
   blockchainRateLimit14: undefined,
   blockchainRateLimit15: undefined,
-  blockchainRateLimit16: undefined
+  blockchainRateLimit16: undefined,
+  blockchainRateLimit17: undefined
 }
 
 let i = 1
-while (i < 17) {
+while (i < 18) {
   config[`blockchainRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: function(req, res /*next*/) {
+    handler: function(req: express.Request, res: express.Response /*next*/) {
       res.format({
         json: function() {
           res.status(500).json({
@@ -49,25 +82,26 @@ while (i < 17) {
   i++
 }
 
-const requestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
+router.get(
+  "/",
+  config.blockchainRateLimit1,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    res.json({ status: "blockchain" })
   }
-}
-
-router.get("/", config.blockchainRateLimit1, async (req, res, next) => {
-  res.json({ status: "blockchain" })
-})
+)
 
 router.get(
   "/getBestBlockHash",
   config.blockchainRateLimit2,
-  async (req, res, next) => {
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getbestblockhash"
     requestConfig.data.method = "getbestblockhash"
     requestConfig.data.params = []
@@ -83,8 +117,12 @@ router.get(
 
 router.get(
   "/getBlock/:hash",
-  config.blockchainRateLimit2,
-  async (req, res, next) => {
+  config.blockchainRateLimit3,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
 
@@ -107,8 +145,12 @@ router.get(
 
 router.get(
   "/getBlockchainInfo",
-  config.blockchainRateLimit3,
-  async (req, res, next) => {
+  config.blockchainRateLimit4,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getblockchaininfo"
     requestConfig.data.method = "getblockchaininfo"
     requestConfig.data.params = []
@@ -124,8 +166,12 @@ router.get(
 
 router.get(
   "/getBlockCount",
-  config.blockchainRateLimit4,
-  async (req, res, next) => {
+  config.blockchainRateLimit5,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getblockcount"
     requestConfig.data.method = "getblockcount"
     requestConfig.data.params = []
@@ -141,8 +187,12 @@ router.get(
 
 router.get(
   "/getBlockHash/:height",
-  config.blockchainRateLimit5,
-  async (req, res, next) => {
+  config.blockchainRateLimit6,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       let heights = JSON.parse(req.params.height)
       if (heights.length > 20) {
@@ -150,8 +200,8 @@ router.get(
           error: "Array too large. Max 20 heights"
         })
       }
-      const result = []
-      heights = heights.map(height =>
+      const result: any[] = []
+      heights = heights.map((height: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -183,7 +233,8 @@ router.get(
       axios.all(heights).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -215,8 +266,12 @@ router.get(
 
 router.get(
   "/getBlockHeader/:hash",
-  config.blockchainRateLimit6,
-  async (req, res, next) => {
+  config.blockchainRateLimit7,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
 
@@ -227,8 +282,8 @@ router.get(
           error: "Array too large. Max 20 hashes"
         })
       }
-      const result = []
-      hashes = hashes.map(hash =>
+      const result = [] as any
+      hashes = hashes.map((hash: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -260,7 +315,8 @@ router.get(
       axios.all(hashes).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -292,8 +348,12 @@ router.get(
 
 router.get(
   "/getChainTips",
-  config.blockchainRateLimit7,
-  async (req, res, next) => {
+  config.blockchainRateLimit8,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getchaintips"
     requestConfig.data.method = "getchaintips"
     requestConfig.data.params = []
@@ -309,8 +369,12 @@ router.get(
 
 router.get(
   "/getDifficulty",
-  config.blockchainRateLimit8,
-  async (req, res, next) => {
+  config.blockchainRateLimit9,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getdifficulty"
     requestConfig.data.method = "getdifficulty"
     requestConfig.data.params = []
@@ -326,8 +390,12 @@ router.get(
 
 router.get(
   "/getMempoolAncestors/:txid",
-  config.blockchainRateLimit9,
-  async (req, res, next) => {
+  config.blockchainRateLimit10,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
 
@@ -338,8 +406,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -371,7 +439,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -403,8 +472,12 @@ router.get(
 
 router.get(
   "/getMempoolDescendants/:txid",
-  config.blockchainRateLimit10,
-  async (req, res, next) => {
+  config.blockchainRateLimit11,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
 
@@ -415,8 +488,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -448,7 +521,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -480,8 +554,12 @@ router.get(
 
 router.get(
   "/getMempoolEntry/:txid",
-  config.blockchainRateLimit11,
-  async (req, res, next) => {
+  config.blockchainRateLimit12,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       let txids = JSON.parse(req.params.txid)
       if (txids.length > 20) {
@@ -489,8 +567,8 @@ router.get(
           error: "Array too large. Max 20 txids"
         })
       }
-      const result = []
-      txids = txids.map(txid =>
+      const result = [] as any
+      txids = txids.map((txid: any) =>
         BitboxHTTP({
           method: "post",
           auth: {
@@ -522,7 +600,8 @@ router.get(
       axios.all(txids).then(
         axios.spread((...args) => {
           for (let i = 0; i < args.length; i++) {
-            const parsed = args[i].data.result
+            let tmp = {} as any
+            const parsed = tmp.data.result
             result.push(parsed)
           }
           res.json(result)
@@ -554,8 +633,12 @@ router.get(
 
 router.get(
   "/getMempoolInfo",
-  config.blockchainRateLimit12,
-  async (req, res, next) => {
+  config.blockchainRateLimit13,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "getmempoolinfo"
     requestConfig.data.method = "getmempoolinfo"
     requestConfig.data.params = []
@@ -571,8 +654,12 @@ router.get(
 
 router.get(
   "/getRawMempool",
-  config.blockchainRateLimit13,
-  async (req, res, next) => {
+  config.blockchainRateLimit14,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
 
@@ -591,8 +678,12 @@ router.get(
 
 router.get(
   "/getTxOut/:txid/:n",
-  config.blockchainRateLimit14,
-  async (req, res, next) => {
+  config.blockchainRateLimit15,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     let include_mempool = false
     if (req.query.include_mempool && req.query.include_mempool === "true")
       include_mempool = true
@@ -616,8 +707,12 @@ router.get(
 
 router.get(
   "/getTxOutProof/:txids",
-  config.blockchainRateLimit15,
-  async (req, res, next) => {
+  config.blockchainRateLimit16,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "gettxoutproof"
     requestConfig.data.method = "gettxoutproof"
     requestConfig.data.params = [req.params.txids]
@@ -702,8 +797,12 @@ router.get(
 
 router.get(
   "/verifyTxOutProof/:proof",
-  config.blockchainRateLimit16,
-  async (req, res, next) => {
+  config.blockchainRateLimit17,
+  async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     requestConfig.data.id = "verifytxoutproof"
     requestConfig.data.method = "verifytxoutproof"
     requestConfig.data.params = [req.params.proof]
