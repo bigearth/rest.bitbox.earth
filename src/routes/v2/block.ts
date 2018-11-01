@@ -3,19 +3,31 @@
 import * as express from "express"
 const router = express.Router()
 import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
-
-interface IRLConfig {
-  [blockRateLimit1: string]: any
-  blockRateLimit2: any
-  blockRateLimit3: any
-}
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
 })
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
+
+const requestConfig: IRequestConfig = {
+  method: "post",
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+}
+
+interface IRLConfig {
+  [blockRateLimit1: string]: any
+  blockRateLimit2: any
+  blockRateLimit3: any
+}
 
 const config: IRLConfig = {
   blockRateLimit1: undefined,
@@ -83,19 +95,10 @@ router.get(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    BitboxHTTP({
-      method: "post",
-      auth: {
-        username: username,
-        password: password
-      },
-      data: {
-        jsonrpc: "1.0",
-        id: "getblockhash",
-        method: "getblockhash",
-        params: [parseInt(req.params.height)]
-      }
-    })
+    requestConfig.data.id = "getblockhash"
+    requestConfig.data.method = "getblockhash"
+    requestConfig.data.params = [parseInt(req.params.height)]
+    BitboxHTTP(requestConfig)
       .then(async response => {
         try {
           const rsp = await axios.get(

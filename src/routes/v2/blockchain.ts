@@ -6,6 +6,23 @@ import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 
+const BitboxHTTP = axios.create({
+  baseURL: process.env.RPC_BASEURL
+})
+const username = process.env.RPC_USERNAME
+const password = process.env.RPC_PASSWORD
+
+const requestConfig: IRequestConfig = {
+  method: "post",
+  auth: {
+    username: username,
+    password: password
+  },
+  data: {
+    jsonrpc: "1.0"
+  }
+}
+
 interface IRLConfig {
   [blockchainRateLimit1: string]: any
   blockchainRateLimit2: any
@@ -25,12 +42,6 @@ interface IRLConfig {
   blockchainRateLimit16: any
   blockchainRateLimit17: any
 }
-
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
 
 const config: IRLConfig = {
   blockchainRateLimit1: undefined,
@@ -69,17 +80,6 @@ while (i < 18) {
     }
   })
   i++
-}
-
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
 }
 
 router.get(

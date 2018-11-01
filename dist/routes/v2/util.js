@@ -45,6 +45,16 @@ var BitboxHTTP = axios_1.default.create({
 });
 var username = process.env.RPC_USERNAME;
 var password = process.env.RPC_PASSWORD;
+var requestConfig = {
+    method: "post",
+    auth: {
+        username: username,
+        password: password
+    },
+    data: {
+        jsonrpc: "1.0"
+    }
+};
 var config = {
     utilRateLimit1: undefined,
     utilRateLimit2: undefined
@@ -67,16 +77,6 @@ while (i < 3) {
     });
     i++;
 }
-var requestConfig = {
-    method: "post",
-    auth: {
-        username: username,
-        password: password
-    },
-    data: {
-        jsonrpc: "1.0"
-    }
-};
 router.get("/", config.utilRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         res.json({ status: "util" });

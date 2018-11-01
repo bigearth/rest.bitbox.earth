@@ -45,6 +45,16 @@ var BitboxHTTP = axios_1.default.create({
 });
 var username = process.env.RPC_USERNAME;
 var password = process.env.RPC_PASSWORD;
+var requestConfig = {
+    method: "post",
+    auth: {
+        username: username,
+        password: password
+    },
+    data: {
+        jsonrpc: "1.0"
+    }
+};
 var config = {
     blockchainRateLimit1: undefined,
     blockchainRateLimit2: undefined,
@@ -82,16 +92,6 @@ while (i < 18) {
     });
     i++;
 }
-var requestConfig = {
-    method: "post",
-    auth: {
-        username: username,
-        password: password
-    },
-    data: {
-        jsonrpc: "1.0"
-    }
-};
 router.get("/", config.blockchainRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         res.json({ status: "blockchain" });
