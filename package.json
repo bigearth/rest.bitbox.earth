@@ -36,7 +36,7 @@
     "pg-hstore": "^2.3.2",
     "request": "^2.87.0",
     "sequelize": "^3.30.4",
-    "slp-balances": "^0.2.0",
+    "slp-balances": "Bitcoin-com/slp-balances#0.2.1",
     "slpjs": "^0.1.7",
     "socket.io": "^2.1.1",
     "swagger-stats": "^0.95.6",
