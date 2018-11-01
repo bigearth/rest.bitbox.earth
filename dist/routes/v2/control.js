@@ -35,13 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios = require("axios");
+var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
-//const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
-//const BITBOX = new BITBOXCli();
-var BitboxHTTP = axios.create({
+var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
 var username = process.env.RPC_USERNAME;

@@ -12,7 +12,12 @@ const BitboxHTTP = axios.create({
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
 
-const config = {
+interface IRLConfig {
+  [controlRateLimit1: string]: any
+  controlRateLimit2: any
+}
+
+const config: IRLConfig = {
   controlRateLimit1: undefined,
   controlRateLimit2: undefined
 }
