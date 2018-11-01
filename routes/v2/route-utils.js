@@ -31,11 +31,11 @@ function validateNetwork(addr) {
     const cashAddr = BITBOX.Address.toCashAddress(addr)
 
     // Return true if the network and address both match testnet
-    const addrIsTest = cashAddr.indexOf(`bchtest`) > -1
+    const addrIsTest = BITBOX.Address.isTestnetAddress(cashAddr)
     if (network === "testnet" && addrIsTest) return true
 
     // Return true if the network and address both match mainnet
-    const addrIsMain = cashAddr.indexOf(`bitcoincash`) > -1
+    const addrIsMain = BITBOX.Address.isMainnetAddress(cashAddr)
     if (network === "mainnet" && addrIsMain) return true
 
     return false
