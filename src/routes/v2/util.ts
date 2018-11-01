@@ -3,6 +3,7 @@
 import * as express from "express"
 const router = express.Router()
 import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 
 interface IRLConfig {
@@ -41,21 +42,7 @@ while (i < 3) {
   i++
 }
 
-interface IConfig {
-  method: string
-  auth: {
-    username: string
-    password: string
-  }
-  data: {
-    jsonrpc: string
-    id?: any
-    method?: any
-    params?: any
-  }
-}
-
-const requestConfig: IConfig = {
+const requestConfig: IRequestConfig = {
   method: "post",
   auth: {
     username: username,
