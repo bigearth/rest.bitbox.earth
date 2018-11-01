@@ -18,7 +18,8 @@ const config = {
   slpRateLimit3: undefined,
   slpRateLimit4: undefined,
   slpRateLimit5: undefined,
-  slpRateLimit6: undefined
+  slpRateLimit6: undefined,
+  slpRateLimit7: undefined
 }
 
 let i = 1
@@ -199,7 +200,7 @@ router.get(
 
 router.get(
   "/balancesForToken/:tokenId",
-  config.slpRateLimit1,
+  config.slpRateLimit7,
   async (req, res, next) => {
     try {
       const balances = await slpBalances.getBalances(
@@ -210,6 +211,7 @@ router.get(
     } catch (err) {
       res.status(500).send(error.response.data.error)
     }
-})
+  }
+)
 
 module.exports = router
