@@ -574,7 +574,7 @@ router.get(
   config.blockchainRateLimit13,
   async (req, res, next) => {
     let verbose = false
-    if (req.query.verbose && req.query.verbose === "true") verbose = true
+    if (req.query.verbose && req.query.verbose === true) verbose = true
 
     requestConfig.data.id = "getrawmempool"
     requestConfig.data.method = "getrawmempool"

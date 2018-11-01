@@ -672,7 +672,7 @@ router.get("/getRawMempool", config.blockchainRateLimit13, function (req, res, n
         switch (_a.label) {
             case 0:
                 verbose = false;
-                if (req.query.verbose && req.query.verbose === "true")
+                if (req.query.verbose && req.query.verbose === true)
                     verbose = true;
                 requestConfig.data.id = "getrawmempool";
                 requestConfig.data.method = "getrawmempool";
