@@ -3,7 +3,7 @@
 //const chai = require("chai");
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
-const rawTransactionsRoute = require("../../routes/v1/rawtransactions")
+const rawTransactionsRoute = require("../dist/routes/v1/rawtransactions")
 
 // Used for debugging.
 const util = require("util")

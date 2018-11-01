@@ -4,7 +4,7 @@
 const assert = require("assert")
 //const expect = chai.expect;
 const httpMocks = require("node-mocks-http")
-const miningRoute = require("../../routes/v1/mining")
+const miningRoute = require("../dist/routes/v1/mining")
 
 describe("#MiningRouter", () => {
   describe("#root", () => {
