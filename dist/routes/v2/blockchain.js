@@ -168,13 +168,14 @@ router.get("/getBlockchainInfo", config.blockchainRateLimit4, function (req, res
                 return [4 /*yield*/, BitboxHTTP(requestConfig)];
             case 2:
                 response = _a.sent();
-                res.json(response.data.result);
                 return [3 /*break*/, 4];
             case 3:
                 error_3 = _a.sent();
-                res.status(500).send(error_3.response.data.error);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [2 /*return*/, res.status(500).send(error_3.response.data.error)];
+            case 4:
+                res.json(response.data.result);
+                res.end();
+                return [2 /*return*/];
         }
     });
 }); });

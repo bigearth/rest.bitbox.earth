@@ -155,12 +155,16 @@ router.get(
     requestConfig.data.method = "getblockchaininfo"
     requestConfig.data.params = []
 
+    let response;
+
     try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
+      response = await BitboxHTTP(requestConfig)
     } catch (error) {
-      res.status(500).send(error.response.data.error)
+      return res.status(500).send(error.response.data.error)
     }
+
+    res.json(response.data.result);
+    res.end();
   }
 )
 
