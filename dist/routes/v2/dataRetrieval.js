@@ -121,7 +121,18 @@ router.get("/balancesForAddress/:address", config.dataRetrievalRateLimit2, funct
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _a.sent();
-                res.status(500).send(error_1.response.data.error);
+                // Check for no balance error
+                if (error_1 &&
+                    error_1.response &&
+                    error_1.response.data &&
+                    error_1.response.data.error &&
+                    error_1.response.data.error.code === -8 &&
+                    error_1.response.data.error.message === "Address not found") {
+                    res.json([]);
+                }
+                else {
+                    res.status(500).send(error_1.response.data.error);
+                }
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
