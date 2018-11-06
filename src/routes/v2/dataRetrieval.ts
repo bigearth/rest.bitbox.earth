@@ -119,7 +119,19 @@ router.get(
       const response = await BitboxHTTP(requestConfig)
       res.json(response.data.result)
     } catch (error) {
-      res.status(500).send(error.response.data.error)
+      // Check for no balance error
+      if (
+        error &&
+        error.response &&
+        error.response.data &&
+        error.response.data.error &&
+        error.response.data.error.code === -8 &&
+        error.response.data.error.message === "Address not found"
+      ) {
+        res.json([])
+      } else {
+        res.status(500).send(error.response.data.error)
+      }
     }
   }
 )
