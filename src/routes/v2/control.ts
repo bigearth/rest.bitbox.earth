@@ -52,17 +52,15 @@ const requestConfig: IRequestConfig = {
   }
 }
 
-router.get(
-  "/",
-  config.controlRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "control" })
-  }
-)
+router.get("/", config.controlRateLimit1, root)
+
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "control" })
+}
 
 router.get(
   "/getInfo",
@@ -122,4 +120,9 @@ router.get(
 //   });
 // });
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root
+  }
+}

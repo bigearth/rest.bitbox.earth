@@ -77,12 +77,10 @@ var requestConfig = {
         jsonrpc: "1.0"
     }
 };
-router.get("/", config.controlRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ status: "control" });
-        return [2 /*return*/];
-    });
-}); });
+router.get("/", config.controlRateLimit1, root);
+function root(req, res, next) {
+    return res.json({ status: "control" });
+}
 router.get("/getInfo", config.controlRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_1;
     return __generator(this, function (_a) {
@@ -143,4 +141,9 @@ router.get("/getInfo", config.controlRateLimit2, function (req, res, next) { ret
 //   }, (err) => { console.log(err);
 //   });
 // });
-module.exports = router;
+module.exports = {
+    router: router,
+    testableComponents: {
+        root: root
+    }
+};
