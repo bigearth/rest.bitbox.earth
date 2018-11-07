@@ -6,7 +6,7 @@ const httpMocks = require("node-mocks-http")
 const panda = require("./helpers/panda")
 process.env.RPC_BASEURL = "http://localhost:48332/"
 const blockchainRoute = require("../../dist/routes/v2/blockchain")
-
+/*
 describe("#BlockchainRouter", () => {
   // local node will be started in regtest mode on the port 48332
   before(panda.runLocalNode)
@@ -73,3 +73,4 @@ describe("#BlockchainRouter", () => {
     })
   })
 })
+*/
