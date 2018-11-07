@@ -3,7 +3,7 @@
 /**
  * Read more about panda here: https://panda-suite.github.io/
  */
-const panda = require("pandacash-cli")
+const panda = require("pandacash-core")
 
 const runLocalNode = done => {
   const server = panda.server({
@@ -14,7 +14,10 @@ const runLocalNode = done => {
     debug: false
   })
 
-  server.listen(48332, (err, pandaCashCore) => {
+  server.listen({
+    port: 48332,
+    walletPort: 48333,
+  }, (err, pandaCashCore) => {
     if (err) return console.error(err)
 
     done()
