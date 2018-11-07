@@ -11,8 +11,6 @@ const logger = require("./logging.js")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 3 }
 
-console.log(`process.env.RPC_BASEURL: ${process.env.RPC_BASEURL}`)
-
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
 })
@@ -79,14 +77,9 @@ async function getInfo(
   requestConfig.data.method = "getinfo"
   requestConfig.data.params = []
 
-  //console.log(`requestConfig: ${util.inspect(requestConfig)}`)
-  //console.log(`requestConfig.data.params: ${util.inspect(requestConfig.data.params)}`)
-  //console.log(`BitboxHTTP: ${util.inspect(BitboxHTTP)}`)
-  console.log(`BitboxHTTP.defaults.baseURL: ${BitboxHTTP.defaults.baseURL}`)
-
   try {
     const response = await BitboxHTTP(requestConfig)
-    res.json(response.data.result)
+    return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
     logger.error(`Error in address/details: `, error)

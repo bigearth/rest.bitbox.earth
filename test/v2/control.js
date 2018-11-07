@@ -18,7 +18,7 @@ let originalUrl // Used during transition from integration to unit tests.
 
 // Mocking data.
 const { mockReq, mockRes } = require("./mocks/express-mocks")
-//const mockData = require("./mocks/address-mock")
+const mockData = require("./mocks/control-mock")
 
 // Used for debugging.
 const util = require("util")
@@ -75,6 +75,13 @@ describe("#ControlRouter", () => {
     const getInfo = controlRoute.testableComponents.getInfo
 
     it("should get info on the full node", async () => {
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/addr/mgps7qxk2Z5ma4mXsviznnet8wx4VvMPFz`)
+          .reply(200, mockData.mockAddressDetails)
+      }
+
       const result = await getInfo(req, res)
       console.log(`result: ${util.inspect(result)}`)
     })

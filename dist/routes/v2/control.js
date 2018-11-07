@@ -43,7 +43,6 @@ var logger = require("./logging.js");
 // Used for processing error messages before sending them to the user.
 var util = require("util");
 util.inspect.defaultOptions = { depth: 3 };
-console.log("process.env.RPC_BASEURL: " + process.env.RPC_BASEURL);
 var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
@@ -95,18 +94,13 @@ function getInfo(req, res, next) {
                     requestConfig.data.id = "getinfo";
                     requestConfig.data.method = "getinfo";
                     requestConfig.data.params = [];
-                    //console.log(`requestConfig: ${util.inspect(requestConfig)}`)
-                    //console.log(`requestConfig.data.params: ${util.inspect(requestConfig.data.params)}`)
-                    //console.log(`BitboxHTTP: ${util.inspect(BitboxHTTP)}`)
-                    console.log("BitboxHTTP.defaults.baseURL: " + BitboxHTTP.defaults.baseURL);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, BitboxHTTP(requestConfig)];
                 case 2:
                     response = _a.sent();
-                    res.json(response.data.result);
-                    return [3 /*break*/, 4];
+                    return [2 /*return*/, res.json(response.data.result)];
                 case 3:
                     error_1 = _a.sent();
                     // Write out error to error log.
