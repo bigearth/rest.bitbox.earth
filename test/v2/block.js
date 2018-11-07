@@ -1,3 +1,9 @@
+/*
+  BLOCKED. See GitHub Issue #104:
+  https://github.com/Bitcoin-com/rest.bitcoin.com/issues/104
+
+*/
+
 "use strict"
 
 const blockRoute = require("../../dist/routes/v2/block")
@@ -61,7 +67,7 @@ describe("#BlockRouter", () => {
       assert.equal(result.status, "block", "Returns static string")
     })
   })
-
+  /*
   describe("#BlockDetails", () => {
     // block route handler.
     const detailsByHash = blockRoute.testableComponents.detailsByHash
@@ -72,16 +78,7 @@ describe("#BlockRouter", () => {
       const result = await detailsByHash(req, res)
       console.log(`result: ${util.inspect(result)}`)
 
-      /*
-      assert.equal(res.statusCode, 200, "HTTP status code 400 expected.")
-      assert.include(
-        result.error,
-        "addresses needs to be an array",
-        "Proper error message"
-      )
-      */
 
-      /*
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/details/549608"
@@ -115,9 +112,11 @@ describe("#BlockRouter", () => {
           "poolInfo"
         ])
         done()
-        */
+
     })
   })
+  */
+
   /*
     it("should GET /details/:id hash", done => {
       const mockRequest = httpMocks.createRequest({
