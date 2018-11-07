@@ -67,29 +67,32 @@ while (i < 4) {
     i++;
 }
 router.get("/", config.blockRateLimit1, root);
-function root(req, res) {
-    res.json({ status: "block" });
+router.get("/detailsByHash/:hash", config.blockRateLimit2, detailsByHash);
+function root(req, res, next) {
+    return res.json({ status: "block" });
 }
-router.get("/detailsByHash/:hash", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var response, parsed, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + req.params.hash)];
-            case 1:
-                response = _a.sent();
-                parsed = response.data;
-                res.json(parsed);
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(500);
-                return [2 /*return*/, res.send(error_1)];
-            case 3: return [2 /*return*/];
-        }
+function detailsByHash(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, parsed, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + req.params.hash)];
+                case 1:
+                    response = _a.sent();
+                    parsed = response.data;
+                    res.json(parsed);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    res.status(500);
+                    return [2 /*return*/, res.send(error_1)];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); });
+}
 router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var requestConfig;
     var _this = this;
@@ -128,6 +131,7 @@ router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, re
 module.exports = {
     router: router,
     testableComponents: {
-        root: root
+        root: root,
+        detailsByHash: detailsByHash
     }
 };

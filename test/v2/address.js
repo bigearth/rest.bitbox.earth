@@ -10,6 +10,7 @@
   --Verify to/from query options work correctly.
   -/unconfirmed/:address
   --Should initiate a transfer of BCH to verify unconfirmed TX.
+  ---This would be more of an e2e test.
 */
 
 "use strict"

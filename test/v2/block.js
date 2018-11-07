@@ -1,27 +1,75 @@
 "use strict"
 
 //const chai = require("chai");
-const assert = require("assert")
-const httpMocks = require("node-mocks-http")
-const blockRoute = require("../../dist/routes/v1/block")
+//const assert = require("assert")
+//const httpMocks = require("node-mocks-http")
+const blockRoute = require("../../dist/routes/v2/block")
+
+const chai = require("chai")
+const assert = chai.assert
+//const addressRoute = require("../../dist/routes/v2/address")
+const nock = require("nock") // HTTP mocking
+
+let originalUrl // Used during transition from integration to unit tests.
+
+// Mocking data.
+const { mockReq, mockRes } = require("./mocks/express-mocks")
+const mockData = require("./mocks/block-mock")
+
+// Used for debugging.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
+
+function beforeTests() {
+  originalUrl = process.env.BITCOINCOM_BASEURL
+
+  // Set default environment variables for unit tests.
+  if (!process.env.TEST) process.env.TEST = "unit"
+  if (process.env.TEST === "unit")
+    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
+
+  console.log(`Testing type is: ${process.env.TEST}`)
+}
+beforeTests()
 
 describe("#BlockRouter", () => {
-  describe("#root", () => {
-    it("should return 'block' for GET /", () => {
-      const mockRequest = httpMocks.createRequest({
-        method: "GET",
-        url: "/"
-      })
-      const mockResponse = httpMocks.createResponse()
-      blockRoute(mockRequest, mockResponse)
-      const actualResponseBody = mockResponse._getData()
-      const expectedResponseBody = {
-        status: "block"
-      }
-      assert.deepEqual(JSON.parse(actualResponseBody), expectedResponseBody)
-    })
+  let req, res
+
+  // Setup the mocks before each test.
+  beforeEach(() => {
+    // Mock the req and res objects used by Express routes.
+    req = mockReq
+    res = mockRes
+
+    // Activate nock if it's inactive.
+    if (!nock.isActive()) nock.activate()
   })
 
+  afterEach(() => {
+    // Clean up HTTP mocks.
+    nock.cleanAll() // clear interceptor list.
+    nock.restore()
+  })
+
+  //before(() => {})
+
+  after(() => {
+    // Restore the original environment variables.
+    process.env.BITCOINCOM_BASEURL = originalUrl
+  })
+
+  describe("#root", () => {
+    // root route handler.
+    const root = blockRoute.testableComponents.root
+
+    it("should respond to GET for base route", async () => {
+      const result = root(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.equal(result.status, "block", "Returns static string")
+    })
+  })
+  /*
   describe("#BlockDetails", () => {
     it("should GET /details/:id height", done => {
       const mockRequest = httpMocks.createRequest({
@@ -98,4 +146,5 @@ describe("#BlockRouter", () => {
       })
     })
   })
+  */
 })
