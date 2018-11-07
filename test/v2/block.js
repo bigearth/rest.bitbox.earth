@@ -1,13 +1,8 @@
 "use strict"
 
-//const chai = require("chai");
-//const assert = require("assert")
-//const httpMocks = require("node-mocks-http")
 const blockRoute = require("../../dist/routes/v2/block")
-
 const chai = require("chai")
 const assert = chai.assert
-//const addressRoute = require("../../dist/routes/v2/address")
 const nock = require("nock") // HTTP mocking
 
 let originalUrl // Used during transition from integration to unit tests.
@@ -51,8 +46,6 @@ describe("#BlockRouter", () => {
     nock.restore()
   })
 
-  //before(() => {})
-
   after(() => {
     // Restore the original environment variables.
     process.env.BITCOINCOM_BASEURL = originalUrl
@@ -64,14 +57,31 @@ describe("#BlockRouter", () => {
 
     it("should respond to GET for base route", async () => {
       const result = root(req, res)
-      //console.log(`result: ${util.inspect(result)}`)
 
       assert.equal(result.status, "block", "Returns static string")
     })
   })
-  /*
+
   describe("#BlockDetails", () => {
-    it("should GET /details/:id height", done => {
+    // block route handler.
+    const detailsByHash = blockRoute.testableComponents.detailsByHash
+
+    it("should GET /details/:id height", async () => {
+      req.params.hash = 500000
+
+      const result = await detailsByHash(req, res)
+      console.log(`result: ${util.inspect(result)}`)
+
+      /*
+      assert.equal(res.statusCode, 200, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "addresses needs to be an array",
+        "Proper error message"
+      )
+      */
+
+      /*
       const mockRequest = httpMocks.createRequest({
         method: "GET",
         url: "/details/549608"
@@ -105,9 +115,10 @@ describe("#BlockRouter", () => {
           "poolInfo"
         ])
         done()
-      })
+        */
     })
-
+  })
+  /*
     it("should GET /details/:id hash", done => {
       const mockRequest = httpMocks.createRequest({
         method: "GET",

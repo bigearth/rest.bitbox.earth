@@ -172,6 +172,7 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
 
       // Assert that required fields exist in the returned object.
       assert.equal(result.length, 1, "Array with one entry")
