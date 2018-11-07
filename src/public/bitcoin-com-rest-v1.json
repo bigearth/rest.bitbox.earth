@@ -2106,7 +2106,7 @@
             "in": "path",
             "description": "The identifier of the tokens to grant",
             "required": true,
-            "example": 51,
+            "example": 220,
             "schema": {
               "type": "number"
             }
