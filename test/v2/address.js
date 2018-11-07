@@ -10,13 +10,14 @@
   --Verify to/from query options work correctly.
   -/unconfirmed/:address
   --Should initiate a transfer of BCH to verify unconfirmed TX.
+  ---This would be more of an e2e test.
 */
 
 "use strict"
 
 const chai = require("chai")
 const assert = chai.assert
-const addressRoute = require("../../routes/v2/address")
+const addressRoute = require("../../dist/routes/v2/address")
 const nock = require("nock") // HTTP mocking
 
 let originalUrl // Used during transition from integration to unit tests.
@@ -171,6 +172,7 @@ describe("#AddressRouter", () => {
 
       // Call the details API.
       const result = await details(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
 
       // Assert that required fields exist in the returned object.
       assert.equal(result.length, 1, "Array with one entry")

@@ -42,26 +42,33 @@ while (i < 4) {
   i++
 }
 
-router.get("/", config.blockRateLimit1, async (req, res, next) => {
-  res.json({ status: "block" })
-})
+router.get("/", config.blockRateLimit1, root)
+router.get("/detailsByHash/:hash", config.blockRateLimit2, detailsByHash)
 
-router.get(
-  "/detailsByHash/:hash",
-  config.blockRateLimit2,
-  async (req, res, next) => {
-    try {
-      const response = await axios.get(
-        `${process.env.BITCOINCOM_BASEURL}block/${req.params.hash}`
-      )
-      const parsed = response.data
-      res.json(parsed)
-    } catch (error) {
-      res.status(500)
-      return res.send(error)
-    }
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "block" })
+}
+
+async function detailsByHash(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const response = await axios.get(
+      `${process.env.BITCOINCOM_BASEURL}block/${req.params.hash}`
+    )
+    const parsed = response.data
+    res.json(parsed)
+  } catch (error) {
+    res.status(500)
+    return res.send(error)
   }
-)
+}
 
 router.get(
   "/detailsByHeight/:height",
@@ -91,4 +98,10 @@ router.get(
   }
 )
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root,
+    detailsByHash
+  }
+}
