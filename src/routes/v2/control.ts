@@ -5,6 +5,13 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
+const logger = require("./logging.js")
+
+// Used for processing error messages before sending them to the user.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 3 }
+
+console.log(`process.env.RPC_BASEURL: ${process.env.RPC_BASEURL}`)
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -52,38 +59,44 @@ const requestConfig: IRequestConfig = {
   }
 }
 
-router.get(
-  "/",
-  config.controlRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "control" })
-  }
-)
+router.get("/", config.controlRateLimit1, root)
+router.get("/getInfo", config.controlRateLimit2, getInfo)
 
-router.get(
-  "/getInfo",
-  config.controlRateLimit2,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getinfo"
-    requestConfig.data.method = "getinfo"
-    requestConfig.data.params = []
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "control" })
+}
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+async function getInfo(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  requestConfig.data.id = "getinfo"
+  requestConfig.data.method = "getinfo"
+  requestConfig.data.params = []
+
+  //console.log(`requestConfig: ${util.inspect(requestConfig)}`)
+  //console.log(`requestConfig.data.params: ${util.inspect(requestConfig.data.params)}`)
+  //console.log(`BitboxHTTP: ${util.inspect(BitboxHTTP)}`)
+  console.log(`BitboxHTTP.defaults.baseURL: ${BitboxHTTP.defaults.baseURL}`)
+
+  try {
+    const response = await BitboxHTTP(requestConfig)
+    res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    logger.error(`Error in address/details: `, error)
+
+    res.status(500)
+    if (error.response && error.response.data && error.response.data.error)
+      return res.json({ error: error.response.data.error })
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
 
 // router.get('/getMemoryInfo', (req, res, next) => {
 //   BitboxHTTP({
@@ -122,4 +135,10 @@ router.get(
 //   });
 // });
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root,
+    getInfo
+  }
+}
