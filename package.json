@@ -10,7 +10,7 @@
     "dev": "nodemon ./dist/app.js",
     "test": "npm run build && nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v1/",
     "test-v1": "nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v1/",
-    "test-v2": "nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v2/",
+    "test-v2": "export NETWORK=testnet && npm run build && nyc --reporter=text mocha --require babel-core/register test/v2/",
     "test-v2:blockchain": "nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v2/blockchain",
     "test-all": "TEST=integration nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v1/ test/v2/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",

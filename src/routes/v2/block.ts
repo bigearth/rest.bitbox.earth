@@ -45,7 +45,7 @@ while (i < 4) {
 
 router.get("/", config.blockRateLimit1, root)
 
-function root(req, res, next) {
+function root(req: express.Request, res: express.Response , /*next*/) {
   res.json({ status: "block" })
 }
 

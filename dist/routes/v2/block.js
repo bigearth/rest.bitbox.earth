@@ -66,12 +66,10 @@ while (i < 4) {
     });
     i++;
 }
-router.get("/", config.blockRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ status: "block" });
-        return [2 /*return*/];
-    });
-}); });
+router.get("/", config.blockRateLimit1, root);
+function root(req, res) {
+    res.json({ status: "block" });
+}
 router.get("/detailsByHash/:hash", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, parsed, error_1;
     return __generator(this, function (_a) {
@@ -127,4 +125,9 @@ router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, re
         return [2 /*return*/];
     });
 }); });
-module.exports = router;
+module.exports = {
+    router: router,
+    testableComponents: {
+        root: root
+    }
+};
