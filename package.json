@@ -1,6 +1,6 @@
 {
   "name": "rest.bitcoin.com",
-  "version": "1.10.4",
+  "version": "1.10.5",
   "description": "REST API for Bitcoin.com's Cloud",
   "author": "Gabriel Cardona @ Bitcoin.com",
   "license": "MIT",
@@ -63,7 +63,7 @@
     "node-mocks-http": "^1.7.0",
     "nodemon": "^1.18.1",
     "nyc": "^11.6.0",
-    "pandacash-cli": "^0.4.0",
+    "pandacash-core": "^0.1.0",
     "prettier": "^1.14.2",
     "sinon": "^6.3.4",
     "typescript": "^3.1.4"
