@@ -1,27 +1,15 @@
 "use strict"
 
 import * as express from "express"
-const router = express.Router()
+import * as requestUtils from "./services/requestUtils"
+import * as bitbox from "./services/bitbox"
+
 import axios from "axios"
-import { IRequestConfig } from "./interfaces/IRequestConfig"
+
+const router: express.Router = express.Router()
+const BitboxHTTP = bitbox.getInstance()
+
 const RateLimit = require("express-rate-limit")
-
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
-
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
-}
 
 interface IRLConfig {
   [blockRateLimit1: string]: any
@@ -54,26 +42,14 @@ while (i < 4) {
   i++
 }
 
-router.get(
-  "/",
-  config.blockRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "block" })
-  }
-)
+router.get("/", config.blockRateLimit1, async (req, res, next) => {
+  res.json({ status: "block" })
+})
 
 router.get(
   "/detailsByHash/:hash",
   config.blockRateLimit2,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+  async (req, res, next) => {
     try {
       const response = await axios.get(
         `${process.env.BITCOINCOM_BASEURL}block/${req.params.hash}`
@@ -90,14 +66,11 @@ router.get(
 router.get(
   "/detailsByHeight/:height",
   config.blockRateLimit2,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getblockhash"
-    requestConfig.data.method = "getblockhash"
-    requestConfig.data.params = [parseInt(req.params.height)]
+  async (req, res, next) => {
+    const requestConfig = requestUtils.getRequestConfig("getblockhash", [
+      parseInt(req.params.height)
+    ])
+
     BitboxHTTP(requestConfig)
       .then(async response => {
         try {
