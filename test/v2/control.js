@@ -1,30 +1,24 @@
 /*
-  TESTS FOR THE ADDRESS.JS LIBRARY
+  TESTS FOR THE CONTROL.JS LIBRARY
 
   This test file uses the environment variable TEST to switch between unit
   and integration tests. By default, TEST is set to 'unit'. Set this variable
   to 'integration' to run the tests against BCH mainnet.
 
-  To-Do:
-  -/details/:address
-  --Verify to/from query options work correctly.
-  -/unconfirmed/:address
-  --Should initiate a transfer of BCH to verify unconfirmed TX.
-  ---This would be more of an e2e test.
 */
 
 "use strict"
 
 const chai = require("chai")
 const assert = chai.assert
-const addressRoute = require("../../dist/routes/v2/address")
+const controlRoute = require("../../dist/routes/v2/control")
 const nock = require("nock") // HTTP mocking
 
 let originalUrl // Used during transition from integration to unit tests.
 
 // Mocking data.
 const { mockReq, mockRes } = require("./mocks/express-mocks")
-const mockData = require("./mocks/address-mock")
+//const mockData = require("./mocks/address-mock")
 
 // Used for debugging.
 const util = require("util")
@@ -38,11 +32,11 @@ function beforeTests() {
   if (process.env.TEST === "unit")
     process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
 
-  console.log(`Testing type is: ${process.env.TEST}`)
+  //console.log(`Testing type is: ${process.env.TEST}`)
 }
 beforeTests()
 
-describe("#AddressRouter", () => {
+describe("#ControlRouter", () => {
   let req, res
 
   // Setup the mocks before each test.
@@ -65,17 +59,28 @@ describe("#AddressRouter", () => {
     process.env.BITCOINCOM_BASEURL = originalUrl
   })
 
-  describe("#root", () => {
+  describe("#root", async () => {
     // root route handler.
-    const root = addressRoute.testableComponents.root
+    const root = controlRoute.testableComponents.root
 
     it("should respond to GET for base route", async () => {
       const result = root(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
 
-      assert.equal(result.status, "address", "Returns static string")
+      assert.equal(result.status, "control", "Returns static string")
     })
   })
 
+  describe("#GetInfo", () => {
+    const getInfo = controlRoute.testableComponents.getInfo
+
+    it("should get info on the full node", async () => {
+      const result = await getInfo(req, res)
+      console.log(`result: ${util.inspect(result)}`)
+    })
+  })
+
+  /*
   describe("#AddressDetails", () => {
     // details route handler.
     const details = addressRoute.testableComponents.details
@@ -630,4 +635,5 @@ describe("#AddressRouter", () => {
       assert.equal(result.length, 2, "Array should have 2 elements")
     })
   })
+  */
 })
