@@ -34,12 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
 var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
+var logger = require("./logging.js");
+// Used for processing error messages before sending them to the user.
+var util = require("util");
+util.inspect.defaultOptions = { depth: 3 };
+console.log("process.env.RPC_BASEURL: " + process.env.RPC_BASEURL);
 var BitboxHTTP = axios_1.default.create({
     baseURL: process.env.RPC_BASEURL
 });
@@ -78,33 +82,44 @@ var requestConfig = {
     }
 };
 router.get("/", config.controlRateLimit1, root);
+router.get("/getInfo", config.controlRateLimit2, getInfo);
 function root(req, res, next) {
     return res.json({ status: "control" });
 }
-router.get("/getInfo", config.controlRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var response, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                requestConfig.data.id = "getinfo";
-                requestConfig.data.method = "getinfo";
-                requestConfig.data.params = [];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, BitboxHTTP(requestConfig)];
-            case 2:
-                response = _a.sent();
-                res.json(response.data.result);
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                res.status(500).send(error_1.response.data.error);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+function getInfo(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    requestConfig.data.id = "getinfo";
+                    requestConfig.data.method = "getinfo";
+                    requestConfig.data.params = [];
+                    //console.log(`requestConfig: ${util.inspect(requestConfig)}`)
+                    //console.log(`requestConfig.data.params: ${util.inspect(requestConfig.data.params)}`)
+                    //console.log(`BitboxHTTP: ${util.inspect(BitboxHTTP)}`)
+                    console.log("BitboxHTTP.defaults.baseURL: " + BitboxHTTP.defaults.baseURL);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 2:
+                    response = _a.sent();
+                    res.json(response.data.result);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    // Write out error to error log.
+                    logger.error("Error in address/details: ", error_1);
+                    res.status(500);
+                    if (error_1.response && error_1.response.data && error_1.response.data.error)
+                        return [2 /*return*/, res.json({ error: error_1.response.data.error })];
+                    return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
+                case 4: return [2 /*return*/];
+            }
+        });
     });
-}); });
+}
 // router.get('/getMemoryInfo', (req, res, next) => {
 //   BitboxHTTP({
 //     method: 'post',
@@ -144,6 +159,7 @@ router.get("/getInfo", config.controlRateLimit2, function (req, res, next) { ret
 module.exports = {
     router: router,
     testableComponents: {
-        root: root
+        root: root,
+        getInfo: getInfo
     }
 };

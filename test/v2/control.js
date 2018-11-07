@@ -70,6 +70,16 @@ describe("#ControlRouter", () => {
       assert.equal(result.status, "control", "Returns static string")
     })
   })
+
+  describe("#GetInfo", () => {
+    const getInfo = controlRoute.testableComponents.getInfo
+
+    it("should get info on the full node", async () => {
+      const result = await getInfo(req, res)
+      console.log(`result: ${util.inspect(result)}`)
+    })
+  })
+
   /*
   describe("#AddressDetails", () => {
     // details route handler.
