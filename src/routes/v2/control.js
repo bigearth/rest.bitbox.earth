@@ -1,9 +1,9 @@
 "use strict"
 
-import * as express from "express"
+const express = require("express")
 const router = express.Router()
-import axios from "axios"
-import { IRequestConfig } from "./interfaces/IRequestConfig"
+const axios = require("axios")
+//import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 const logger = require("./logging.js")
 
@@ -11,18 +11,26 @@ const logger = require("./logging.js")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 3 }
 
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
+// Dynamically set these based on env vars. Allows unit testing.
+let BitboxHTTP
+let username
+let password
+let requestConfig
 
-interface IRLConfig {
-  [controlRateLimit1: string]: any
-  controlRateLimit2: any
-}
+// Typescript
+//interface IRLConfig {
+//  [controlRateLimit1: string]: any
+//  controlRateLimit2: any
+//}
 
-const config: IRLConfig = {
+// Typescript
+//const config: IRLConfig = {
+//  controlRateLimit1: undefined,
+//  controlRateLimit2: undefined
+//}
+
+// JavaScript
+const config = {
   controlRateLimit1: undefined,
   controlRateLimit2: undefined
 }
@@ -33,7 +41,7 @@ while (i < 3) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: (req: express.Request, res: express.Response /*next*/) => {
+    handler: (req, res /*next*/) => {
       res.format({
         json: () => {
           res.status(500).json({
@@ -46,48 +54,53 @@ while (i < 3) {
   i++
 }
 
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
-}
-
 router.get("/", config.controlRateLimit1, root)
 router.get("/getInfo", config.controlRateLimit2, getInfo)
 
-function root(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
+function root(req, res, next) {
   return res.json({ status: "control" })
 }
 
-async function getInfo(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
+// Execute the RPC getinfo call.
+async function getInfo(req, res, next) {
+  setEnvVars()
+
   requestConfig.data.id = "getinfo"
   requestConfig.data.method = "getinfo"
   requestConfig.data.params = []
 
   try {
     const response = await BitboxHTTP(requestConfig)
+
     return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
-    logger.error(`Error in address/details: `, error)
+    //logger.error(`Error in control/getInfo: `, error)
 
     res.status(500)
     if (error.response && error.response.data && error.response.data.error)
       return res.json({ error: error.response.data.error })
     return res.json({ error: util.inspect(error) })
+  }
+}
+
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+  BitboxHTTP = axios.create({
+    baseURL: process.env.RPC_BASEURL
+  })
+  username = process.env.RPC_USERNAME
+  password = process.env.RPC_PASSWORD
+
+  requestConfig = {
+    method: "post",
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0"
+    }
   }
 }
 

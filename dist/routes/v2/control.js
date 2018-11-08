@@ -34,20 +34,31 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios_1 = require("axios");
+var axios = require("axios");
+//import { IRequestConfig } from "./interfaces/IRequestConfig"
 var RateLimit = require("express-rate-limit");
 var logger = require("./logging.js");
 // Used for processing error messages before sending them to the user.
 var util = require("util");
 util.inspect.defaultOptions = { depth: 3 };
-var BitboxHTTP = axios_1.default.create({
-    baseURL: process.env.RPC_BASEURL
-});
-var username = process.env.RPC_USERNAME;
-var password = process.env.RPC_PASSWORD;
+// Dynamically set these based on env vars. Allows unit testing.
+var BitboxHTTP;
+var username;
+var password;
+var requestConfig;
+// Typescript
+//interface IRLConfig {
+//  [controlRateLimit1: string]: any
+//  controlRateLimit2: any
+//}
+// Typescript
+//const config: IRLConfig = {
+//  controlRateLimit1: undefined,
+//  controlRateLimit2: undefined
+//}
+// JavaScript
 var config = {
     controlRateLimit1: undefined,
     controlRateLimit2: undefined
@@ -70,27 +81,19 @@ while (i < 3) {
     });
     i++;
 }
-var requestConfig = {
-    method: "post",
-    auth: {
-        username: username,
-        password: password
-    },
-    data: {
-        jsonrpc: "1.0"
-    }
-};
 router.get("/", config.controlRateLimit1, root);
 router.get("/getInfo", config.controlRateLimit2, getInfo);
 function root(req, res, next) {
     return res.json({ status: "control" });
 }
+// Execute the RPC getinfo call.
 function getInfo(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
         var response, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    setEnvVars();
                     requestConfig.data.id = "getinfo";
                     requestConfig.data.method = "getinfo";
                     requestConfig.data.params = [];
@@ -104,7 +107,7 @@ function getInfo(req, res, next) {
                 case 3:
                     error_1 = _a.sent();
                     // Write out error to error log.
-                    logger.error("Error in address/details: ", error_1);
+                    //logger.error(`Error in control/getInfo: `, error)
                     res.status(500);
                     if (error_1.response && error_1.response.data && error_1.response.data.error)
                         return [2 /*return*/, res.json({ error: error_1.response.data.error })];
@@ -113,6 +116,24 @@ function getInfo(req, res, next) {
             }
         });
     });
+}
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+    BitboxHTTP = axios.create({
+        baseURL: process.env.RPC_BASEURL
+    });
+    username = process.env.RPC_USERNAME;
+    password = process.env.RPC_PASSWORD;
+    requestConfig = {
+        method: "post",
+        auth: {
+            username: username,
+            password: password
+        },
+        data: {
+            jsonrpc: "1.0"
+        }
+    };
 }
 // router.get('/getMemoryInfo', (req, res, next) => {
 //   BitboxHTTP({
