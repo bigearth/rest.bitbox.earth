@@ -42,7 +42,7 @@ var RateLimit = require("express-rate-limit");
 var logger = require("./logging.js");
 // Used for processing error messages before sending them to the user.
 var util = require("util");
-util.inspect.defaultOptions = { depth: 3 };
+util.inspect.defaultOptions = { depth: 1 };
 // Dynamically set these based on env vars. Allows unit testing.
 var BitboxHTTP;
 var username;

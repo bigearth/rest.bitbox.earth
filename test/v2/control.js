@@ -88,6 +88,23 @@ describe("#ControlRouter", () => {
   describe("#GetInfo", () => {
     const getInfo = controlRoute.testableComponents.getInfo
 
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await getInfo(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+
     it("should get info on the full node", async () => {
       // Mock the RPC call for unit tests.
       if (process.env.TEST === "unit") {
