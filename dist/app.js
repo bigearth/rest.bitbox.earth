@@ -13,7 +13,6 @@ var cors = require("cors");
 var BitcoinCashZMQDecoder = require("bitcoincash-zmq-decoder");
 var zmq = require("zeromq");
 var sock = zmq.socket("sub");
-console.log("01 process.env.RPC_BASEURL: " + process.env.RPC_BASEURL);
 var swStats = require("swagger-stats");
 var apiSpec = require("./public/bitcoin-com-rest-v1.json");
 // v1

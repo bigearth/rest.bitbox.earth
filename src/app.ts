@@ -19,8 +19,6 @@ const zmq = require("zeromq");
 
 const sock: any = zmq.socket("sub");
 
-console.log(`01 process.env.RPC_BASEURL: ${process.env.RPC_BASEURL}`)
-
 const swStats = require("swagger-stats")
 const apiSpec = require("./public/bitcoin-com-rest-v1.json")
 
