@@ -6,3 +6,4 @@ start-local-server
 test-local-server
 coverage
 start-my-infra
+dist/routes/**
