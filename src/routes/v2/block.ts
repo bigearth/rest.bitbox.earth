@@ -76,7 +76,7 @@ async function detailsByHash(
     )
 
     const parsed = response.data
-    res.json(parsed)
+    return res.json(parsed)
   } catch (error) {
     // Write out error to error log.
     //logger.error(`Error in block/detailsByHash: `, error)

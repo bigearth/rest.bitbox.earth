@@ -92,8 +92,7 @@ function detailsByHash(req, res, next) {
                 case 1:
                     response = _a.sent();
                     parsed = response.data;
-                    res.json(parsed);
-                    return [3 /*break*/, 3];
+                    return [2 /*return*/, res.json(parsed)];
                 case 2:
                     error_1 = _a.sent();
                     // Write out error to error log.

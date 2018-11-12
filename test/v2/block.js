@@ -115,6 +115,42 @@ describe("#BlockRouter", () => {
       assert.equal(res.statusCode, 404, "HTTP status code 404 expected.")
       assert.include(result.error, "Not Found", "Proper error message")
     })
+
+    it("should GET /detailsByHash/:hash", async () => {
+      req.params.hash =
+        "00000000000000645dec6503d3f5eafb0d2537a7a28f181d721dec7c44154c79"
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/block/${req.params.hash}`)
+          .reply(200, mockData.mockBlockDetails)
+      }
+
+      const result = await detailsByHash(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAnyKeys(result, [
+        "hash",
+        "size",
+        "height",
+        "version",
+        "merkleroot",
+        "tx",
+        "time",
+        "nonce",
+        "bits",
+        "difficulty",
+        "chainwork",
+        "confirmations",
+        "previousblockhash",
+        "nextblockhash",
+        "reward",
+        "isMainChain",
+        "poolInfo"
+      ])
+      assert.isArray(result.tx)
+    })
   })
 
   /*
