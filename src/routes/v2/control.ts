@@ -1,9 +1,9 @@
 "use strict"
 
-const express = require("express")
+import * as express from "express"
 const router = express.Router()
-const axios = require("axios")
-//import { IRequestConfig } from "./interfaces/IRequestConfig"
+import axios from "axios"
+import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 const logger = require("./logging.js")
 
@@ -12,28 +12,28 @@ const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
 // Dynamically set these based on env vars. Allows unit testing.
-let BitboxHTTP
-let username
-let password
-let requestConfig
+let BitboxHTTP: any
+let username: any
+let password: any
+let requestConfig: any
 
 // Typescript
-//interface IRLConfig {
-//  [controlRateLimit1: string]: any
-//  controlRateLimit2: any
-//}
+interface IRLConfig {
+  [controlRateLimit1: string]: any
+  controlRateLimit2: any
+}
 
 // Typescript
-//const config: IRLConfig = {
-//  controlRateLimit1: undefined,
-//  controlRateLimit2: undefined
-//}
-
-// JavaScript
-const config = {
+const config: IRLConfig = {
   controlRateLimit1: undefined,
   controlRateLimit2: undefined
 }
+
+// JavaScript
+//const config = {
+//  controlRateLimit1: undefined,
+//  controlRateLimit2: undefined
+//}
 
 let i = 1
 while (i < 3) {
@@ -41,7 +41,7 @@ while (i < 3) {
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
     max: 60, // start blocking after 60 requests
-    handler: (req, res /*next*/) => {
+    handler: (req: express.Request, res: express.Response /*next*/) => {
       res.format({
         json: () => {
           res.status(500).json({
@@ -57,12 +57,20 @@ while (i < 3) {
 router.get("/", config.controlRateLimit1, root)
 router.get("/getInfo", config.controlRateLimit2, getInfo)
 
-function root(req, res, next) {
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   return res.json({ status: "control" })
 }
 
 // Execute the RPC getinfo call.
-async function getInfo(req, res, next) {
+async function getInfo(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   setEnvVars()
 
   requestConfig.data.id = "getinfo"
