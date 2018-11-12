@@ -67,6 +67,53 @@ describe("#BlockRouter", () => {
       assert.equal(result.status, "block", "Returns static string")
     })
   })
+
+  describe("Block Details By Hash", () => {
+    const detailsByHash = blockRoute.testableComponents.detailsByHash
+
+    it("should throw an error for an empty hash", async () => {
+      req.params.hash = ""
+
+      const result = await detailsByHash(req, res)
+
+      assert.equal(res.statusCode, 400, "HTTP status code 400 expected.")
+      assert.include(
+        result.error,
+        "hash must not be empty",
+        "Proper error message"
+      )
+    })
+
+    it("should throw an error for invalid hash", async () => {
+      req.params.hash = "abc123"
+
+      const result = await detailsByHash(req, res)
+      console.log(`result: ${util.inspect(result)}`)
+
+      assert.equal(res.statusCode, 404, "HTTP status code 404 expected.")
+      assert.include(result.error, "Not Found", "Proper error message")
+    })
+
+    /*
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await detailsByHash(req, res)
+      console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+*/
+  })
+
   /*
   describe("#BlockDetails", () => {
     // block route handler.

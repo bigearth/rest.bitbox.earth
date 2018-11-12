@@ -3,8 +3,12 @@
 import * as express from "express"
 import * as requestUtils from "./services/requestUtils"
 import * as bitbox from "./services/bitbox"
-
+const logger = require("./logging.js")
 import axios from "axios"
+
+// Used for processing error messages before sending them to the user.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
 
 const router: express.Router = express.Router()
 const BitboxHTTP = bitbox.getInstance()
@@ -59,14 +63,30 @@ async function detailsByHash(
   next: express.NextFunction
 ) {
   try {
+    const hash = req.params.hash
+
+    // Reject if hash is empty
+    if(!hash || hash === "") {
+      res.status(400)
+      return res.json({ error: "hash must not be empty" })
+    }
+
     const response = await axios.get(
-      `${process.env.BITCOINCOM_BASEURL}block/${req.params.hash}`
+      `${process.env.BITCOINCOM_BASEURL}block/${hash}`
     )
     const parsed = response.data
     res.json(parsed)
   } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in block/detailsByHash: `, error)
+
+    if(error.response && error.response.status === 404) {
+      res.status(404)
+      return res.json({error: error.response.statusText})
+    }
+
     res.status(500)
-    return res.send(error)
+    return res.json({error: util.inspect(error)})
   }
 }
 
@@ -93,7 +113,7 @@ router.get(
       })
       .catch(error => {
         res.status(500)
-        return res.send(error)
+        return res.json({error: util.inspect(error)})
       })
   }
 )

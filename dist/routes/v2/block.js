@@ -39,7 +39,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var requestUtils = require("./services/requestUtils");
 var bitbox = require("./services/bitbox");
+var logger = require("./logging.js");
 var axios_1 = require("axios");
+// Used for processing error messages before sending them to the user.
+var util = require("util");
+util.inspect.defaultOptions = { depth: 1 };
 var router = express.Router();
 var BitboxHTTP = bitbox.getInstance();
 var RateLimit = require("express-rate-limit");
@@ -73,12 +77,18 @@ function root(req, res, next) {
 }
 function detailsByHash(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var response, parsed, error_1;
+        var hash, response, parsed, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + req.params.hash)];
+                    hash = req.params.hash;
+                    // Reject if hash is empty
+                    if (!hash || hash === "") {
+                        res.status(400);
+                        return [2 /*return*/, res.json({ error: "hash must not be empty" })];
+                    }
+                    return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + hash)];
                 case 1:
                     response = _a.sent();
                     parsed = response.data;
@@ -86,8 +96,14 @@ function detailsByHash(req, res, next) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in block/detailsByHash: `, error)
+                    if (error_1.response && error_1.response.status === 404) {
+                        res.status(404);
+                        return [2 /*return*/, res.json({ error: error_1.response.statusText })];
+                    }
                     res.status(500);
-                    return [2 /*return*/, res.send(error_1)];
+                    return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
                 case 3: return [2 /*return*/];
             }
         });
@@ -123,7 +139,7 @@ router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, re
         }); })
             .catch(function (error) {
             res.status(500);
-            return res.send(error);
+            return res.json({ error: util.inspect(error) });
         });
         return [2 /*return*/];
     });
