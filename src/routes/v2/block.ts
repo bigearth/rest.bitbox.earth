@@ -74,6 +74,7 @@ async function detailsByHash(
     const response = await axios.get(
       `${process.env.BITCOINCOM_BASEURL}block/${hash}`
     )
+
     const parsed = response.data
     res.json(parsed)
   } catch (error) {
@@ -82,7 +83,7 @@ async function detailsByHash(
 
     if(error.response && error.response.status === 404) {
       res.status(404)
-      return res.json({error: error.response.statusText})
+      return res.json({error: 'Not Found'})
     }
 
     res.status(500)

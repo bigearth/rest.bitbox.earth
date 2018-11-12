@@ -100,7 +100,7 @@ function detailsByHash(req, res, next) {
                     //logger.error(`Error in block/detailsByHash: `, error)
                     if (error_1.response && error_1.response.status === 404) {
                         res.status(404);
-                        return [2 /*return*/, res.json({ error: error_1.response.statusText })];
+                        return [2 /*return*/, res.json({ error: 'Not Found' })];
                     }
                     res.status(500);
                     return [2 /*return*/, res.json({ error: util.inspect(error_1) })];

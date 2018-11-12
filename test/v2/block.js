@@ -21,20 +21,17 @@ const mockData = require("./mocks/block-mock")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
-function beforeTests() {
-  originalUrl = process.env.BITCOINCOM_BASEURL
-
-  // Set default environment variables for unit tests.
-  if (!process.env.TEST) process.env.TEST = "unit"
-  if (process.env.TEST === "unit")
-    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
-
-  //console.log(`Testing type is: ${process.env.TEST}`)
-}
-beforeTests()
-
 describe("#BlockRouter", () => {
   let req, res
+
+  before(() => {
+    originalUrl = process.env.BITCOINCOM_BASEURL
+
+    // Set default environment variables for unit tests.
+    if (!process.env.TEST) process.env.TEST = "unit"
+    if (process.env.TEST === "unit")
+      process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
+  })
 
   // Setup the mocks before each test.
   beforeEach(() => {
@@ -84,34 +81,40 @@ describe("#BlockRouter", () => {
       )
     })
 
-    it("should throw an error for invalid hash", async () => {
-      req.params.hash = "abc123"
-
-      const result = await detailsByHash(req, res)
-      console.log(`result: ${util.inspect(result)}`)
-
-      assert.equal(res.statusCode, 404, "HTTP status code 404 expected.")
-      assert.include(result.error, "Not Found", "Proper error message")
-    })
-
-    /*
     it("should throw 500 when network issues", async () => {
       // Save the existing RPC URL.
-      const savedUrl = process.env.RPC_BASEURL
+      const savedUrl = process.env.BITCOINCOM_BASEURL
 
       // Manipulate the URL to cause a 500 network error.
-      process.env.RPC_BASEURL = "http://fakeurl/api/"
+      process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
 
+      req.params.hash = "abc123"
       const result = await detailsByHash(req, res)
-      console.log(`result: ${util.inspect(result)}`)
+      //console.log(`result: ${util.inspect(result)}`)
 
       // Restore the saved URL.
-      process.env.RPC_BASEURL = savedUrl
+      process.env.BITCOINCOM_BASEURL = savedUrl
 
       assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
       assert.include(result.error, "ENOTFOUND", "Error message expected")
     })
-*/
+
+    it("should throw an error for invalid hash", async () => {
+      req.params.hash = "abc123"
+
+      // Mock the Insight URL for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.BITCOINCOM_BASEURL}`)
+          .get(`/block/${req.params.hash}`)
+          .reply(404, { statusText: "Not Found" })
+      }
+
+      const result = await detailsByHash(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.equal(res.statusCode, 404, "HTTP status code 404 expected.")
+      assert.include(result.error, "Not Found", "Proper error message")
+    })
   })
 
   /*
