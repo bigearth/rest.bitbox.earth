@@ -34,24 +34,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
-var requestUtils = require("./services/requestUtils");
-var bitbox = require("./services/bitbox");
 var logger = require("./logging.js");
 var axios_1 = require("axios");
 // Used for processing error messages before sending them to the user.
 var util = require("util");
 util.inspect.defaultOptions = { depth: 1 };
 var router = express.Router();
-var BitboxHTTP = bitbox.getInstance();
+//const BitboxHTTP = bitbox.getInstance()
 var RateLimit = require("express-rate-limit");
 var config = {
     blockRateLimit1: undefined,
     blockRateLimit2: undefined,
     blockRateLimit3: undefined
 };
+// Dynamically set these based on env vars. Allows unit testing.
+var BitboxHTTP;
+var username;
+var password;
+var requestConfig;
 var i = 1;
 while (i < 4) {
     config["blockRateLimit" + i] = new RateLimit({
@@ -72,9 +74,11 @@ while (i < 4) {
 }
 router.get("/", config.blockRateLimit1, root);
 router.get("/detailsByHash/:hash", config.blockRateLimit2, detailsByHash);
+router.get("/detailsByHeight/:height", config.blockRateLimit2, detailsByHeight);
 function root(req, res, next) {
     return res.json({ status: "block" });
 }
+// Call the insight server to get block details based on the hash.
 function detailsByHash(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
         var hash, response, parsed, error_1;
@@ -99,7 +103,7 @@ function detailsByHash(req, res, next) {
                     //logger.error(`Error in block/detailsByHash: `, error)
                     if (error_1.response && error_1.response.status === 404) {
                         res.status(404);
-                        return [2 /*return*/, res.json({ error: 'Not Found' })];
+                        return [2 /*return*/, res.json({ error: "Not Found" })];
                     }
                     res.status(500);
                     return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
@@ -108,45 +112,67 @@ function detailsByHash(req, res, next) {
         });
     });
 }
-router.get("/detailsByHeight/:height", config.blockRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var requestConfig;
-    var _this = this;
-    return __generator(this, function (_a) {
-        requestConfig = requestUtils.getRequestConfig("getblockhash", [
-            parseInt(req.params.height)
-        ]);
-        BitboxHTTP(requestConfig)
-            .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
-            var rsp, parsed, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios_1.default.get(process.env.BITCOINCOM_BASEURL + "block/" + response.data.result)];
-                    case 1:
-                        rsp = _a.sent();
-                        parsed = rsp.data;
-                        res.json(parsed);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_2 = _a.sent();
-                        res.status(500);
-                        return [2 /*return*/, res.send(error_2)];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); })
-            .catch(function (error) {
-            res.status(500);
-            return res.json({ error: util.inspect(error) });
+// Call the Full Node to get block hash based on height, then call the Insight
+// server to get details from that hash.
+function detailsByHeight(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var height, response, hash, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    height = req.params.height;
+                    // Reject if id is empty
+                    if (!height || height === "") {
+                        res.status(400);
+                        return [2 /*return*/, res.json({ error: "height must not be empty" })];
+                    }
+                    setEnvVars();
+                    requestConfig.data.id = "getblockhash";
+                    requestConfig.data.method = "getblockhash";
+                    requestConfig.data.params = [parseInt(height)];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _a.sent();
+                    hash = response.data.result;
+                    //console.log(`hash: ${hash}`)
+                    // Call detailsByHash now that the hash has been retrieved.
+                    req.params.hash = hash;
+                    return [2 /*return*/, detailsByHash(req, res, next)];
+                case 2:
+                    error_2 = _a.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_2) })];
+                case 3: return [2 /*return*/];
+            }
         });
-        return [2 /*return*/];
     });
-}); });
+}
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+    BitboxHTTP = axios_1.default.create({
+        baseURL: process.env.RPC_BASEURL
+    });
+    username = process.env.RPC_USERNAME;
+    password = process.env.RPC_PASSWORD;
+    requestConfig = {
+        method: "post",
+        auth: {
+            username: username,
+            password: password
+        },
+        data: {
+            jsonrpc: "1.0"
+        }
+    };
+}
 module.exports = {
     router: router,
     testableComponents: {
         root: root,
-        detailsByHash: detailsByHash
+        detailsByHash: detailsByHash,
+        detailsByHeight: detailsByHeight
     }
 };

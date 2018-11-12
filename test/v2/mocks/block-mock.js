@@ -33,6 +33,10 @@ const mockBlockDetails = {
   poolInfo: {}
 }
 
+const mockBlockHash =
+  "00000000000000645dec6503d3f5eafb0d2537a7a28f181d721dec7c44154c79"
+
 module.exports = {
-  mockBlockDetails
+  mockBlockDetails,
+  mockBlockHash
 }
