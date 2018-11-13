@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
 var RateLimit = require("express-rate-limit");
-var routeUtils = require("./services/util");
+var routeUtils = require("./route-utils");
 var logger = require("./logging.js");
 // Used to convert error messages to strings, to safely pass to users.
 var util = require("util");

@@ -6,16 +6,11 @@ import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 const logger = require("./logging.js")
+const routeUtils = require("./route-utils")
 
 // Used for processing error messages before sending them to the user.
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
-
-// Dynamically set these based on env vars. Allows unit testing.
-let BitboxHTTP: any
-let username: any
-let password: any
-let requestConfig: any
 
 // Typescript
 interface IRLConfig {
@@ -71,7 +66,7 @@ async function getInfo(
   res: express.Response,
   next: express.NextFunction
 ) {
-  setEnvVars()
+  const {BitboxHTTP, username, password, requestConfig} = routeUtils.setEnvVars()
 
   requestConfig.data.id = "getinfo"
   requestConfig.data.method = "getinfo"
@@ -89,26 +84,6 @@ async function getInfo(
     if (error.response && error.response.data && error.response.data.error)
       return res.json({ error: error.response.data.error })
     return res.json({ error: util.inspect(error) })
-  }
-}
-
-// Dynamically set these based on env vars. Allows unit testing.
-function setEnvVars() {
-  BitboxHTTP = axios.create({
-    baseURL: process.env.RPC_BASEURL
-  })
-  username = process.env.RPC_USERNAME
-  password = process.env.RPC_PASSWORD
-
-  requestConfig = {
-    method: "post",
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0"
-    }
   }
 }
 

@@ -2,10 +2,12 @@
   A private library of utility functions used by several different routes.
 */
 "use strict";
+var axios = require("axios");
 var BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 var BITBOX = new BITBOXCli();
 module.exports = {
-    validateNetwork: validateNetwork // Prevents a common user error
+    validateNetwork: validateNetwork,
+    setEnvVars: setEnvVars // Allows RPC variables to be set dynamically based on changing env vars.
 };
 // Returns true if user-provided cash address matches the correct network,
 // mainnet or testnet. If NETWORK env var is not defined, it returns false.
@@ -37,4 +39,23 @@ function validateNetwork(addr) {
         logger.error("Error in validateNetwork()");
         return false;
     }
+}
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+    var BitboxHTTP = axios.create({
+        baseURL: process.env.RPC_BASEURL
+    });
+    var username = process.env.RPC_USERNAME;
+    var password = process.env.RPC_PASSWORD;
+    var requestConfig = {
+        method: "post",
+        auth: {
+            username: username,
+            password: password
+        },
+        data: {
+            jsonrpc: "1.0"
+        }
+    };
+    return { BitboxHTTP: BitboxHTTP, username: username, password: password, requestConfig: requestConfig };
 }

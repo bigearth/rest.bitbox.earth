@@ -5,7 +5,7 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
-const routeUtils = require("./services/util")
+const routeUtils = require("./route-utils")
 const logger = require("./logging.js")
 
 // Used to convert error messages to strings, to safely pass to users.

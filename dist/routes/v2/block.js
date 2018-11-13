@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var logger = require("./logging.js");
 var axios_1 = require("axios");
+var routeUtils = require("./route-utils");
 // Used for processing error messages before sending them to the user.
 var util = require("util");
 util.inspect.defaultOptions = { depth: 1 };
@@ -49,11 +50,6 @@ var config = {
     blockRateLimit2: undefined,
     blockRateLimit3: undefined
 };
-// Dynamically set these based on env vars. Allows unit testing.
-var BitboxHTTP;
-var username;
-var password;
-var requestConfig;
 var i = 1;
 while (i < 4) {
     config["blockRateLimit" + i] = new RateLimit({
@@ -116,31 +112,31 @@ function detailsByHash(req, res, next) {
 // server to get details from that hash.
 function detailsByHeight(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var height, response, hash, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var height, _a, BitboxHTTP, username, password, requestConfig, response, hash, error_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    _b.trys.push([0, 2, , 3]);
                     height = req.params.height;
                     // Reject if id is empty
                     if (!height || height === "") {
                         res.status(400);
                         return [2 /*return*/, res.json({ error: "height must not be empty" })];
                     }
-                    setEnvVars();
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
                     requestConfig.data.id = "getblockhash";
                     requestConfig.data.method = "getblockhash";
                     requestConfig.data.params = [parseInt(height)];
                     return [4 /*yield*/, BitboxHTTP(requestConfig)];
                 case 1:
-                    response = _a.sent();
+                    response = _b.sent();
                     hash = response.data.result;
                     //console.log(`hash: ${hash}`)
                     // Call detailsByHash now that the hash has been retrieved.
                     req.params.hash = hash;
                     return [2 /*return*/, detailsByHash(req, res, next)];
                 case 2:
-                    error_2 = _a.sent();
+                    error_2 = _b.sent();
                     // Write out error to error log.
                     //logger.error(`Error in control/getInfo: `, error)
                     res.status(500);
@@ -149,24 +145,6 @@ function detailsByHeight(req, res, next) {
             }
         });
     });
-}
-// Dynamically set these based on env vars. Allows unit testing.
-function setEnvVars() {
-    BitboxHTTP = axios_1.default.create({
-        baseURL: process.env.RPC_BASEURL
-    });
-    username = process.env.RPC_USERNAME;
-    password = process.env.RPC_PASSWORD;
-    requestConfig = {
-        method: "post",
-        auth: {
-            username: username,
-            password: password
-        },
-        data: {
-            jsonrpc: "1.0"
-        }
-    };
 }
 module.exports = {
     router: router,

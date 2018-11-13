@@ -5,6 +5,7 @@ import * as requestUtils from "./services/requestUtils"
 import * as bitbox from "./services/bitbox"
 const logger = require("./logging.js")
 import axios from "axios"
+const routeUtils = require("./route-utils")
 
 // Used for processing error messages before sending them to the user.
 const util = require("util")
@@ -26,12 +27,6 @@ const config: IRLConfig = {
   blockRateLimit2: undefined,
   blockRateLimit3: undefined
 }
-
-// Dynamically set these based on env vars. Allows unit testing.
-let BitboxHTTP: any
-let username: any
-let password: any
-let requestConfig: any
 
 let i = 1
 while (i < 4) {
@@ -115,7 +110,7 @@ async function detailsByHeight(
       return res.json({ error: "height must not be empty" })
     }
 
-    setEnvVars()
+    const {BitboxHTTP, username, password, requestConfig} = routeUtils.setEnvVars()
 
     requestConfig.data.id = "getblockhash"
     requestConfig.data.method = "getblockhash"
@@ -135,27 +130,6 @@ async function detailsByHeight(
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
-  }
-
-}
-
-// Dynamically set these based on env vars. Allows unit testing.
-function setEnvVars() {
-  BitboxHTTP = axios.create({
-    baseURL: process.env.RPC_BASEURL
-  })
-  username = process.env.RPC_USERNAME
-  password = process.env.RPC_PASSWORD
-
-  requestConfig = {
-    method: "post",
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0"
-    }
   }
 }
 
