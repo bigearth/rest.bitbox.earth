@@ -90,28 +90,24 @@ describe("#BlockchainRouter", () => {
   describe("getBestBlockHash()", () => {
     // block route handler.
     const getBestBlockHash = blockchainRoute.testableComponents.getBestBlockHash
-    /*
+
     it("should throw 500 when network issues", async () => {
       // Save the existing RPC URL.
-      const savedUrl = process.env.BITCOINCOM_BASEURL
       const savedUrl2 = process.env.RPC_BASEURL
 
       // Manipulate the URL to cause a 500 network error.
-      process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
       process.env.RPC_BASEURL = "http://fakeurl/api/"
 
-      req.params.height = "abc123"
-      const result = await detailsByHeight(req, res)
+      const result = await getBestBlockHash(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
       // Restore the saved URL.
-      process.env.BITCOINCOM_BASEURL = savedUrl
       process.env.RPC_BASEURL = savedUrl2
 
       assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
       assert.include(result.error, "ENOTFOUND", "Error message expected")
     })
-*/
+
     it("should GET /getBestBlockHash", async () => {
       // Mock the RPC call for unit tests.
       if (process.env.TEST === "unit") {

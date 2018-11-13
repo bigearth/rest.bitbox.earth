@@ -48,11 +48,6 @@ var config = {
     controlRateLimit1: undefined,
     controlRateLimit2: undefined
 };
-// JavaScript
-//const config = {
-//  controlRateLimit1: undefined,
-//  controlRateLimit2: undefined
-//}
 var i = 1;
 while (i < 3) {
     config["controlRateLimit" + i] = new RateLimit({

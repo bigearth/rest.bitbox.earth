@@ -105,7 +105,7 @@ function getBestBlockHash(req, res, next) {
                 case 2:
                     error_1 = _b.sent();
                     // Write out error to error log.
-                    logger.error("Error in control/getInfo: ", error_1);
+                    //logger.error(`Error in control/getInfo: `, error)
                     res.status(500);
                     return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
                 case 3: return [2 /*return*/];
