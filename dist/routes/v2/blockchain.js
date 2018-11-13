@@ -37,53 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var router = express.Router();
-var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
+var routeUtils = require("./services/util");
+var logger = require("./logging.js");
 // Used to convert error messages to strings, to safely pass to users.
 var util = require("util");
 util.inspect.defaultOptions = { depth: 1 };
-// Dynamically set these based on env vars. Allows unit testing.
-var BitboxHTTP;
-var username;
-var password;
-var requestConfig;
-/*
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
-*/
-/*
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
-}
-*/
-// Dynamically set these based on env vars. Allows unit testing.
-function setEnvVars() {
-    BitboxHTTP = axios_1.default.create({
-        baseURL: process.env.RPC_BASEURL
-    });
-    username = process.env.RPC_USERNAME;
-    password = process.env.RPC_PASSWORD;
-    requestConfig = {
-        method: "post",
-        auth: {
-            username: username,
-            password: password
-        },
-        data: {
-            jsonrpc: "1.0"
-        }
-    };
-}
 var config = {
     blockchainRateLimit1: undefined,
     blockchainRateLimit2: undefined,
@@ -130,23 +89,23 @@ function root(req, res, next) {
 // Returns the hash of the best (tip) block in the longest block chain.
 function getBestBlockHash(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var response, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    setEnvVars();
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
                     requestConfig.data.id = "getbestblockhash";
                     requestConfig.data.method = "getbestblockhash";
                     requestConfig.data.params = [];
                     return [4 /*yield*/, BitboxHTTP(requestConfig)];
                 case 1:
-                    response = _a.sent();
+                    response = _b.sent();
                     return [2 /*return*/, res.json(response.data.result)];
                 case 2:
-                    error_1 = _a.sent();
+                    error_1 = _b.sent();
                     // Write out error to error log.
-                    //logger.error(`Error in control/getInfo: `, error)
+                    logger.error("Error in control/getInfo: ", error_1);
                     res.status(500);
                     return [2 /*return*/, res.json({ error: util.inspect(error_1) })];
                 case 3: return [2 /*return*/];

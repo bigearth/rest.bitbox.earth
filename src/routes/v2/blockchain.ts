@@ -5,57 +5,12 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
+const routeUtils = require("./services/util")
+const logger = require("./logging.js")
 
 // Used to convert error messages to strings, to safely pass to users.
 const util = require("util");
 util.inspect.defaultOptions = {depth: 1};
-
-// Dynamically set these based on env vars. Allows unit testing.
-let BitboxHTTP: any
-let username: any
-let password: any
-let requestConfig: any
-
-/*
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
-*/
-
-/*
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
-}
-*/
-
-// Dynamically set these based on env vars. Allows unit testing.
-function setEnvVars() {
-  BitboxHTTP = axios.create({
-    baseURL: process.env.RPC_BASEURL
-  })
-  username = process.env.RPC_USERNAME
-  password = process.env.RPC_PASSWORD
-
-  requestConfig = {
-    method: "post",
-    auth: {
-      username: username,
-      password: password
-    },
-    data: {
-      jsonrpc: "1.0"
-    }
-  }
-}
 
 interface IRLConfig {
   [blockchainRateLimit1: string]: any
@@ -135,7 +90,7 @@ async function getBestBlockHash(
   next: express.NextFunction
 ) {
   try {
-    setEnvVars()
+    const {BitboxHTTP, username, password, requestConfig} = routeUtils.setEnvVars()
 
     requestConfig.data.id = "getbestblockhash"
     requestConfig.data.method = "getbestblockhash"
@@ -145,7 +100,7 @@ async function getBestBlockHash(
     return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    logger.error(`Error in control/getInfo: `, error)
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
