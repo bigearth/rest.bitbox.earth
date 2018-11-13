@@ -6,12 +6,25 @@ import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
 
+// Used to convert error messages to strings, to safely pass to users.
+const util = require("util");
+util.inspect.defaultOptions = {depth: 1};
+
+// Dynamically set these based on env vars. Allows unit testing.
+let BitboxHTTP: any
+let username: any
+let password: any
+let requestConfig: any
+
+/*
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
 })
 const username = process.env.RPC_USERNAME
 const password = process.env.RPC_PASSWORD
+*/
 
+/*
 const requestConfig: IRequestConfig = {
   method: "post",
   auth: {
@@ -20,6 +33,27 @@ const requestConfig: IRequestConfig = {
   },
   data: {
     jsonrpc: "1.0"
+  }
+}
+*/
+
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+  BitboxHTTP = axios.create({
+    baseURL: process.env.RPC_BASEURL
+  })
+  username = process.env.RPC_USERNAME
+  password = process.env.RPC_PASSWORD
+
+  requestConfig = {
+    method: "post",
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0"
+    }
   }
 }
 
@@ -82,7 +116,9 @@ while (i < 18) {
   i++
 }
 
+// Define routes.
 router.get("/", config.blockchainRateLimit1, root)
+router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash)
 
 function root(
   req: express.Request,
@@ -92,28 +128,31 @@ function root(
   return res.json({ status: "blockchain" })
 }
 
-/*
-router.get(
-  "/getBestBlockHash",
-  config.blockchainRateLimit2,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+// Returns the hash of the best (tip) block in the longest block chain.
+async function getBestBlockHash(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    setEnvVars()
+
     requestConfig.data.id = "getbestblockhash"
     requestConfig.data.method = "getbestblockhash"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
 
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
+  }
+}
+
+/*
 router.get(
   "/getBlock/:hash",
   config.blockchainRateLimit3,
@@ -823,6 +862,7 @@ router.get(
 module.exports = {
   router,
   testableComponents: {
-    root
+    root,
+    getBestBlockHash
   }
 }
