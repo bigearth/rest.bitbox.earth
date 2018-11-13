@@ -120,15 +120,11 @@ describe("#BlockchainRouter", () => {
           .reply(200, { result: mockData.mockBlockHash })
       }
 
-      // Mock the Insight URL for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/block/${req.params.hash}`)
-          .reply(200, mockData.mockBlockDetails)
-      }
-
       const result = await getBestBlockHash(req, res)
-      console.log(`result: ${util.inspect(result)}`)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.isString(result)
+      assert.equal(result.length, 64, "Hash string is fixed length")
     })
   })
 
