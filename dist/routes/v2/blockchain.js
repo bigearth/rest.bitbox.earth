@@ -87,6 +87,7 @@ router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash);
 router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo);
 router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount);
 router.get("/getChainTips", config.blockchainRateLimit8, getChainTips);
+router.get("/getDifficulty", config.blockchainRateLimit9, getDifficulty);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -386,28 +387,33 @@ function getChainTips(req, res, next) {
         });
     });
 }
+function getDifficulty(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_5;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "getdifficulty";
+                    requestConfig.data.method = "getdifficulty";
+                    requestConfig.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_5 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_5) })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
 /*
-router.get(
-  "/getDifficulty",
-  config.blockchainRateLimit9,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getdifficulty"
-    requestConfig.data.method = "getdifficulty"
-    requestConfig.data.params = []
-
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
-
 router.get(
   "/getMempoolAncestors/:txid",
   config.blockchainRateLimit10,
@@ -844,6 +850,7 @@ module.exports = {
         //getBlock,
         getBlockchainInfo: getBlockchainInfo,
         getBlockCount: getBlockCount,
-        getChainTips: getChainTips
+        getChainTips: getChainTips,
+        getDifficulty: getDifficulty
     }
 };
