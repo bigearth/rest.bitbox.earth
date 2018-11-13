@@ -86,6 +86,7 @@ router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash);
 //router.get("/getBlock/:hash", config.blockchainRateLimit3, getBlock) // Same as block/getBlockByHash
 router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo);
 router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount);
+router.get("/getChainTips", config.blockchainRateLimit8, getChainTips);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -195,6 +196,7 @@ function getBlockCount(req, res, next) {
         });
     });
 }
+// redundant. Same call is in block.tx/detailsByHash
 /*
 router.get(
   "/getBlockHash/:height",
@@ -274,7 +276,8 @@ router.get(
     }
   }
 )
-
+*/
+/*
 router.get(
   "/getBlockHeader/:hash",
   config.blockchainRateLimit7,
@@ -356,28 +359,34 @@ router.get(
     }
   }
 )
-
-router.get(
-  "/getChainTips",
-  config.blockchainRateLimit8,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getchaintips"
-    requestConfig.data.method = "getchaintips"
-    requestConfig.data.params = []
-
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
-
+*/
+function getChainTips(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_4;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "getchaintips";
+                    requestConfig.data.method = "getchaintips";
+                    requestConfig.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_4 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_4) })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+/*
 router.get(
   "/getDifficulty",
   config.blockchainRateLimit9,
@@ -834,6 +843,7 @@ module.exports = {
         getBestBlockHash: getBestBlockHash,
         //getBlock,
         getBlockchainInfo: getBlockchainInfo,
-        getBlockCount: getBlockCount
+        getBlockCount: getBlockCount,
+        getChainTips: getChainTips
     }
 };

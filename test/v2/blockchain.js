@@ -199,13 +199,50 @@ describe("#BlockchainRouter", () => {
       if (process.env.TEST === "unit") {
         nock(`${process.env.RPC_BASEURL}`)
           .post(``)
-          .reply(200, { result: 1267695 })
+          .reply(200, { result: 126769 })
       }
 
       const result = await getBlockCount(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
       assert.isNumber(result)
+    })
+  })
+
+  describe("getChainTips()", () => {
+    // block route handler.
+    const getChainTips = blockchainRoute.testableComponents.getChainTips
+
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl2 = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await getChainTips(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl2
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+
+    it("should GET /getChainTips", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(200, { result: mockData.mockChainTips })
+      }
+
+      const result = await getChainTips(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.isArray(result)
+      assert.hasAnyKeys(result[0], ["height", "hash", "branchlen", "status"])
     })
   })
 

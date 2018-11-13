@@ -77,6 +77,7 @@ router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash)
 //router.get("/getBlock/:hash", config.blockchainRateLimit3, getBlock) // Same as block/getBlockByHash
 router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo)
 router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount)
+router.get("/getChainTips", config.blockchainRateLimit8, getChainTips)
 
 function root(
   req: express.Request,
@@ -200,6 +201,7 @@ async function getBlockCount(
   }
 }
 
+// redundant. Same call is in block.tx/detailsByHash
 /*
 router.get(
   "/getBlockHash/:height",
@@ -279,7 +281,9 @@ router.get(
     }
   }
 )
+*/
 
+/*
 router.get(
   "/getBlockHeader/:hash",
   config.blockchainRateLimit7,
@@ -361,28 +365,37 @@ router.get(
     }
   }
 )
+*/
 
-router.get(
-  "/getChainTips",
-  config.blockchainRateLimit8,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+async function getChainTips(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "getchaintips"
     requestConfig.data.method = "getchaintips"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
 
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
+  }
+}
+
+/*
 router.get(
   "/getDifficulty",
   config.blockchainRateLimit9,
@@ -840,6 +853,7 @@ module.exports = {
     getBestBlockHash,
     //getBlock,
     getBlockchainInfo,
-    getBlockCount
+    getBlockCount,
+    getChainTips
   }
 }
