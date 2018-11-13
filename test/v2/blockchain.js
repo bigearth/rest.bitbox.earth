@@ -16,7 +16,7 @@ const nock = require("nock") // HTTP mocking
 const blockchainRoute = require("../../dist/routes/v2/blockchain")
 
 const util = require("util")
-util.inspect.defaultOptions = { depth: 1 }
+util.inspect.defaultOptions = { depth: 2 }
 
 // Mocking data.
 const { mockReq, mockRes } = require("./mocks/express-mocks")
@@ -121,6 +121,55 @@ describe("#BlockchainRouter", () => {
 
       assert.isString(result)
       assert.equal(result.length, 64, "Hash string is fixed length")
+    })
+  })
+
+  describe("getBlockchainInfo()", () => {
+    // block route handler.
+    const getBlockchainInfo =
+      blockchainRoute.testableComponents.getBlockchainInfo
+
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl2 = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await getBlockchainInfo(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl2
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+
+    it("should GET /getBlockchainInfo", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(200, { result: mockData.mockBlockchainInfo })
+      }
+
+      const result = await getBlockchainInfo(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAnyKeys(result, [
+        "chain",
+        "blocks",
+        "headers",
+        "bestblockhash",
+        "difficulty",
+        "mediantime",
+        "verificationprogress",
+        "chainwork",
+        "pruned",
+        "softforks",
+        "bip9_softforks"
+      ])
     })
   })
 

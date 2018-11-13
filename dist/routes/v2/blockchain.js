@@ -83,6 +83,8 @@ while (i < 18) {
 // Define routes.
 router.get("/", config.blockchainRateLimit1, root);
 router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash);
+//router.get("/getBlock/:hash", config.blockchainRateLimit3, getBlock) // Same as block/getBlockByHash
+router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -114,59 +116,59 @@ function getBestBlockHash(req, res, next) {
     });
 }
 /*
-router.get(
-  "/getBlock/:hash",
-  config.blockchainRateLimit3,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    let verbose = false
-    if (req.query.verbose && req.query.verbose === "true") verbose = true
+// Get a block via the hash. This is a redundant function call. The same function
+// is achieved by the block/detailsByHash() function.
+async function getBlock(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  let verbose = false
+  if (req.query.verbose && req.query.verbose === "true") verbose = true
 
-    let showTxs = true
-    if (req.query.txs && req.query.txs === "false") showTxs = false
+  let showTxs = true
+  if (req.query.txs && req.query.txs === "false") showTxs = false
 
-    requestConfig.data.id = "getblock"
-    requestConfig.data.method = "getblock"
-    requestConfig.data.params = [req.params.hash, verbose]
+  requestConfig.data.id = "getblock"
+  requestConfig.data.method = "getblock"
+  requestConfig.data.params = [req.params.hash, verbose]
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      if (!showTxs) delete response.data.result.tx
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+  try {
+    const response = await BitboxHTTP(requestConfig)
+    if (!showTxs) delete response.data.result.tx
+    res.json(response.data.result)
+  } catch (error) {
+    res.status(500).send(error.response.data.error)
   }
-)
-
-router.get(
-  "/getBlockchainInfo",
-  config.blockchainRateLimit4,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getblockchaininfo"
-    requestConfig.data.method = "getblockchaininfo"
-    requestConfig.data.params = []
-
-    let response;
-
-    try {
-      response = await BitboxHTTP(requestConfig)
-    } catch (error) {
-      return res.status(500).send(error.response.data.error)
-    }
-
-    res.json(response.data.result);
-    res.end();
-  }
-)
-
+}
+*/
+function getBlockchainInfo(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "getblockchaininfo";
+                    requestConfig.data.method = "getblockchaininfo";
+                    requestConfig.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_2 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_2) })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+/*
 router.get(
   "/getBlockCount",
   config.blockchainRateLimit5,
@@ -823,6 +825,8 @@ module.exports = {
     router: router,
     testableComponents: {
         root: root,
-        getBestBlockHash: getBestBlockHash
+        getBestBlockHash: getBestBlockHash,
+        //getBlock,
+        getBlockchainInfo: getBlockchainInfo
     }
 };
