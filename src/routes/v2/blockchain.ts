@@ -79,6 +79,7 @@ router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo)
 router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount)
 router.get("/getChainTips", config.blockchainRateLimit8, getChainTips)
 router.get("/getDifficulty", config.blockchainRateLimit9, getDifficulty)
+router.get("/getMempoolInfo", config.blockchainRateLimit13, getMempoolInfo)
 
 function root(
   req: express.Request,
@@ -667,28 +668,37 @@ router.get(
     }
   }
 )
+*/
 
-router.get(
-  "/getMempoolInfo",
-  config.blockchainRateLimit13,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+async function getMempoolInfo(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "getmempoolinfo"
     requestConfig.data.method = "getmempoolinfo"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
 
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
+  }
+}
+
+/*
 router.get(
   "/getRawMempool",
   config.blockchainRateLimit14,
@@ -863,6 +873,7 @@ module.exports = {
     getBlockchainInfo,
     getBlockCount,
     getChainTips,
-    getDifficulty
+    getDifficulty,
+    getMempoolInfo
   }
 }

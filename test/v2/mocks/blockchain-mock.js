@@ -204,8 +204,17 @@ const mockChainTips = [
   }
 ]
 
+const mockMempoolInfo = {
+  size: 87,
+  bytes: 16816,
+  usage: 66408,
+  maxmempool: 300000000,
+  mempoolminfee: 0
+}
+
 module.exports = {
   mockBlockHash,
   mockBlockchainInfo,
-  mockChainTips
+  mockChainTips,
+  mockMempoolInfo
 }

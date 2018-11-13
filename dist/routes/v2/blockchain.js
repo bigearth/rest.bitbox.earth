@@ -88,6 +88,7 @@ router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo)
 router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount);
 router.get("/getChainTips", config.blockchainRateLimit8, getChainTips);
 router.get("/getDifficulty", config.blockchainRateLimit9, getDifficulty);
+router.get("/getMempoolInfo", config.blockchainRateLimit13, getMempoolInfo);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -656,28 +657,34 @@ router.get(
     }
   }
 )
-
-router.get(
-  "/getMempoolInfo",
-  config.blockchainRateLimit13,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getmempoolinfo"
-    requestConfig.data.method = "getmempoolinfo"
-    requestConfig.data.params = []
-
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
-
+*/
+function getMempoolInfo(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_6;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "getmempoolinfo";
+                    requestConfig.data.method = "getmempoolinfo";
+                    requestConfig.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_6 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_6) })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+/*
 router.get(
   "/getRawMempool",
   config.blockchainRateLimit14,
@@ -851,6 +858,7 @@ module.exports = {
         getBlockchainInfo: getBlockchainInfo,
         getBlockCount: getBlockCount,
         getChainTips: getChainTips,
-        getDifficulty: getDifficulty
+        getDifficulty: getDifficulty,
+        getMempoolInfo: getMempoolInfo
     }
 };
