@@ -82,18 +82,17 @@ while (i < 18) {
   i++
 }
 
-router.get(
-  "/",
-  config.blockchainRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "blockchain" })
-  }
-)
+router.get("/", config.blockchainRateLimit1, root)
 
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "blockchain" })
+}
+
+/*
 router.get(
   "/getBestBlockHash",
   config.blockchainRateLimit2,
@@ -819,5 +818,11 @@ router.get(
     }
   }
 )
+*/
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root
+  }
+}
