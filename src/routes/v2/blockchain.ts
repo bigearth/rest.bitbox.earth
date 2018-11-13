@@ -76,6 +76,7 @@ router.get("/", config.blockchainRateLimit1, root)
 router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash)
 //router.get("/getBlock/:hash", config.blockchainRateLimit3, getBlock) // Same as block/getBlockByHash
 router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo)
+router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount)
 
 function root(
   req: express.Request,
@@ -171,28 +172,35 @@ async function getBlockchainInfo(
   }
 }
 
-/*
-router.get(
-  "/getBlockCount",
-  config.blockchainRateLimit5,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+async function getBlockCount(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "getblockcount"
     requestConfig.data.method = "getblockcount"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
 
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
+  }
+}
+
+/*
 router.get(
   "/getBlockHash/:height",
   config.blockchainRateLimit6,
@@ -831,6 +839,7 @@ module.exports = {
     root,
     getBestBlockHash,
     //getBlock,
-    getBlockchainInfo
+    getBlockchainInfo,
+    getBlockCount
   }
 }

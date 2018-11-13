@@ -85,6 +85,7 @@ router.get("/", config.blockchainRateLimit1, root);
 router.get("/getBestBlockHash", config.blockchainRateLimit2, getBestBlockHash);
 //router.get("/getBlock/:hash", config.blockchainRateLimit3, getBlock) // Same as block/getBlockByHash
 router.get("/getBlockchainInfo", config.blockchainRateLimit4, getBlockchainInfo);
+router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -168,28 +169,33 @@ function getBlockchainInfo(req, res, next) {
         });
     });
 }
+function getBlockCount(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_3;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "getblockcount";
+                    requestConfig.data.method = "getblockcount";
+                    requestConfig.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_3 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_3) })];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
 /*
-router.get(
-  "/getBlockCount",
-  config.blockchainRateLimit5,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "getblockcount"
-    requestConfig.data.method = "getblockcount"
-    requestConfig.data.params = []
-
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
-
 router.get(
   "/getBlockHash/:height",
   config.blockchainRateLimit6,
@@ -827,6 +833,7 @@ module.exports = {
         root: root,
         getBestBlockHash: getBestBlockHash,
         //getBlock,
-        getBlockchainInfo: getBlockchainInfo
+        getBlockchainInfo: getBlockchainInfo,
+        getBlockCount: getBlockCount
     }
 };
