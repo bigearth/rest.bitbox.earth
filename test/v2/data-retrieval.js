@@ -18,7 +18,7 @@ let originalEnvVars // Used during transition from integration to unit tests.
 
 // Mocking data.
 const { mockReq, mockRes } = require("./mocks/express-mocks")
-const mockData = require("./mocks/control-mock")
+const mockData = require("./mocks/data-retrieval-mocks")
 
 // Used for debugging.
 const util = require("util")
@@ -79,6 +79,43 @@ describe("#DataRetrieval", () => {
       //console.log(`result: ${util.inspect(result)}`)
 
       assert.equal(result.status, "dataRetrieval", "Returns static string")
+    })
+  })
+
+  describe("getCurrentConsensusHash()", () => {
+    // block route handler.
+    const getCurrentConsensusHash =
+      dataRetrievalRoute.testableComponents.getCurrentConsensusHash
+
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl2 = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await getCurrentConsensusHash(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl2
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+
+    it("should GET /getCurrentConsensusHash", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(200, { result: mockData.mockConsensusHash })
+      }
+
+      const result = await getCurrentConsensusHash(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAnyKeys(result, ["block", "blockhash", "consenushash"])
     })
   })
 })

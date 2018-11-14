@@ -5,6 +5,12 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
+const routeUtils = require("./route-utils")
+const logger = require("./logging.js")
+
+// Used to convert error messages to strings, to safely pass to users.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
 
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
@@ -92,6 +98,7 @@ while (i < 21) {
 }
 
 router.get("/", config.dataRetrievalRateLimit1, root)
+router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash)
 
 function root(
   req: express.Request,
@@ -229,26 +236,35 @@ router.get(
   }
 )
 
-router.get(
-  "/currentConsensusHash",
-  config.dataRetrievalRateLimit6,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    requestConfig.data.id = "whc_getcurrentconsensushash"
-    requestConfig.data.method = "whc_getcurrentconsensushash"
-    requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+async function getCurrentConsensusHash(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const {
+    BitboxHTTP,
+    username,
+    password,
+    requestConfig
+  } = routeUtils.setEnvVars()
+
+  requestConfig.data.id = "whc_getcurrentconsensushash"
+  requestConfig.data.method = "whc_getcurrentconsensushash"
+  requestConfig.data.params = []
+
+  try {
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/grants/:propertyId",
@@ -544,6 +560,7 @@ router.get(
 module.exports = {
   router,
   testableComponents: {
-    root
+    root,
+    getCurrentConsensusHash
   }
 }

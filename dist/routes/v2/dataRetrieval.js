@@ -40,6 +40,11 @@ var express = require("express");
 var router = express.Router();
 var axios_1 = require("axios");
 var RateLimit = require("express-rate-limit");
+var routeUtils = require("./route-utils");
+var logger = require("./logging.js");
+// Used to convert error messages to strings, to safely pass to users.
+var util = require("util");
+util.inspect.defaultOptions = { depth: 1 };
 var BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default;
 var BITBOX = new BITBOXCli();
 var BitboxHTTP = axios_1.default.create({
@@ -98,6 +103,7 @@ while (i < 21) {
     i++;
 }
 router.get("/", config.dataRetrievalRateLimit1, root);
+router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash);
 function root(req, res, next) {
     return res.json({ status: "dataRetrieval" });
 }
@@ -240,30 +246,34 @@ router.get("/crowdSale/:propertyId", config.dataRetrievalRateLimit5, function (r
         }
     });
 }); });
-router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var response, error_6;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                requestConfig.data.id = "whc_getcurrentconsensushash";
-                requestConfig.data.method = "whc_getcurrentconsensushash";
-                requestConfig.data.params = [];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, BitboxHTTP(requestConfig)];
-            case 2:
-                response = _a.sent();
-                res.json(response.data.result);
-                return [3 /*break*/, 4];
-            case 3:
-                error_6 = _a.sent();
-                res.status(500).send(error_6.response.data.error);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+function getCurrentConsensusHash(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, response, error_6;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    requestConfig.data.id = "whc_getcurrentconsensushash";
+                    requestConfig.data.method = "whc_getcurrentconsensushash";
+                    requestConfig.data.params = [];
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 2:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 3:
+                    error_6 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_6) })];
+                case 4: return [2 /*return*/];
+            }
+        });
     });
-}); });
+}
 router.get("/grants/:propertyId", config.dataRetrievalRateLimit8, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_7;
     return __generator(this, function (_a) {
@@ -595,6 +605,7 @@ router.get("/frozenBalanceForId/:propertyId", config.dataRetrievalRateLimit20, f
 module.exports = {
     router: router,
     testableComponents: {
-        root: root
+        root: root,
+        getCurrentConsensusHash: getCurrentConsensusHash
     }
 };
