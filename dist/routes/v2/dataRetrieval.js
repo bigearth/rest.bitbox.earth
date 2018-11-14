@@ -104,6 +104,7 @@ while (i < 21) {
 }
 router.get("/", config.dataRetrievalRateLimit1, root);
 router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash);
+router.get("/info", config.dataRetrievalRateLimit9, info);
 function root(req, res, next) {
     return res.json({ status: "dataRetrieval" });
 }
@@ -248,28 +249,26 @@ router.get("/crowdSale/:propertyId", config.dataRetrievalRateLimit5, function (r
 }); });
 function getCurrentConsensusHash(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, BitboxHTTP, username, password, requestConfig, response, error_6;
+        var _a, BitboxHTTP_1, username_1, password_1, requestConfig_1, response, error_6;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
-                    requestConfig.data.id = "whc_getcurrentconsensushash";
-                    requestConfig.data.method = "whc_getcurrentconsensushash";
-                    requestConfig.data.params = [];
-                    _b.label = 1;
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP_1 = _a.BitboxHTTP, username_1 = _a.username, password_1 = _a.password, requestConfig_1 = _a.requestConfig;
+                    requestConfig_1.data.id = "whc_getcurrentconsensushash";
+                    requestConfig_1.data.method = "whc_getcurrentconsensushash";
+                    requestConfig_1.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP_1(requestConfig_1)];
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
-                case 2:
                     response = _b.sent();
                     return [2 /*return*/, res.json(response.data.result)];
-                case 3:
+                case 2:
                     error_6 = _b.sent();
                     // Write out error to error log.
                     //logger.error(`Error in control/getInfo: `, error)
                     res.status(500);
                     return [2 /*return*/, res.json({ error: util.inspect(error_6) })];
-                case 4: return [2 /*return*/];
+                case 3: return [2 /*return*/];
             }
         });
     });
@@ -299,30 +298,32 @@ router.get("/grants/:propertyId", config.dataRetrievalRateLimit8, function (req,
         }
     });
 }); });
-router.get("/info", config.dataRetrievalRateLimit9, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var response, error_8;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                requestConfig.data.id = "whc_getinfo";
-                requestConfig.data.method = "whc_getinfo";
-                requestConfig.data.params = [];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, BitboxHTTP(requestConfig)];
-            case 2:
-                response = _a.sent();
-                res.json(response.data.result);
-                return [3 /*break*/, 4];
-            case 3:
-                error_8 = _a.sent();
-                res.status(500).send(error_8.response.data.error);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+function info(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP_2, username_2, password_2, requestConfig_2, response, error_8;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP_2 = _a.BitboxHTTP, username_2 = _a.username, password_2 = _a.password, requestConfig_2 = _a.requestConfig;
+                    requestConfig_2.data.id = "whc_getinfo";
+                    requestConfig_2.data.method = "whc_getinfo";
+                    requestConfig_2.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP_2(requestConfig_2)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_8 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_8) })];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); });
+}
 router.get("/payload/:txid", config.dataRetrievalRateLimit10, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_9;
     return __generator(this, function (_a) {
@@ -606,6 +607,7 @@ module.exports = {
     router: router,
     testableComponents: {
         root: root,
-        getCurrentConsensusHash: getCurrentConsensusHash
+        getCurrentConsensusHash: getCurrentConsensusHash,
+        info: info
     }
 };

@@ -99,6 +99,7 @@ while (i < 21) {
 
 router.get("/", config.dataRetrievalRateLimit1, root)
 router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash)
+router.get("/info", config.dataRetrievalRateLimit9, info)
 
 function root(
   req: express.Request,
@@ -242,18 +243,18 @@ async function getCurrentConsensusHash(
   res: express.Response,
   next: express.NextFunction
 ) {
-  const {
-    BitboxHTTP,
-    username,
-    password,
-    requestConfig
-  } = routeUtils.setEnvVars()
-
-  requestConfig.data.id = "whc_getcurrentconsensushash"
-  requestConfig.data.method = "whc_getcurrentconsensushash"
-  requestConfig.data.params = []
-
   try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
+    requestConfig.data.id = "whc_getcurrentconsensushash"
+    requestConfig.data.method = "whc_getcurrentconsensushash"
+    requestConfig.data.params = []
+
     const response = await BitboxHTTP(requestConfig)
     return res.json(response.data.result)
   } catch (error) {
@@ -289,26 +290,35 @@ router.get(
   }
 )
 
-router.get(
-  "/info",
-  config.dataRetrievalRateLimit9,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+
+async function info(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "whc_getinfo"
     requestConfig.data.method = "whc_getinfo"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/payload/:txid",
@@ -561,6 +571,7 @@ module.exports = {
   router,
   testableComponents: {
     root,
-    getCurrentConsensusHash
+    getCurrentConsensusHash,
+    info
   }
 }
