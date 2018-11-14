@@ -91,17 +91,16 @@ while (i < 21) {
   i++
 }
 
-router.get(
-  "/",
-  config.dataRetrievalRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "dataRetrieval" })
-  }
-)
+router.get("/", config.dataRetrievalRateLimit1, root)
+
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "dataRetrieval" })
+}
+
 
 router.get(
   "/balancesForAddress/:address",
@@ -541,4 +540,10 @@ router.get(
     }
   }
 )
-module.exports = router
+
+module.exports = {
+  router,
+  testableComponents: {
+    root
+  }
+}

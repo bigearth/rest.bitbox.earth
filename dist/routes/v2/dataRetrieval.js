@@ -97,12 +97,10 @@ while (i < 21) {
     });
     i++;
 }
-router.get("/", config.dataRetrievalRateLimit1, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.json({ status: "dataRetrieval" });
-        return [2 /*return*/];
-    });
-}); });
+router.get("/", config.dataRetrievalRateLimit1, root);
+function root(req, res, next) {
+    return res.json({ status: "dataRetrieval" });
+}
 router.get("/balancesForAddress/:address", config.dataRetrievalRateLimit2, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var response, error_1;
     return __generator(this, function (_a) {
@@ -594,4 +592,9 @@ router.get("/frozenBalanceForId/:propertyId", config.dataRetrievalRateLimit20, f
         }
     });
 }); });
-module.exports = router;
+module.exports = {
+    router: router,
+    testableComponents: {
+        root: root
+    }
+};

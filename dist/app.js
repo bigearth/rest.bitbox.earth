@@ -86,7 +86,7 @@ app.use("/" + v1prefix + "/" + "slp", slpV1);
 app.use("/", indexV2);
 app.use("/" + v2prefix + "/" + "health-check", healthCheckV2);
 app.use("/" + v2prefix + "/" + "address", addressV2.router);
-app.use("/" + v2prefix + "/" + "blockchain", blockchainV2);
+app.use("/" + v2prefix + "/" + "blockchain", blockchainV2.router);
 app.use("/" + v2prefix + "/" + "block", blockV2.router);
 app.use("/" + v2prefix + "/" + "control", controlV2.router);
 app.use("/" + v2prefix + "/" + "generating", generatingV2);
@@ -95,7 +95,7 @@ app.use("/" + v2prefix + "/" + "network", networkV2);
 app.use("/" + v2prefix + "/" + "rawtransactions", rawtransactionsV2);
 app.use("/" + v2prefix + "/" + "transaction", transactionV2);
 app.use("/" + v2prefix + "/" + "util", utilV2);
-app.use("/" + v2prefix + "/" + "dataRetrieval", dataRetrievalV2);
+app.use("/" + v2prefix + "/" + "dataRetrieval", dataRetrievalV2.router);
 app.use("/" + v2prefix + "/" + "payloadCreation", payloadCreationV2);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
