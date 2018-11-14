@@ -100,6 +100,7 @@ while (i < 21) {
 router.get("/", config.dataRetrievalRateLimit1, root)
 router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash)
 router.get("/info", config.dataRetrievalRateLimit9, info)
+router.get("/properties", config.dataRetrievalRateLimit17, properties)
 
 function root(
   req: express.Request,
@@ -477,26 +478,35 @@ router.get(
   }
 )
 
-router.get(
-  "/properties",
-  config.dataRetrievalRateLimit17,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+// Get a list of all tokens that have been created.
+async function properties(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "whc_listproperties"
     requestConfig.data.method = "whc_listproperties"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/frozenBalance/:address/:propertyId",
@@ -572,6 +582,7 @@ module.exports = {
   testableComponents: {
     root,
     getCurrentConsensusHash,
-    info
+    info,
+    properties
   }
 }

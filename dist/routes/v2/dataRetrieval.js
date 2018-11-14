@@ -105,6 +105,7 @@ while (i < 21) {
 router.get("/", config.dataRetrievalRateLimit1, root);
 router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash);
 router.get("/info", config.dataRetrievalRateLimit9, info);
+router.get("/properties", config.dataRetrievalRateLimit17, properties);
 function root(req, res, next) {
     return res.json({ status: "dataRetrieval" });
 }
@@ -501,30 +502,33 @@ router.get("/pendingTransactions", config.dataRetrievalRateLimit16, function (re
         }
     });
 }); });
-router.get("/properties", config.dataRetrievalRateLimit17, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-    var response, error_16;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                requestConfig.data.id = "whc_listproperties";
-                requestConfig.data.method = "whc_listproperties";
-                requestConfig.data.params = [];
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, BitboxHTTP(requestConfig)];
-            case 2:
-                response = _a.sent();
-                res.json(response.data.result);
-                return [3 /*break*/, 4];
-            case 3:
-                error_16 = _a.sent();
-                res.status(500).send(error_16.response.data.error);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
+// Get a list of all tokens that have been created.
+function properties(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP_3, username_3, password_3, requestConfig_3, response, error_16;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    _a = routeUtils.setEnvVars(), BitboxHTTP_3 = _a.BitboxHTTP, username_3 = _a.username, password_3 = _a.password, requestConfig_3 = _a.requestConfig;
+                    requestConfig_3.data.id = "whc_listproperties";
+                    requestConfig_3.data.method = "whc_listproperties";
+                    requestConfig_3.data.params = [];
+                    return [4 /*yield*/, BitboxHTTP_3(requestConfig_3)];
+                case 1:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 2:
+                    error_16 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_16) })];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); });
+}
 router.get("/frozenBalance/:address/:propertyId", config.dataRetrievalRateLimit18, function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
     var params, response, error_17;
     return __generator(this, function (_a) {
@@ -608,6 +612,7 @@ module.exports = {
     testableComponents: {
         root: root,
         getCurrentConsensusHash: getCurrentConsensusHash,
-        info: info
+        info: info,
+        properties: properties
     }
 };

@@ -22,7 +22,39 @@ const mockInfo = {
   alerts: []
 }
 
+const mockProperties = [
+  {
+    propertyid: 1,
+    name: "WHC",
+    category: "N/A",
+    subcategory: "N/A",
+    data:
+      "WHC serve as the binding between Bitcoin cash, smart properties and contracts created on the Wormhole.",
+    url: "http://www.wormhole.cash",
+    precision: 8
+  },
+  {
+    propertyid: 3,
+    name: "test_token1",
+    category: "test managed token 0",
+    subcategory: "test",
+    data: "my data",
+    url: "www.testmanagedtoken.com",
+    precision: 0
+  },
+  {
+    propertyid: 4,
+    name: "test_token1",
+    category: "test managed token 2",
+    subcategory: "test",
+    data: "my data",
+    url: "www.testmanagedtoken.com",
+    precision: 2
+  }
+]
+
 module.exports = {
   mockConsensusHash,
-  mockInfo
+  mockInfo,
+  mockProperties
 }
