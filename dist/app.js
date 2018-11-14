@@ -86,7 +86,7 @@ app.use("/" + v1prefix + "/" + "slp", slpV1);
 app.use("/", indexV2);
 app.use("/" + v2prefix + "/" + "health-check", healthCheckV2);
 app.use("/" + v2prefix + "/" + "address", addressV2.router);
-app.use("/" + v2prefix + "/" + "blockchain", blockchainV2);
+app.use("/" + v2prefix + "/" + "blockchain", blockchainV2.router);
 app.use("/" + v2prefix + "/" + "block", blockV2.router);
 app.use("/" + v2prefix + "/" + "control", controlV2.router);
 app.use("/" + v2prefix + "/" + "generating", generatingV2);
