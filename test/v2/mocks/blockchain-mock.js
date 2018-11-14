@@ -212,9 +212,15 @@ const mockMempoolInfo = {
   mempoolminfee: 0
 }
 
+const mockRawMempool = [
+  "db045bc3bd1088fa91f5ebb05c35cb9e2a91a22377f79b465cc6920b9893123c",
+  "6b3df7febf2b9834f1409155f88b866dd516b36376eae00e2b455df82e290405"
+]
+
 module.exports = {
   mockBlockHash,
   mockBlockchainInfo,
   mockChainTips,
-  mockMempoolInfo
+  mockMempoolInfo,
+  mockRawMempool
 }

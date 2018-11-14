@@ -89,6 +89,7 @@ router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount);
 router.get("/getChainTips", config.blockchainRateLimit8, getChainTips);
 router.get("/getDifficulty", config.blockchainRateLimit9, getDifficulty);
 router.get("/getMempoolInfo", config.blockchainRateLimit13, getMempoolInfo);
+router.get("/getRawMempool", config.blockchainRateLimit14, getRawMempool);
 function root(req, res, next) {
     return res.json({ status: "blockchain" });
 }
@@ -684,31 +685,38 @@ function getMempoolInfo(req, res, next) {
         });
     });
 }
+function getRawMempool(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, BitboxHTTP, username, password, requestConfig, verbose, response, error_7;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _a = routeUtils.setEnvVars(), BitboxHTTP = _a.BitboxHTTP, username = _a.username, password = _a.password, requestConfig = _a.requestConfig;
+                    verbose = false;
+                    if (req.query.verbose && req.query.verbose === "true")
+                        verbose = true;
+                    requestConfig.data.id = "getrawmempool";
+                    requestConfig.data.method = "getrawmempool";
+                    requestConfig.data.params = [verbose];
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, BitboxHTTP(requestConfig)];
+                case 2:
+                    response = _b.sent();
+                    return [2 /*return*/, res.json(response.data.result)];
+                case 3:
+                    error_7 = _b.sent();
+                    // Write out error to error log.
+                    //logger.error(`Error in control/getInfo: `, error)
+                    res.status(500);
+                    return [2 /*return*/, res.json({ error: util.inspect(error_7) })];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
 /*
-router.get(
-  "/getRawMempool",
-  config.blockchainRateLimit14,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    let verbose = false
-    if (req.query.verbose && req.query.verbose === "true") verbose = true
-
-    requestConfig.data.id = "getrawmempool"
-    requestConfig.data.method = "getrawmempool"
-    requestConfig.data.params = [verbose]
-
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
-  }
-)
-
 router.get(
   "/getTxOut/:txid/:n",
   config.blockchainRateLimit15,
@@ -859,6 +867,7 @@ module.exports = {
         getBlockCount: getBlockCount,
         getChainTips: getChainTips,
         getDifficulty: getDifficulty,
-        getMempoolInfo: getMempoolInfo
+        getMempoolInfo: getMempoolInfo,
+        getRawMempool: getRawMempool
     }
 };

@@ -1,5 +1,7 @@
 /*
-
+  TODO:
+  -getRawMempool
+  --Add tests for 'verbos' input values
 */
 
 "use strict"
@@ -321,6 +323,43 @@ describe("#BlockchainRouter", () => {
         "maxmempool",
         "mempoolminfree"
       ])
+    })
+  })
+
+  describe("getRawMempool()", () => {
+    // block route handler.
+    const getRawMempool = blockchainRoute.testableComponents.getRawMempool
+
+    it("should throw 500 when network issues", async () => {
+      // Save the existing RPC URL.
+      const savedUrl2 = process.env.RPC_BASEURL
+
+      // Manipulate the URL to cause a 500 network error.
+      process.env.RPC_BASEURL = "http://fakeurl/api/"
+
+      const result = await getRawMempool(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      // Restore the saved URL.
+      process.env.RPC_BASEURL = savedUrl2
+
+      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
+      assert.include(result.error, "ENOTFOUND", "Error message expected")
+    })
+
+    it("should GET /getMempoolInfo", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(200, { result: mockData.mockRawMempool })
+      }
+
+      const result = await getRawMempool(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.isArray(result)
+      // Not sure what other assertions should be made here.
     })
   })
 })

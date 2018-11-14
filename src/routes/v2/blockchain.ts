@@ -80,6 +80,7 @@ router.get("/getBlockCount", config.blockchainRateLimit5, getBlockCount)
 router.get("/getChainTips", config.blockchainRateLimit8, getChainTips)
 router.get("/getDifficulty", config.blockchainRateLimit9, getDifficulty)
 router.get("/getMempoolInfo", config.blockchainRateLimit13, getMempoolInfo)
+router.get("/getRawMempool", config.blockchainRateLimit14, getRawMempool)
 
 function root(
   req: express.Request,
@@ -698,31 +699,39 @@ async function getMempoolInfo(
   }
 }
 
-/*
-router.get(
-  "/getRawMempool",
-  config.blockchainRateLimit14,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    let verbose = false
-    if (req.query.verbose && req.query.verbose === "true") verbose = true
 
-    requestConfig.data.id = "getrawmempool"
-    requestConfig.data.method = "getrawmempool"
-    requestConfig.data.params = [verbose]
+async function getRawMempool(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const {
+    BitboxHTTP,
+    username,
+    password,
+    requestConfig
+  } = routeUtils.setEnvVars()
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+  let verbose = false
+  if (req.query.verbose && req.query.verbose === "true") verbose = true
+
+  requestConfig.data.id = "getrawmempool"
+  requestConfig.data.method = "getrawmempool"
+  requestConfig.data.params = [verbose]
+
+  try {
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
 
+/*
 router.get(
   "/getTxOut/:txid/:n",
   config.blockchainRateLimit15,
@@ -874,6 +883,7 @@ module.exports = {
     getBlockCount,
     getChainTips,
     getDifficulty,
-    getMempoolInfo
+    getMempoolInfo,
+    getRawMempool
   }
 }
