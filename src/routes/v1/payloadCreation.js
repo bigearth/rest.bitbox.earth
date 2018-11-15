@@ -29,11 +29,14 @@ const config = {
   payloadCreationRateLimit12: undefined,
   payloadCreationRateLimit13: undefined,
   payloadCreationRateLimit14: undefined,
-  payloadCreationRateLimit15: undefined
+  payloadCreationRateLimit15: undefined,
+  payloadCreationRateLimit16: undefined,
+  payloadCreationRateLimit17: undefined,
+  payloadCreationRateLimit18: undefined
 }
 
 let i = 1
-while (i < 16) {
+while (i < 19) {
   config[`payloadCreationRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -369,6 +372,98 @@ router.post(
 
     requestConfig.data.id = "whc_createpayload_unfreeze"
     requestConfig.data.method = "whc_createpayload_unfreeze"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/issueERC721Property/:name/:symbol/:data/:url/:totalNumber",
+  config.payloadCreationRateLimit16,
+  async (req, res, next) => {
+    const params = [
+      req.params.name,
+      req.params.symbol,
+      req.params.data,
+      req.params.url,
+      req.params.totalNumber
+    ]
+
+    requestConfig.data.id = "whc_createpayload_issueERC721property"
+    requestConfig.data.method = "whc_createpayload_issueERC721property"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/issueERC721Token/:propertyId/:tokenId/:attributes/:url",
+  config.payloadCreationRateLimit17,
+  async (req, res, next) => {
+    const params = [
+      req.params.propertyId,
+      req.params.tokenId,
+      req.params.attributes,
+      req.params.url
+    ]
+
+    requestConfig.data.id = "whc_createpayload_issueERC721token"
+    requestConfig.data.method = "whc_createpayload_issueERC721token"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/transferERC721Token/:owner/:receiver/:propertyId",
+  config.payloadCreationRateLimit18,
+  async (req, res, next) => {
+    const params = [
+      req.params.owner,
+      req.params.receiver,
+      req.params.propertyId
+    ]
+    if (req.query.tokenId) params.push(req.query.tokenId)
+
+    requestConfig.data.id = "whc_transferERC721Token"
+    requestConfig.data.method = "whc_transferERC721Token"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.post(
+  "/destroyERC721Token/:propertyId/:tokenId",
+  config.payloadCreationRateLimit19,
+  async (req, res, next) => {
+    const params = [req.params.propertyId, req.params.tokenId]
+
+    requestConfig.data.id = "whc_createpayload_destroyERC721token"
+    requestConfig.data.method = "whc_createpayload_destroyERC721token"
     requestConfig.data.params = params
 
     try {
