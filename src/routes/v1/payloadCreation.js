@@ -457,10 +457,11 @@ router.post(
 )
 
 router.post(
-  "/destroyERC721Token/:propertyId/:tokenId",
+  "/destroyERC721Token/:propertyId",
   config.payloadCreationRateLimit19,
   async (req, res, next) => {
-    const params = [req.params.propertyId, req.params.tokenId]
+    const params = [req.params.propertyId]
+    if (req.query.tokenId) params.push(req.query.tokenId)
 
     requestConfig.data.id = "whc_createpayload_destroyERC721token"
     requestConfig.data.method = "whc_createpayload_destroyERC721token"
