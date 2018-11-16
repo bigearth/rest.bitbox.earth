@@ -27,11 +27,12 @@ const config = {
   blockchainRateLimit13: undefined,
   blockchainRateLimit14: undefined,
   blockchainRateLimit15: undefined,
-  blockchainRateLimit16: undefined
+  blockchainRateLimit16: undefined,
+  blockchainRateLimit17: undefined
 }
 
 let i = 1
-while (i < 17) {
+while (i < 18) {
   config[`blockchainRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -83,7 +84,7 @@ router.get(
 
 router.get(
   "/getBlock/:hash",
-  config.blockchainRateLimit2,
+  config.blockchainRateLimit3,
   async (req, res, next) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
@@ -107,7 +108,7 @@ router.get(
 
 router.get(
   "/getBlockchainInfo",
-  config.blockchainRateLimit3,
+  config.blockchainRateLimit4,
   async (req, res, next) => {
     requestConfig.data.id = "getblockchaininfo"
     requestConfig.data.method = "getblockchaininfo"
@@ -124,7 +125,7 @@ router.get(
 
 router.get(
   "/getBlockCount",
-  config.blockchainRateLimit4,
+  config.blockchainRateLimit5,
   async (req, res, next) => {
     requestConfig.data.id = "getblockcount"
     requestConfig.data.method = "getblockcount"
@@ -141,7 +142,7 @@ router.get(
 
 router.get(
   "/getBlockHash/:height",
-  config.blockchainRateLimit5,
+  config.blockchainRateLimit6,
   async (req, res, next) => {
     try {
       let heights = JSON.parse(req.params.height)
@@ -215,7 +216,7 @@ router.get(
 
 router.get(
   "/getBlockHeader/:hash",
-  config.blockchainRateLimit6,
+  config.blockchainRateLimit7,
   async (req, res, next) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
@@ -292,7 +293,7 @@ router.get(
 
 router.get(
   "/getChainTips",
-  config.blockchainRateLimit7,
+  config.blockchainRateLimit8,
   async (req, res, next) => {
     requestConfig.data.id = "getchaintips"
     requestConfig.data.method = "getchaintips"
@@ -309,7 +310,7 @@ router.get(
 
 router.get(
   "/getDifficulty",
-  config.blockchainRateLimit8,
+  config.blockchainRateLimit9,
   async (req, res, next) => {
     requestConfig.data.id = "getdifficulty"
     requestConfig.data.method = "getdifficulty"
@@ -326,7 +327,7 @@ router.get(
 
 router.get(
   "/getMempoolAncestors/:txid",
-  config.blockchainRateLimit9,
+  config.blockchainRateLimit10,
   async (req, res, next) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
@@ -403,7 +404,7 @@ router.get(
 
 router.get(
   "/getMempoolDescendants/:txid",
-  config.blockchainRateLimit10,
+  config.blockchainRateLimit11,
   async (req, res, next) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === "true") verbose = true
@@ -480,7 +481,7 @@ router.get(
 
 router.get(
   "/getMempoolEntry/:txid",
-  config.blockchainRateLimit11,
+  config.blockchainRateLimit12,
   async (req, res, next) => {
     try {
       let txids = JSON.parse(req.params.txid)
@@ -554,7 +555,7 @@ router.get(
 
 router.get(
   "/getMempoolInfo",
-  config.blockchainRateLimit12,
+  config.blockchainRateLimit13,
   async (req, res, next) => {
     requestConfig.data.id = "getmempoolinfo"
     requestConfig.data.method = "getmempoolinfo"
@@ -571,7 +572,7 @@ router.get(
 
 router.get(
   "/getRawMempool",
-  config.blockchainRateLimit13,
+  config.blockchainRateLimit14,
   async (req, res, next) => {
     let verbose = false
     if (req.query.verbose && req.query.verbose === true) verbose = true
@@ -591,7 +592,7 @@ router.get(
 
 router.get(
   "/getTxOut/:txid/:n",
-  config.blockchainRateLimit14,
+  config.blockchainRateLimit15,
   async (req, res, next) => {
     let include_mempool = false
     if (req.query.include_mempool && req.query.include_mempool === "true")
@@ -616,7 +617,7 @@ router.get(
 
 router.get(
   "/getTxOutProof/:txids",
-  config.blockchainRateLimit15,
+  config.blockchainRateLimit16,
   async (req, res, next) => {
     requestConfig.data.id = "gettxoutproof"
     requestConfig.data.method = "gettxoutproof"
@@ -702,7 +703,7 @@ router.get(
 
 router.get(
   "/verifyTxOutProof/:proof",
-  config.blockchainRateLimit16,
+  config.blockchainRateLimit17,
   async (req, res, next) => {
     requestConfig.data.id = "verifytxoutproof"
     requestConfig.data.method = "verifytxoutproof"
