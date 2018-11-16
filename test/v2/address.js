@@ -50,6 +50,10 @@ describe("#AddressRouter", () => {
     req = mockReq
     res = mockRes
 
+    // Explicitly reset the parmas and body.
+    req.params = {}
+    req.body = {}
+
     // Activate nock if it's inactive.
     if (!nock.isActive()) nock.activate()
   })

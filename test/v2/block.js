@@ -1,5 +1,5 @@
 /*
-  
+
 
 */
 
@@ -47,6 +47,10 @@ describe("#BlockRouter", () => {
     // Mock the req and res objects used by Express routes.
     req = mockReq
     res = mockRes
+
+    // Explicitly reset the parmas and body.
+    req.params = {}
+    req.body = {}
 
     // Activate nock if it's inactive.
     if (!nock.isActive()) nock.activate()
@@ -238,7 +242,9 @@ describe("#BlockRouter", () => {
       // Mock the Insight URL for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.BITCOINCOM_BASEURL}`)
-          .get(`/block/${req.params.hash}`)
+          .get(
+            `/block/00000000000000645dec6503d3f5eafb0d2537a7a28f181d721dec7c44154c79`
+          )
           .reply(200, mockData.mockBlockDetails)
       }
 
