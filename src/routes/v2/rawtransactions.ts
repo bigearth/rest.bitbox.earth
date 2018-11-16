@@ -78,6 +78,7 @@ while (i < 12) {
 }
 
 router.get("/", config.rawTransactionsRateLimit1, root)
+router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, decodeRawTransaction)
 
 function root(
   req: express.Request,
@@ -87,66 +88,44 @@ function root(
   return res.json({ status: "rawtransactions" })
 }
 
-router.get(
-  "/decodeRawTransaction/:hex",
-  config.rawTransactionsRateLimit2,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    try {
-      let transactions = JSON.parse(req.params.hex)
-      if (transactions.length > 20) {
-        res.json({
-          error: "Array too large. Max 20 transactions"
-        })
-      }
-      const result = [] as any
-      transactions = transactions.map((transaction: any) => {
-        requestConfig.data.id = "decoderawtransaction"
-        requestConfig.data.method = "decoderawtransaction"
-        requestConfig.data.params = [transaction]
-        BitboxHTTP(requestConfig).catch(error => {
-          try {
-            return {
-              data: {
-                result: error.response.data.error.message
-              }
-            }
-          } catch (ex) {
-            return {
-              data: {
-                result: "unknown error"
-              }
-            }
-          }
-        })
-      })
-      axios.all(transactions).then(
-        axios.spread((...args) => {
-          for (let i = 0; i < args.length; i++) {
-            let tmp = {} as any
-            const parsed = tmp.data.result
-            result.push(parsed)
-          }
-          res.json(result)
-        })
-      )
-    } catch (error) {
-      requestConfig.data.id = "decoderawtransaction"
-      requestConfig.data.method = "decoderawtransaction"
-      requestConfig.data.params = [req.params.hex]
-      BitboxHTTP(requestConfig)
-        .then(response => {
-          res.json(response.data.result)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
+// Decode a raw transaction from hex to assembly.
+async function decodeRawTransaction(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const hex = req.params.hex
+
+    // Throw an error if hex is empty.
+    if(!hex || hex === "") {
+      res.status(400)
+      return res.json({ error: "hex can not be empty" })
     }
+
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
+    requestConfig.data.id = "decoderawtransaction"
+    requestConfig.data.method = "decoderawtransaction"
+    requestConfig.data.params = [hex]
+
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/decodeScript/:script",
@@ -495,6 +474,7 @@ router.post(
 module.exports = {
   router,
   testableComponents: {
-    root
+    root,
+    decodeRawTransaction
   }
 }
