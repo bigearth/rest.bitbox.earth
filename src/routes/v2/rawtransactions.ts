@@ -5,6 +5,12 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
+const routeUtils = require("./route-utils")
+const logger = require("./logging.js")
+
+// Used to convert error messages to strings, to safely pass to users.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
 
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
@@ -71,17 +77,15 @@ while (i < 12) {
   i++
 }
 
-router.get(
-  "/",
-  config.rawTransactionsRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "rawtransactions" })
-  }
-)
+router.get("/", config.rawTransactionsRateLimit1, root)
+
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "rawtransactions" })
+}
 
 router.get(
   "/decodeRawTransaction/:hex",
@@ -488,4 +492,9 @@ router.post(
   }
 )
 
-module.exports = router
+module.exports = {
+  router,
+  testableComponents: {
+    root
+  }
+}
