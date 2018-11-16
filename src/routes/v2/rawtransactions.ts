@@ -78,7 +78,16 @@ while (i < 12) {
 }
 
 router.get("/", config.rawTransactionsRateLimit1, root)
-router.get("/decodeRawTransaction/:hex", config.rawTransactionsRateLimit2, decodeRawTransaction)
+router.get(
+  "/decodeRawTransaction/:hex",
+  config.rawTransactionsRateLimit2,
+  decodeRawTransaction
+)
+router.get(
+  "/decodeScript/:hex",
+  config.rawTransactionsRateLimit3,
+  decodeScript
+)
 
 function root(
   req: express.Request,
@@ -88,7 +97,7 @@ function root(
   return res.json({ status: "rawtransactions" })
 }
 
-// Decode a raw transaction from hex to assembly.
+// Decode transaction hex into a JSON object.
 async function decodeRawTransaction(
   req: express.Request,
   res: express.Response,
@@ -98,7 +107,7 @@ async function decodeRawTransaction(
     const hex = req.params.hex
 
     // Throw an error if hex is empty.
-    if(!hex || hex === "") {
+    if (!hex || hex === "") {
       res.status(400)
       return res.json({ error: "hex can not be empty" })
     }
@@ -116,7 +125,6 @@ async function decodeRawTransaction(
 
     const response = await BitboxHTTP(requestConfig)
     return res.json(response.data.result)
-
   } catch (error) {
     // Write out error to error log.
     //logger.error(`Error in control/getInfo: `, error)
@@ -126,67 +134,43 @@ async function decodeRawTransaction(
   }
 }
 
+// Decode a raw transaction from hex to assembly.
+async function decodeScript(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const hex = req.params.hex
 
-router.get(
-  "/decodeScript/:script",
-  config.rawTransactionsRateLimit3,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    try {
-      let scripts = JSON.parse(req.params.script)
-      if (scripts.length > 20) {
-        res.json({
-          error: "Array too large. Max 20 scripts"
-        })
-      }
-      const result = [] as any
-      scripts = scripts.map((script: any) => {
-        requestConfig.data.id = "decodescript"
-        requestConfig.data.method = "decodescript"
-        requestConfig.data.params = [script]
-        BitboxHTTP(requestConfig).catch(error => {
-          try {
-            return {
-              data: {
-                result: error.response.data.error.message
-              }
-            }
-          } catch (ex) {
-            return {
-              data: {
-                result: "unknown error"
-              }
-            }
-          }
-        })
-      })
-      axios.all(scripts).then(
-        axios.spread((...args) => {
-          for (let i = 0; i < args.length; i++) {
-            let tmp = {} as any
-            const parsed = tmp.data.result
-            result.push(parsed)
-          }
-          res.json(result)
-        })
-      )
-    } catch (error) {
-      requestConfig.data.id = "decodescript"
-      requestConfig.data.method = "decodescript"
-      requestConfig.data.params = [req.params.script]
-      BitboxHTTP(requestConfig)
-        .then(response => {
-          res.json(response.data.result)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
+    // Throw an error if hex is empty.
+    if (!hex || hex === "") {
+      res.status(400)
+      return res.json({ error: "hex can not be empty" })
     }
+
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
+    requestConfig.data.id = "decodescript"
+    requestConfig.data.method = "decodescript"
+    requestConfig.data.params = [hex]
+
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
 
 router.get(
   "/getRawTransaction/:txid",
@@ -475,6 +459,7 @@ module.exports = {
   router,
   testableComponents: {
     root,
-    decodeRawTransaction
+    decodeRawTransaction,
+    decodeScript
   }
 }
