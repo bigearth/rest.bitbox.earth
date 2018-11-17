@@ -1,7 +1,7 @@
 "use strict"
-import { Socket } from "net";
+import { Socket } from "net"
 
-import * as express from "express";
+import * as express from "express"
 
 const path = require("path")
 const logger = require("morgan")
@@ -15,10 +15,9 @@ const cors = require("cors")
 
 const BitcoinCashZMQDecoder = require("bitcoincash-zmq-decoder")
 
-const zmq = require("zeromq");
+const zmq = require("zeromq")
 
-const sock: any = zmq.socket("sub");
-
+const sock: any = zmq.socket("sub")
 
 const swStats = require("swagger-stats")
 const apiSpec = require("./public/bitcoin-com-rest-v1.json")
@@ -41,30 +40,29 @@ const payloadCreationV1 = require("./routes/v1/payloadCreation")
 const slpV1 = require("./routes/v1/slp")
 
 // v2
-const indexV2 = require("./routes/v2/index")
-const healthCheckV2 = require("./routes/v2/health-check")
-const addressV2 = require("./routes/v2/address")
-const blockV2 = require("./routes/v2/block")
-const blockchainV2 = require("./routes/v2/blockchain")
-const controlV2 = require("./routes/v2/control")
-const generatingV2 = require("./routes/v2/generating")
-const miningV2 = require("./routes/v2/mining")
-const networkV2 = require("./routes/v2/network")
-const rawtransactionsV2 = require("./routes/v2/rawtransactions")
-const transactionV2 = require("./routes/v2/transaction")
-const utilV2 = require("./routes/v2/util")
-const dataRetrievalV2 = require("./routes/v2/dataRetrieval")
-const payloadCreationV2 = require("./routes/v2/payloadCreation")
-
+// const indexV2 = require("./routes/v2/index")
+// const healthCheckV2 = require("./routes/v2/health-check")
+// const addressV2 = require("./routes/v2/address")
+// const blockV2 = require("./routes/v2/block")
+// const blockchainV2 = require("./routes/v2/blockchain")
+// const controlV2 = require("./routes/v2/control")
+// const generatingV2 = require("./routes/v2/generating")
+// const miningV2 = require("./routes/v2/mining")
+// const networkV2 = require("./routes/v2/network")
+// const rawtransactionsV2 = require("./routes/v2/rawtransactions")
+// const transactionV2 = require("./routes/v2/transaction")
+// const utilV2 = require("./routes/v2/util")
+// const dataRetrievalV2 = require("./routes/v2/dataRetrieval")
+// const payloadCreationV2 = require("./routes/v2/payloadCreation")
 
 interface IError {
-  message: string;
-  status: number;
+  message: string
+  status: number
 }
 
 require("dotenv").config()
 
-const app: express.Application = express();
+const app: express.Application = express()
 
 app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }))
 
@@ -95,20 +93,22 @@ app.use(express.static(path.join(__dirname, "public")))
 // ));
 
 interface ICustomRequest extends express.Request {
-  io: any;
+  io: any
 }
 
 // Make io accessible to our router
-app.use((req: ICustomRequest, res: express.Response, next: express.NextFunction) => {
-  req.io = io;
+app.use(
+  (req: ICustomRequest, res: express.Response, next: express.NextFunction) => {
+    req.io = io
 
-  next();
-})
+    next()
+  }
+)
 
-const v1prefix = "v1";
+const v1prefix = "v1"
 const v2prefix = "v2"
 
-app.use("/", indexV1);
+app.use("/", indexV1)
 app.use(`/${v1prefix}/` + `health-check`, healthCheckV1)
 app.use(`/${v1prefix}/` + `address`, addressV1)
 app.use(`/${v1prefix}/` + `blockchain`, blockchainV1)
@@ -124,35 +124,36 @@ app.use(`/${v1prefix}/` + `dataRetrieval`, dataRetrievalV1)
 app.use(`/${v1prefix}/` + `payloadCreation`, payloadCreationV1)
 app.use(`/${v1prefix}/` + `slp`, slpV1)
 
-
-app.use("/", indexV2)
-app.use(`/${v2prefix}/` + `health-check`, healthCheckV2)
-app.use(`/${v2prefix}/` + `address`, addressV2.router)
-app.use(`/${v2prefix}/` + `blockchain`, blockchainV2)
-app.use(`/${v2prefix}/` + `block`, blockV2.router)
-app.use(`/${v2prefix}/` + `control`, controlV2.router)
-app.use(`/${v2prefix}/` + `generating`, generatingV2)
-app.use(`/${v2prefix}/` + `mining`, miningV2)
-app.use(`/${v2prefix}/` + `network`, networkV2)
-app.use(`/${v2prefix}/` + `rawtransactions`, rawtransactionsV2)
-app.use(`/${v2prefix}/` + `transaction`, transactionV2)
-app.use(`/${v2prefix}/` + `util`, utilV2)
-app.use(`/${v2prefix}/` + `dataRetrieval`, dataRetrievalV2)
-app.use(`/${v2prefix}/` + `payloadCreation`, payloadCreationV2)
+// app.use("/", indexV2)
+// app.use(`/${v2prefix}/` + `health-check`, healthCheckV2)
+// app.use(`/${v2prefix}/` + `address`, addressV2.router)
+// app.use(`/${v2prefix}/` + `blockchain`, blockchainV2)
+// app.use(`/${v2prefix}/` + `block`, blockV2.router)
+// app.use(`/${v2prefix}/` + `control`, controlV2.router)
+// app.use(`/${v2prefix}/` + `generating`, generatingV2)
+// app.use(`/${v2prefix}/` + `mining`, miningV2)
+// app.use(`/${v2prefix}/` + `network`, networkV2)
+// app.use(`/${v2prefix}/` + `rawtransactions`, rawtransactionsV2)
+// app.use(`/${v2prefix}/` + `transaction`, transactionV2)
+// app.use(`/${v2prefix}/` + `util`, utilV2)
+// app.use(`/${v2prefix}/` + `dataRetrieval`, dataRetrievalV2)
+// app.use(`/${v2prefix}/` + `payloadCreation`, payloadCreationV2)
 
 // catch 404 and forward to error handler
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const err: IError = {
-    message: "Not Found",
-    status: 404
-  };
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const err: IError = {
+      message: "Not Found",
+      status: 404
+    }
 
-  next(err);
-})
+    next(err)
+  }
+)
 
 // error handler
 app.use((err: IError, req: express.Request, res: express.Response) => {
-  const status = err.status || 500;
+  const status = err.status || 500
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get("env") === "development" ? err : {}
@@ -217,7 +218,7 @@ server.setTimeout(10000)
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val: string ) {
+function normalizePort(val: string) {
   const port = parseInt(val, 10)
 
   if (isNaN(port)) {
