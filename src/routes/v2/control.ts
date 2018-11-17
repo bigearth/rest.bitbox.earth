@@ -11,8 +11,6 @@ const logger = require("./logging.js")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 3 }
 
-console.log(`process.env.RPC_BASEURL: ${process.env.RPC_BASEURL}`)
-
 const BitboxHTTP = axios.create({
   baseURL: process.env.RPC_BASEURL
 })
