@@ -32,11 +32,12 @@ const config = {
   payloadCreationRateLimit15: undefined,
   payloadCreationRateLimit16: undefined,
   payloadCreationRateLimit17: undefined,
-  payloadCreationRateLimit18: undefined
+  payloadCreationRateLimit18: undefined,
+  payloadCreationRateLimit19: undefined
 }
 
 let i = 1
-while (i < 19) {
+while (i < 20) {
   config[`payloadCreationRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
