@@ -197,4 +197,31 @@ describe("#Raw-Transactions", () => {
       assert.hasAllKeys(result, ["asm", "type", "p2sh"])
     })
   })
+
+  describe("getRawTransaction()", () => {
+    // block route handler.
+    const getRawTransaction =
+      rawtransactions.testableComponents.getRawTransaction
+
+    it("should throw error if txids array is missing", async () => {
+      const result = await getRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "txids must be an array")
+    })
+
+    it("should throw error if txids is too large", async () => {
+      const testArray = []
+      for (var i = 0; i < 25; i++) testArray.push("")
+
+      req.body.txids = testArray
+
+      const result = await getRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "Array too large. Max 20 txids")
+    })
+  })
 })
