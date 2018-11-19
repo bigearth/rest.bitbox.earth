@@ -223,5 +223,32 @@ describe("#Raw-Transactions", () => {
       assert.hasAllKeys(result, ["error"])
       assert.include(result.error, "Array too large. Max 20 txids")
     })
+
+    it("should throw 500 error if txid is invalid", async () => {
+      req.body.txids = [""]
+
+      const result = await getRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "Encountered empty TXID")
+    })
+
+    it("should throw error if txid are invalid", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(500, { result: "Error: Request failed with status code 500" })
+      }
+
+      req.body.txids = ["abc123"]
+
+      const result = await getRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "Request failed with status code 500")
+    })
   })
 })

@@ -130,7 +130,7 @@ async function decodeRawTransaction(
     return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    //logger.error(`Error in rawtransactions/decodeRawTransaction: `, err)
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
@@ -168,7 +168,7 @@ async function decodeScript(
 
   } catch (error) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    //logger.error(`Error in rawtransactions/decodeScript: `, err)
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
@@ -226,7 +226,7 @@ async function getRawTransaction(
 
   } catch(err) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    //logger.error(`Error in rawtransactions/getRawTransaction: `, err)
 
     res.status(500)
     return res.json({ error: util.inspect(err) })
