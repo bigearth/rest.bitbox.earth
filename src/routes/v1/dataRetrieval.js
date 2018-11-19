@@ -33,11 +33,16 @@ const config = {
   dataRetrievalRateLimit17: undefined,
   dataRetrievalRateLimit18: undefined,
   dataRetrievalRateLimit19: undefined,
-  dataRetrievalRateLimit20: undefined
+  dataRetrievalRateLimit20: undefined,
+  dataRetrievalRateLimit21: undefined,
+  dataRetrievalRateLimit22: undefined,
+  dataRetrievalRateLimit23: undefined,
+  dataRetrievalRateLimit24: undefined,
+  dataRetrievalRateLimit25: undefined
 }
 
 let i = 1
-while (i < 21) {
+while (i < 26) {
   config[`dataRetrievalRateLimit${i}`] = new RateLimit({
     windowMs: 60000, // 1 hour window
     delayMs: 0, // disable delaying - full speed until the max limit is reached
@@ -90,11 +95,9 @@ router.get(
         error.response.data.error &&
         error.response.data.error.code === -8 &&
         error.response.data.error.message === "Address not found"
-      ) {
+      )
         res.json([])
-      } else {
-        res.status(500).send(error.response.data.error)
-      }
+      else res.status(500).send(error.response.data.error)
     }
   }
 )
@@ -428,4 +431,99 @@ router.get(
     }
   }
 )
+
+router.get(
+  "/ERC721AddressTokens/:address/:propertyId",
+  config.dataRetrievalRateLimit21,
+  async (req, res, next) => {
+    const params = [req.params.address, req.params.propertyId]
+    requestConfig.data.id = "whc_getERC721AddressTokens"
+    requestConfig.data.method = "whc_getERC721AddressTokens"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/ERC721PropertyDestroyTokens/:propertyId",
+  config.dataRetrievalRateLimit22,
+  async (req, res, next) => {
+    const params = [req.params.propertyId]
+    requestConfig.data.id = "whc_getERC721PropertyDestroyTokens"
+    requestConfig.data.method = "whc_getERC721PropertyDestroyTokens"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/ERC721PropertyNews/:propertyId",
+  config.dataRetrievalRateLimit23,
+  async (req, res, next) => {
+    const params = [req.params.propertyId]
+    requestConfig.data.id = "whc_getERC721PropertyNews"
+    requestConfig.data.method = "whc_getERC721PropertyNews"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/ERC721TokenNews/:propertyId/:tokenId",
+  config.dataRetrievalRateLimit24,
+  async (req, res, next) => {
+    const params = [req.params.propertyId, req.params.tokenId]
+    requestConfig.data.id = "whc_getERC721TokenNews"
+    requestConfig.data.method = "whc_getERC721TokenNews"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
+router.get(
+  "/ownerOfERC721Token/:propertyId/:tokenId/:address",
+  config.dataRetrievalRateLimit25,
+  async (req, res, next) => {
+    const params = [
+      req.params.propertyId,
+      req.params.tokenId,
+      req.params.address
+    ]
+    requestConfig.data.id = "whc_ownerOfERC721Token"
+    requestConfig.data.method = "whc_ownerOfERC721Token"
+    requestConfig.data.params = params
+
+    try {
+      const response = await BitboxHTTP(requestConfig)
+      res.json(response.data.result)
+    } catch (error) {
+      res.status(500).send(error.response.data.error)
+    }
+  }
+)
+
 module.exports = router
