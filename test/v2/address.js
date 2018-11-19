@@ -30,20 +30,19 @@ const mockData = require("./mocks/address-mock")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
-function beforeTests() {
-  originalUrl = process.env.BITCOINCOM_BASEURL
-
-  // Set default environment variables for unit tests.
-  if (!process.env.TEST) process.env.TEST = "unit"
-  if (process.env.TEST === "unit")
-    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
-
-  console.log(`Testing type is: ${process.env.TEST}`)
-}
-beforeTests()
-
 describe("#AddressRouter", () => {
   let req, res
+
+  before(() => {
+    originalUrl = process.env.BITCOINCOM_BASEURL
+
+    // Set default environment variables for unit tests.
+    if (!process.env.TEST) process.env.TEST = "unit"
+    if (process.env.TEST === "unit")
+      process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
+
+    console.log(`Testing type is: ${process.env.TEST}`)
+  })
 
   // Setup the mocks before each test.
   beforeEach(() => {
