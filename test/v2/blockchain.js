@@ -10,7 +10,7 @@
 const assert = require("assert")
 const httpMocks = require("node-mocks-http")
 const panda = require("./helpers/panda")
-process.env.RPC_BASEURL = "http://localhost:48332/"
+//process.env.RPC_BASEURL = "http://localhost:48332/"
 const blockchainRoute = require("../../dist/routes/v2/blockchain")
 /*
 describe("#BlockchainRouter", () => {
