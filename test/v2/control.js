@@ -24,30 +24,27 @@ const mockData = require("./mocks/control-mock")
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
-function beforeTests() {
-  // Save existing environment variables.
-  originalEnvVars = {
-    BITCOINCOM_BASEURL: process.env.BITCOINCOM_BASEURL,
-    RPC_BASEURL: process.env.RPC_BASEURL,
-    RPC_USERNAME: process.env.RPC_USERNAME,
-    RPC_PASSWORD: process.env.RPC_PASSWORD
-  }
-
-  // Set default environment variables for unit tests.
-  if (!process.env.TEST) process.env.TEST = "unit"
-  if (process.env.TEST === "unit") {
-    process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
-    process.env.RPC_BASEURL = "http://fakeurl/api"
-    process.env.RPC_USERNAME = "fakeusername"
-    process.env.RPC_PASSWORD = "fakepassword"
-  }
-
-  //console.log(`Testing type is: ${process.env.TEST}`)
-}
-beforeTests()
-
 describe("#ControlRouter", () => {
   let req, res
+
+  before(() => {
+    // Save existing environment variables.
+    originalEnvVars = {
+      BITCOINCOM_BASEURL: process.env.BITCOINCOM_BASEURL,
+      RPC_BASEURL: process.env.RPC_BASEURL,
+      RPC_USERNAME: process.env.RPC_USERNAME,
+      RPC_PASSWORD: process.env.RPC_PASSWORD
+    }
+
+    // Set default environment variables for unit tests.
+    if (!process.env.TEST) process.env.TEST = "unit"
+    if (process.env.TEST === "unit") {
+      process.env.BITCOINCOM_BASEURL = "http://fakeurl/api/"
+      process.env.RPC_BASEURL = "http://fakeurl/api"
+      process.env.RPC_USERNAME = "fakeusername"
+      process.env.RPC_PASSWORD = "fakepassword"
+    }
+  })
 
   // Setup the mocks before each test.
   beforeEach(() => {
