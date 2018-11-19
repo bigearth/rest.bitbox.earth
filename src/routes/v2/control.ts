@@ -9,23 +9,31 @@ const logger = require("./logging.js")
 
 // Used for processing error messages before sending them to the user.
 const util = require("util")
-util.inspect.defaultOptions = { depth: 3 }
+util.inspect.defaultOptions = { depth: 1 }
 
-const BitboxHTTP = axios.create({
-  baseURL: process.env.RPC_BASEURL
-})
-const username = process.env.RPC_USERNAME
-const password = process.env.RPC_PASSWORD
+// Dynamically set these based on env vars. Allows unit testing.
+let BitboxHTTP: any
+let username: any
+let password: any
+let requestConfig: any
 
+// Typescript
 interface IRLConfig {
   [controlRateLimit1: string]: any
   controlRateLimit2: any
 }
 
+// Typescript
 const config: IRLConfig = {
   controlRateLimit1: undefined,
   controlRateLimit2: undefined
 }
+
+// JavaScript
+//const config = {
+//  controlRateLimit1: undefined,
+//  controlRateLimit2: undefined
+//}
 
 let i = 1
 while (i < 3) {
@@ -46,17 +54,6 @@ while (i < 3) {
   i++
 }
 
-const requestConfig: IRequestConfig = {
-  method: "post",
-  auth: {
-    username: username,
-    password: password
-  },
-  data: {
-    jsonrpc: "1.0"
-  }
-}
-
 router.get("/", config.controlRateLimit1, root)
 router.get("/getInfo", config.controlRateLimit2, getInfo)
 
@@ -68,31 +65,50 @@ function root(
   return res.json({ status: "control" })
 }
 
+// Execute the RPC getinfo call.
 async function getInfo(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
+  setEnvVars()
+
   requestConfig.data.id = "getinfo"
   requestConfig.data.method = "getinfo"
   requestConfig.data.params = []
 
-  //console.log(`requestConfig: ${util.inspect(requestConfig)}`)
-  //console.log(`requestConfig.data.params: ${util.inspect(requestConfig.data.params)}`)
-  //console.log(`BitboxHTTP: ${util.inspect(BitboxHTTP)}`)
-  console.log(`BitboxHTTP.defaults.baseURL: ${BitboxHTTP.defaults.baseURL}`)
-
   try {
     const response = await BitboxHTTP(requestConfig)
-    res.json(response.data.result)
+
+    return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
-    logger.error(`Error in address/details: `, error)
+    //logger.error(`Error in control/getInfo: `, error)
 
     res.status(500)
     if (error.response && error.response.data && error.response.data.error)
       return res.json({ error: error.response.data.error })
     return res.json({ error: util.inspect(error) })
+  }
+}
+
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+  BitboxHTTP = axios.create({
+    baseURL: process.env.RPC_BASEURL
+  })
+  username = process.env.RPC_USERNAME
+  password = process.env.RPC_PASSWORD
+
+  requestConfig = {
+    method: "post",
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0"
+    }
   }
 }
 

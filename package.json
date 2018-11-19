@@ -1,6 +1,6 @@
 {
   "name": "rest.bitcoin.com",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "REST API for Bitcoin.com's Cloud",
   "author": "Gabriel Cardona @ Bitcoin.com",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "test-v2:blockchain": "nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v2/blockchain",
     "test-all": "TEST=integration nyc --reporter=text mocha --require babel-core/register --timeout 15000 test/v1/ test/v2/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "coverage:report": "nyc --reporter=html mocha --require babel-core/register --timeout 15000"
+    "coverage:report": "export NETWORK=testnet && npm run build && nyc --reporter=html mocha --require babel-core/register test/v2/"
   },
   "engines": {
     "node": ">=8.11.3"
