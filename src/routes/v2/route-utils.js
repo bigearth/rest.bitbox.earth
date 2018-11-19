@@ -4,11 +4,14 @@
 
 "use strict"
 
+const axios = require("axios")
+
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
 
 module.exports = {
-  validateNetwork // Prevents a common user error
+  validateNetwork, // Prevents a common user error
+  setEnvVars // Allows RPC variables to be set dynamically based on changing env vars.
 }
 
 // Returns true if user-provided cash address matches the correct network,
@@ -43,4 +46,26 @@ function validateNetwork(addr) {
     logger.error(`Error in validateNetwork()`)
     return false
   }
+}
+
+// Dynamically set these based on env vars. Allows unit testing.
+function setEnvVars() {
+  const BitboxHTTP = axios.create({
+    baseURL: process.env.RPC_BASEURL
+  })
+  const username = process.env.RPC_USERNAME
+  const password = process.env.RPC_PASSWORD
+
+  const requestConfig = {
+    method: "post",
+    auth: {
+      username: username,
+      password: password
+    },
+    data: {
+      jsonrpc: "1.0"
+    }
+  }
+
+  return { BitboxHTTP, username, password, requestConfig }
 }
