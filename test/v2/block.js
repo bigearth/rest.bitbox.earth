@@ -1,6 +1,5 @@
 /*
-  BLOCKED. See GitHub Issue #104:
-  https://github.com/Bitcoin-com/rest.bitcoin.com/issues/104
+  
 
 */
 
