@@ -31,21 +31,6 @@ var utilV1 = require("./routes/v1/util");
 var dataRetrievalV1 = require("./routes/v1/dataRetrieval");
 var payloadCreationV1 = require("./routes/v1/payloadCreation");
 var slpV1 = require("./routes/v1/slp");
-// v2
-var indexV2 = require("./routes/v2/index");
-var healthCheckV2 = require("./routes/v2/health-check");
-var addressV2 = require("./routes/v2/address");
-var blockV2 = require("./routes/v2/block");
-var blockchainV2 = require("./routes/v2/blockchain");
-var controlV2 = require("./routes/v2/control");
-var generatingV2 = require("./routes/v2/generating");
-var miningV2 = require("./routes/v2/mining");
-var networkV2 = require("./routes/v2/network");
-var rawtransactionsV2 = require("./routes/v2/rawtransactions");
-var transactionV2 = require("./routes/v2/transaction");
-var utilV2 = require("./routes/v2/util");
-var dataRetrievalV2 = require("./routes/v2/dataRetrieval");
-var payloadCreationV2 = require("./routes/v2/payloadCreation");
 require("dotenv").config();
 var app = express();
 app.use(swStats.getMiddleware({ swaggerSpec: apiSpec }));
@@ -83,20 +68,20 @@ app.use("/" + v1prefix + "/" + "util", utilV1);
 app.use("/" + v1prefix + "/" + "dataRetrieval", dataRetrievalV1);
 app.use("/" + v1prefix + "/" + "payloadCreation", payloadCreationV1);
 app.use("/" + v1prefix + "/" + "slp", slpV1);
-app.use("/", indexV2);
-app.use("/" + v2prefix + "/" + "health-check", healthCheckV2);
-app.use("/" + v2prefix + "/" + "address", addressV2.router);
-app.use("/" + v2prefix + "/" + "blockchain", blockchainV2);
-app.use("/" + v2prefix + "/" + "block", blockV2.router);
-app.use("/" + v2prefix + "/" + "control", controlV2.router);
-app.use("/" + v2prefix + "/" + "generating", generatingV2);
-app.use("/" + v2prefix + "/" + "mining", miningV2);
-app.use("/" + v2prefix + "/" + "network", networkV2);
-app.use("/" + v2prefix + "/" + "rawtransactions", rawtransactionsV2);
-app.use("/" + v2prefix + "/" + "transaction", transactionV2);
-app.use("/" + v2prefix + "/" + "util", utilV2);
-app.use("/" + v2prefix + "/" + "dataRetrieval", dataRetrievalV2);
-app.use("/" + v2prefix + "/" + "payloadCreation", payloadCreationV2);
+// app.use("/", indexV2)
+// app.use(`/${v2prefix}/` + `health-check`, healthCheckV2)
+// app.use(`/${v2prefix}/` + `address`, addressV2.router)
+// app.use(`/${v2prefix}/` + `blockchain`, blockchainV2)
+// app.use(`/${v2prefix}/` + `block`, blockV2.router)
+// app.use(`/${v2prefix}/` + `control`, controlV2.router)
+// app.use(`/${v2prefix}/` + `generating`, generatingV2)
+// app.use(`/${v2prefix}/` + `mining`, miningV2)
+// app.use(`/${v2prefix}/` + `network`, networkV2)
+// app.use(`/${v2prefix}/` + `rawtransactions`, rawtransactionsV2)
+// app.use(`/${v2prefix}/` + `transaction`, transactionV2)
+// app.use(`/${v2prefix}/` + `util`, utilV2)
+// app.use(`/${v2prefix}/` + `dataRetrieval`, dataRetrievalV2)
+// app.use(`/${v2prefix}/` + `payloadCreation`, payloadCreationV2)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = {
