@@ -88,6 +88,9 @@ router.get(
   config.rawTransactionsRateLimit3,
   decodeScript
 )
+router.post(
+  "/getRawTransaction/:txid",
+  config.rawTransactionsRateLimit4, getRawTransaction)
 
 function root(
   req: express.Request,
@@ -127,7 +130,7 @@ async function decodeRawTransaction(
     return res.json(response.data.result)
   } catch (error) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    //logger.error(`Error in rawtransactions/decodeRawTransaction: `, err)
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
@@ -165,76 +168,125 @@ async function decodeScript(
 
   } catch (error) {
     // Write out error to error log.
-    //logger.error(`Error in control/getInfo: `, error)
+    //logger.error(`Error in rawtransactions/decodeScript: `, err)
 
     res.status(500)
     return res.json({ error: util.inspect(error) })
   }
 }
 
-router.get(
-  "/getRawTransaction/:txid",
-  config.rawTransactionsRateLimit4,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+// Get a JSON object breakdown of transaction details.
+async function getRawTransaction(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
     let verbose = 0
-    if (req.query.verbose && req.query.verbose === "true") verbose = 1
+    if (req.body.verbose && req.body.verbose === "true") verbose = 1
 
-    try {
-      let txids = JSON.parse(req.params.txid)
-      if (txids.length > 20) {
-        res.json({
-          error: "Array too large. Max 20 txids"
-        })
+    const txids = req.body.txids
+    if (!Array.isArray(txids)) {
+      res.status(400)
+      return res.json({error: "txids must be an array"})
+    }
+    if (txids.length > 20) {
+      res.status(400)
+      return res.json({error: "Array too large. Max 20 txids"})
+    }
+
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
+    requestConfig.data.id = "getrawtransaction"
+    requestConfig.data.method = "getrawtransaction"
+
+    const results = []
+
+    // Loop through each txid in the array
+    for(let i=0; i < txids.length; i++) {
+      const txid = txids[i]
+
+      if (!txid || txid === "") {
+        res.status(400)
+        return res.json({ error: "Encountered empty TXID" })
       }
-      const result = [] as any
-      txids = txids.map((txid: any) => {
-        requestConfig.data.id = "getrawtransaction"
-        requestConfig.data.method = "getrawtransaction"
-        requestConfig.data.params = [txid, verbose]
-        BitboxHTTP(requestConfig).catch(error => {
-          try {
-            return {
-              data: {
-                result: error.response.data.error.message
-              }
-            }
-          } catch (ex) {
-            return {
-              data: {
-                result: "unknown error"
-              }
-            }
-          }
-        })
+
+      requestConfig.data.params = [txid, verbose]
+
+      const response = await BitboxHTTP(requestConfig)
+      results.push(response.data.result)
+    }
+
+    return res.json(results)
+
+  } catch(err) {
+    // Write out error to error log.
+    //logger.error(`Error in rawtransactions/getRawTransaction: `, err)
+
+    res.status(500)
+    return res.json({ error: util.inspect(err) })
+  }
+
+
+  /*
+  try {
+    let txids = JSON.parse(req.params.txid)
+    if (txids.length > 20) {
+      res.json({
+        error: "Array too large. Max 20 txids"
       })
-      axios.all(txids).then(
-        axios.spread((...args) => {
-          for (let i = 0; i < args.length; i++) {
-            let tmp = {} as any
-            const parsed = tmp.data.result
-            result.push(parsed)
-          }
-          res.json(result)
-        })
-      )
-    } catch (error) {
+    }
+    const result = [] as any
+    txids = txids.map((txid: any) => {
       requestConfig.data.id = "getrawtransaction"
       requestConfig.data.method = "getrawtransaction"
-      requestConfig.data.params = [req.params.txid, verbose]
-      BitboxHTTP(requestConfig)
-        .then(response => {
-          res.json(response.data.result)
-        })
-        .catch(error => {
-          res.send(error.response.data.error.message)
-        })
-    }
+      requestConfig.data.params = [txid, verbose]
+      BitboxHTTP(requestConfig).catch(error => {
+        try {
+          return {
+            data: {
+              result: error.response.data.error.message
+            }
+          }
+        } catch (ex) {
+          return {
+            data: {
+              result: "unknown error"
+            }
+          }
+        }
+      })
+    })
+    axios.all(txids).then(
+      axios.spread((...args) => {
+        for (let i = 0; i < args.length; i++) {
+          let tmp = {} as any
+          const parsed = tmp.data.result
+          result.push(parsed)
+        }
+        res.json(result)
+      })
+    )
+  } catch (error) {
+    requestConfig.data.id = "getrawtransaction"
+    requestConfig.data.method = "getrawtransaction"
+    requestConfig.data.params = [req.params.txid, verbose]
+    BitboxHTTP(requestConfig)
+      .then(response => {
+        res.json(response.data.result)
+      })
+      .catch(error => {
+        res.send(error.response.data.error.message)
+      })
   }
-)
+  */
+}
+
 
 router.post(
   "/sendRawTransaction/:hex",
@@ -244,7 +296,7 @@ router.post(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    try {
+    try {https://twitter.com/vinarmani/status/1064504066259210240
       let transactions = JSON.parse(req.params.hex)
       if (transactions.length > 20) {
         res.json({
@@ -460,6 +512,7 @@ module.exports = {
   testableComponents: {
     root,
     decodeRawTransaction,
-    decodeScript
+    decodeScript,
+    getRawTransaction
   }
 }
