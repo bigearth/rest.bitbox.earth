@@ -183,7 +183,7 @@ async function getRawTransaction(
 ) {
   try {
     let verbose = 0
-    if (req.query.verbose && req.query.verbose === "true") verbose = 1
+    if (req.body.verbose && req.body.verbose === "true") verbose = 1
 
     const txids = req.body.txids
     if (!Array.isArray(txids)) {

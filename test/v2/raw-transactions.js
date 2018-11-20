@@ -203,7 +203,7 @@ describe("#Raw-Transactions", () => {
     const getRawTransaction =
       rawtransactions.testableComponents.getRawTransaction
 
-    it("should throw error if txids array is missing", async () => {
+    it("should throw 400 error if txids array is missing", async () => {
       const result = await getRawTransaction(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
@@ -211,7 +211,7 @@ describe("#Raw-Transactions", () => {
       assert.include(result.error, "txids must be an array")
     })
 
-    it("should throw error if txids is too large", async () => {
+    it("should throw 400 error if txids is too large", async () => {
       const testArray = []
       for (var i = 0; i < 25; i++) testArray.push("")
 
@@ -224,7 +224,7 @@ describe("#Raw-Transactions", () => {
       assert.include(result.error, "Array too large. Max 20 txids")
     })
 
-    it("should throw 500 error if txid is invalid", async () => {
+    it("should throw 400 error if txid is empty", async () => {
       req.body.txids = [""]
 
       const result = await getRawTransaction(req, res)
@@ -234,7 +234,7 @@ describe("#Raw-Transactions", () => {
       assert.include(result.error, "Encountered empty TXID")
     })
 
-    it("should throw error if txid are invalid", async () => {
+    it("should throw 500 error if txid is invalid", async () => {
       // Mock the RPC call for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.RPC_BASEURL}`)
@@ -249,6 +249,22 @@ describe("#Raw-Transactions", () => {
 
       assert.hasAllKeys(result, ["error"])
       assert.include(result.error, "Request failed with status code 500")
+    })
+
+    it("should get non-verbose transaction data", async () => {
+      // Mock the RPC call for unit tests.
+      if (process.env.TEST === "unit") {
+        nock(`${process.env.RPC_BASEURL}`)
+          .post(``)
+          .reply(500, { result: "Error: Request failed with status code 500" })
+      }
+
+      req.body.txids = [
+        "bd320377db7026a3dd5c7ec444596c0ee18fc25c4f34ee944adc03e432ce1971"
+      ]
+
+      const result = await getRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
     })
   })
 })
