@@ -5,6 +5,12 @@ const router = express.Router()
 import axios from "axios"
 import { IRequestConfig } from "./interfaces/IRequestConfig"
 const RateLimit = require("express-rate-limit")
+const routeUtils = require("./route-utils")
+const logger = require("./logging.js")
+
+// Used to convert error messages to strings, to safely pass to users.
+const util = require("util")
+util.inspect.defaultOptions = { depth: 1 }
 
 const BITBOXCli = require("bitbox-cli/lib/bitbox-cli").default
 const BITBOX = new BITBOXCli()
@@ -91,17 +97,19 @@ while (i < 21) {
   i++
 }
 
-router.get(
-  "/",
-  config.dataRetrievalRateLimit1,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    res.json({ status: "dataRetrieval" })
-  }
-)
+router.get("/", config.dataRetrievalRateLimit1, root)
+router.get("/currentConsensusHash", config.dataRetrievalRateLimit6, getCurrentConsensusHash)
+router.get("/info", config.dataRetrievalRateLimit9, info)
+router.get("/properties", config.dataRetrievalRateLimit17, properties)
+
+function root(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  return res.json({ status: "dataRetrieval" })
+}
+
 
 router.get(
   "/balancesForAddress/:address",
@@ -230,26 +238,35 @@ router.get(
   }
 )
 
-router.get(
-  "/currentConsensusHash",
-  config.dataRetrievalRateLimit6,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+
+async function getCurrentConsensusHash(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "whc_getcurrentconsensushash"
     requestConfig.data.method = "whc_getcurrentconsensushash"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/grants/:propertyId",
@@ -274,26 +291,35 @@ router.get(
   }
 )
 
-router.get(
-  "/info",
-  config.dataRetrievalRateLimit9,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+
+async function info(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "whc_getinfo"
     requestConfig.data.method = "whc_getinfo"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/payload/:txid",
@@ -452,26 +478,35 @@ router.get(
   }
 )
 
-router.get(
-  "/properties",
-  config.dataRetrievalRateLimit17,
-  async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+// Get a list of all tokens that have been created.
+async function properties(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  try {
+    const {
+      BitboxHTTP,
+      username,
+      password,
+      requestConfig
+    } = routeUtils.setEnvVars()
+
     requestConfig.data.id = "whc_listproperties"
     requestConfig.data.method = "whc_listproperties"
     requestConfig.data.params = []
 
-    try {
-      const response = await BitboxHTTP(requestConfig)
-      res.json(response.data.result)
-    } catch (error) {
-      res.status(500).send(error.response.data.error)
-    }
+    const response = await BitboxHTTP(requestConfig)
+    return res.json(response.data.result)
+  } catch (error) {
+    // Write out error to error log.
+    //logger.error(`Error in control/getInfo: `, error)
+
+    res.status(500)
+    return res.json({ error: util.inspect(error) })
   }
-)
+}
+
 
 router.get(
   "/frozenBalance/:address/:propertyId",
@@ -541,4 +576,13 @@ router.get(
     }
   }
 )
-module.exports = router
+
+module.exports = {
+  router,
+  testableComponents: {
+    root,
+    getCurrentConsensusHash,
+    info,
+    properties
+  }
+}
