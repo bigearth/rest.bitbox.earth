@@ -1,5 +1,5 @@
 /*
-  TESTS FOR THE DATARETRIEVAL.TS LIBRARY
+  TESTS FOR THE RAWTRANSACTIONS.TS LIBRARY
 
   This test file uses the environment variable TEST to switch between unit
   and integration tests. By default, TEST is set to 'unit'. Set this variable
@@ -11,20 +11,21 @@
 
 const chai = require("chai")
 const assert = chai.assert
-const dataRetrievalRoute = require("../../dist/routes/v2/dataRetrieval")
+const rawtransactions = require("../../dist/routes/v2/rawtransactions")
 const nock = require("nock") // HTTP mocking
 
 let originalEnvVars // Used during transition from integration to unit tests.
 
 // Mocking data.
+//delete require.cache[require.resolve("./mocks/express-mocks")] // Fixes bug
 const { mockReq, mockRes } = require("./mocks/express-mocks")
-const mockData = require("./mocks/data-retrieval-mocks")
+const mockData = require("./mocks/raw-transactions-mocks")
 
 // Used for debugging.
 const util = require("util")
 util.inspect.defaultOptions = { depth: 1 }
 
-describe("#DataRetrieval", () => {
+describe("#Raw-Transactions", () => {
   let req, res
 
   before(() => {
@@ -76,20 +77,28 @@ describe("#DataRetrieval", () => {
 
   describe("#root", async () => {
     // root route handler.
-    const root = dataRetrievalRoute.testableComponents.root
+    const root = rawtransactions.testableComponents.root
 
     it("should respond to GET for base route", async () => {
       const result = root(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
-      assert.equal(result.status, "dataRetrieval", "Returns static string")
+      assert.equal(result.status, "rawtransactions", "Returns static string")
     })
   })
 
-  describe("getCurrentConsensusHash()", () => {
+  describe("decodeRawTransaction()", () => {
     // block route handler.
-    const getCurrentConsensusHash =
-      dataRetrievalRoute.testableComponents.getCurrentConsensusHash
+    const decodeRawTransaction =
+      rawtransactions.testableComponents.decodeRawTransaction
+
+    it("should throw error if hex is missing", async () => {
+      const result = await decodeRawTransaction(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "hex can not be empty")
+    })
 
     it("should throw 500 when network issues", async () => {
       // Save the existing RPC URL.
@@ -98,7 +107,10 @@ describe("#DataRetrieval", () => {
       // Manipulate the URL to cause a 500 network error.
       process.env.RPC_BASEURL = "http://fakeurl/api/"
 
-      const result = await getCurrentConsensusHash(req, res)
+      req.params.hex =
+        "0200000001b9b598d7d6d72fc486b2b3a3c03c79b5bade6ec9a77ced850515ab5e64edcc21010000006b483045022100a7b1b08956abb8d6f322aa709d8583c8ea492ba0585f1a6f4f9983520af74a5a0220411aee4a9a54effab617b0508c504c31681b15f9b187179b4874257badd4139041210360cfc66fdacb650bc4c83b4e351805181ee696b7d5ab4667c57b2786f51c413dffffffff0210270000000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac786e9800000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac00000000"
+
+      const result = await decodeRawTransaction(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
       // Restore the saved URL.
@@ -108,69 +120,45 @@ describe("#DataRetrieval", () => {
       assert.include(result.error, "ENOTFOUND", "Error message expected")
     })
 
-    it("should GET /getCurrentConsensusHash", async () => {
+    it("should GET /decodeRawTransaction", async () => {
       // Mock the RPC call for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.RPC_BASEURL}`)
           .post(``)
-          .reply(200, { result: mockData.mockConsensusHash })
+          .reply(200, { result: mockData.mockDecodeRawTransaction })
       }
 
-      const result = await getCurrentConsensusHash(req, res)
-      //console.log(`result: ${util.inspect(result)}`)
+      req.params.hex =
+        "0200000001b9b598d7d6d72fc486b2b3a3c03c79b5bade6ec9a77ced850515ab5e64edcc21010000006b483045022100a7b1b08956abb8d6f322aa709d8583c8ea492ba0585f1a6f4f9983520af74a5a0220411aee4a9a54effab617b0508c504c31681b15f9b187179b4874257badd4139041210360cfc66fdacb650bc4c83b4e351805181ee696b7d5ab4667c57b2786f51c413dffffffff0210270000000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac786e9800000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac00000000"
 
-      assert.hasAnyKeys(result, ["block", "blockhash", "consenushash"])
-    })
-  })
-
-  describe("info()", () => {
-    // block route handler.
-    const info = dataRetrievalRoute.testableComponents.info
-
-    it("should throw 500 when network issues", async () => {
-      // Save the existing RPC URL.
-      const savedUrl2 = process.env.RPC_BASEURL
-
-      // Manipulate the URL to cause a 500 network error.
-      process.env.RPC_BASEURL = "http://fakeurl/api/"
-
-      const result = await info(req, res)
-      //console.log(`result: ${util.inspect(result)}`)
-
-      // Restore the saved URL.
-      process.env.RPC_BASEURL = savedUrl2
-
-      assert.equal(res.statusCode, 500, "HTTP status code 500 expected.")
-      assert.include(result.error, "ENOTFOUND", "Error message expected")
-    })
-
-    it("should GET /getCurrentConsensusHash", async () => {
-      // Mock the RPC call for unit tests.
-      if (process.env.TEST === "unit") {
-        nock(`${process.env.RPC_BASEURL}`)
-          .post(``)
-          .reply(200, { result: mockData.mockInfo })
-      }
-
-      const result = await info(req, res)
+      const result = await decodeRawTransaction(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
       assert.hasAnyKeys(result, [
-        "wormholeversion_int",
-        "wormholeversion",
-        "bitcoincoreversion",
-        "block",
-        "blocktime",
-        "blocktransactions",
-        "totaltransactions",
-        "alerts"
+        "txid",
+        "hash",
+        "size",
+        "version",
+        "locktime",
+        "vin",
+        "vout"
       ])
+      assert.isArray(result.vin)
+      assert.isArray(result.vout)
     })
   })
 
-  describe("properties()", () => {
+  describe("decodeScript()", () => {
     // block route handler.
-    const properties = dataRetrievalRoute.testableComponents.properties
+    const decodeScript = rawtransactions.testableComponents.decodeScript
+
+    it("should throw error if hex is missing", async () => {
+      const result = await decodeScript(req, res)
+      //console.log(`result: ${util.inspect(result)}`)
+
+      assert.hasAllKeys(result, ["error"])
+      assert.include(result.error, "hex can not be empty")
+    })
 
     it("should throw 500 when network issues", async () => {
       // Save the existing RPC URL.
@@ -179,7 +167,10 @@ describe("#DataRetrieval", () => {
       // Manipulate the URL to cause a 500 network error.
       process.env.RPC_BASEURL = "http://fakeurl/api/"
 
-      const result = await properties(req, res)
+      req.params.hex =
+        "0200000001b9b598d7d6d72fc486b2b3a3c03c79b5bade6ec9a77ced850515ab5e64edcc21010000006b483045022100a7b1b08956abb8d6f322aa709d8583c8ea492ba0585f1a6f4f9983520af74a5a0220411aee4a9a54effab617b0508c504c31681b15f9b187179b4874257badd4139041210360cfc66fdacb650bc4c83b4e351805181ee696b7d5ab4667c57b2786f51c413dffffffff0210270000000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac786e9800000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac00000000"
+
+      const result = await decodeScript(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
       // Restore the saved URL.
@@ -189,27 +180,21 @@ describe("#DataRetrieval", () => {
       assert.include(result.error, "ENOTFOUND", "Error message expected")
     })
 
-    it("should GET properties", async () => {
+    it("should GET /decodeScript", async () => {
       // Mock the RPC call for unit tests.
       if (process.env.TEST === "unit") {
         nock(`${process.env.RPC_BASEURL}`)
           .post(``)
-          .reply(200, { result: mockData.mockProperties })
+          .reply(200, { result: mockData.mockDecodeScript })
       }
 
-      const result = await properties(req, res)
+      req.params.hex =
+        "0200000001b9b598d7d6d72fc486b2b3a3c03c79b5bade6ec9a77ced850515ab5e64edcc21010000006b483045022100a7b1b08956abb8d6f322aa709d8583c8ea492ba0585f1a6f4f9983520af74a5a0220411aee4a9a54effab617b0508c504c31681b15f9b187179b4874257badd4139041210360cfc66fdacb650bc4c83b4e351805181ee696b7d5ab4667c57b2786f51c413dffffffff0210270000000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac786e9800000000001976a914eb4b180def88e3f5625b2d8ae2c098ff7d85f66488ac00000000"
+
+      const result = await decodeScript(req, res)
       //console.log(`result: ${util.inspect(result)}`)
 
-      assert.isArray(result)
-      assert.hasAnyKeys(result[0], [
-        "propertyid",
-        "name",
-        "category",
-        "subcategory",
-        "data",
-        "url",
-        "precision"
-      ])
+      assert.hasAllKeys(result, ["asm", "type", "p2sh"])
     })
   })
 })
